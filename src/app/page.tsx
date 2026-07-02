@@ -1,27 +1,17 @@
-import { Metadata } from "next";
-import { SliceZone } from "@prismicio/react";
-
-import { createClient } from "@/prismicio";
-import { components } from "@/slices";
-
-export default async function Page() {
-  const client = createClient();
-  const page = await client.getSingle("homepage");
-
-  return <SliceZone slices={page.data.slices} components={components} />;
+export default function Home() {
+  return (
+    <section className="mx-auto flex max-w-5xl flex-col items-center gap-8 px-4 py-24 text-center">
+      <p className="font-pixel text-xs text-accent-alt">PLAYER 1</p>
+      <h1 className="font-pixel text-2xl text-highlight sm:text-4xl">
+        SAIM HASHMI
+      </h1>
+      <p className="max-w-xl text-2xl text-muted">
+        Software engineer. This world is under construction — new zones unlock
+        with every phase.
+      </p>
+      <p className="pixel-border animate-pulse bg-surface px-6 py-3 font-pixel text-xs text-foreground">
+        PRESS START
+      </p>
+    </section>
+  );
 }
-
-export async function generateMetadata(): Promise<Metadata> {
-  const client = createClient();
-  const page = await client.getSingle("homepage");
-
-  return {
-    title: page.data.meta_title,
-    description: page.data.meta_description,
-  };
-}
-
-/* new about image added */
-/* new resume link added */
-/* fixed about page navlink */
-/* updated resume link and added experience v2*/

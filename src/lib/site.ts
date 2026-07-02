@@ -1,0 +1,20 @@
+export const SITE = {
+  name: "Saim Hashmi",
+  handle: "anakafeel",
+  title: "Saim Hashmi — Portfolio",
+  description:
+    "Saim Hashmi's portfolio — projects, experience, and an 8-bit world to explore.",
+} as const;
+
+export const CONTACT = {
+  email: "hashmisaim037@gmail.com",
+  github: "https://github.com/anakafeel",
+  linkedin: "https://www.linkedin.com/in/saim-hashmi-2230b6243/",
+} as const;
+
+export const NAV_LINKS = [
+  { label: "HOME", href: "/" },
+  { label: "ABOUT", href: "/about" },
+  { label: "PROJECTS", href: "/projects" },
+  { label: "BLOG", href: "/blog" },
+] as const;

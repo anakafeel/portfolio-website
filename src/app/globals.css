@@ -2,24 +2,107 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  min-height: 100%;
-  background-color: hsl(270, 50%, 15%);
+/*
+ * Theme system: every theme is a block of CSS custom properties selected
+ * by the data-theme attribute on <html>. Components must only reference
+ * the Tailwind tokens mapped to these variables (see tailwind.config.ts)
+ * so they stay theme-agnostic.
+ */
+
+:root,
+[data-theme="arcade"] {
+  --color-background: #0a0a12;
+  --color-surface: #16162a;
+  --color-border: #34346a;
+  --color-foreground: #e8e8f4;
+  --color-muted: #8f8fb3;
+  --color-accent: #ff2d78;
+  --color-accent-alt: #00e5ff;
+  --color-highlight: #ffd400;
 }
 
-/* Only show hover effects on devices that support hover */
-@media (hover: hover) and (pointer: fine) {
-  .group:hover .hover-overlay-desktop {
-    opacity: 1;
+[data-theme="phosphor"] {
+  --color-background: #020a04;
+  --color-surface: #05170c;
+  --color-border: #12522a;
+  --color-foreground: #35ff6d;
+  --color-muted: #1d9c46;
+  --color-accent: #8dffb0;
+  --color-accent-alt: #35ff6d;
+  --color-highlight: #d6ffe2;
+}
+
+[data-theme="synthwave"] {
+  --color-background: #170733;
+  --color-surface: #261252;
+  --color-border: #4d2b8f;
+  --color-foreground: #f4e9ff;
+  --color-muted: #a98fd6;
+  --color-accent: #ff3ec8;
+  --color-accent-alt: #00f0ff;
+  --color-highlight: #ffb300;
+}
+
+[data-theme="gameboy"] {
+  --color-background: #0f380f;
+  --color-surface: #306230;
+  --color-border: #8bac0f;
+  --color-foreground: #9bbc0e;
+  --color-muted: #8bac0f;
+  --color-accent: #cadc9f;
+  --color-accent-alt: #9bbc0e;
+  --color-highlight: #cadc9f;
+}
+
+@layer base {
+  html {
+    min-height: 100%;
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-body), monospace;
+    font-size: 1.25rem;
+    line-height: 1.5;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-pixel), monospace;
+    line-height: 1.4;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-background);
   }
 }
 
-.background-gradient {
-  background: radial-gradient(
-    circle at top center,
-    hsl(270, 50%, 20%) 0%,
-    hsla(270, 50%, 15%, 0.7) 50%,
-    hsla(270, 50%, 10%, 0.5) 100%
-  );
+@layer utilities {
+  .pixelated {
+    image-rendering: pixelated;
+  }
+
+  /* Chunky retro panel border drawn with box-shadow so it stays crisp. */
+  .pixel-border {
+    border: 2px solid var(--color-border);
+    box-shadow: 4px 4px 0 0 var(--color-border);
+  }
+
+  /* Subtle CRT scanline overlay; apply to a fixed, pointer-events-none div. */
+  .crt-scanlines {
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.18) 0px,
+      rgba(0, 0, 0, 0.18) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  }
 }
