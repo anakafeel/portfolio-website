@@ -8,7 +8,10 @@ import Footer from "@/components/Footer";
 import { GameProvider } from "@/components/game/GameProvider";
 import HUD from "@/components/game/HUD";
 import AchievementToast from "@/components/game/AchievementToast";
+import TerminalOverlay from "@/components/terminal/TerminalOverlay";
+import { getBlogPosts, getProjects } from "@/lib/content";
 import { SITE } from "@/lib/site";
+import type { TerminalData } from "@/lib/terminal/commands";
 
 // Applies the saved theme before first paint to avoid a flash of the default
 // theme. Must stay in sync with STORAGE_KEY in src/lib/game/storage.ts.
@@ -38,6 +41,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const terminalData: TerminalData = {
+    projects: getProjects().map(({ slug, frontmatter }) => ({
+      slug,
+      title: frontmatter.title,
+      summary: frontmatter.summary,
+      rarityTier: frontmatter.rarityTier,
+      techStack: frontmatter.techStack,
+    })),
+    posts: getBlogPosts().map(({ slug, frontmatter }) => ({
+      slug,
+      title: frontmatter.title,
+      date: frontmatter.date,
+    })),
+  };
+
   return (
     <html lang="en" data-theme="arcade" suppressHydrationWarning>
       <body
@@ -50,6 +68,7 @@ export default function RootLayout({
           <Footer />
           <HUD />
           <AchievementToast />
+          <TerminalOverlay data={terminalData} />
         </GameProvider>
         <div
           aria-hidden
