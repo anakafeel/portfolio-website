@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import { GameProvider } from "@/components/game/GameProvider";
 import HUD from "@/components/game/HUD";
 import AchievementToast from "@/components/game/AchievementToast";
+import SoundEffects from "@/components/game/SoundEffects";
 import TerminalOverlay from "@/components/terminal/TerminalOverlay";
 import { getBlogPosts, getProjects } from "@/lib/content";
 import { SITE } from "@/lib/site";
@@ -68,6 +69,7 @@ export default function RootLayout({
           <Footer />
           <HUD />
           <AchievementToast />
+          <SoundEffects />
           <TerminalOverlay data={terminalData} />
         </GameProvider>
         <div

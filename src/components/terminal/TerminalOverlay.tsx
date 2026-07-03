@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { useGame } from "@/components/game/GameProvider";
+import { playSfx } from "@/lib/audio/sfx";
 import type { TerminalData } from "@/lib/terminal/commands";
 import Terminal from "./Terminal";
 
@@ -12,12 +13,17 @@ import Terminal from "./Terminal";
  */
 export default function TerminalOverlay({ data }: { data: TerminalData }) {
   const [open, setOpen] = useState(false);
-  const { award, hydrated } = useGame();
+  const { state, award, hydrated } = useGame();
 
   const openTerminal = useCallback(() => {
     setOpen(true);
+    // First discovery triggers the achievement fanfare instead; only play
+    // the open jingle once SECRET CONSOLE is already unlocked.
+    if (!state.muted && state.achievements.includes("found_terminal")) {
+      playSfx("terminal", state.volume);
+    }
     award("found_terminal");
-  }, [award]);
+  }, [award, state.muted, state.volume, state.achievements]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
