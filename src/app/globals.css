@@ -84,6 +84,71 @@
   }
 }
 
+@layer components {
+  /* Typography for MDX bodies rendered on project and blog pages. */
+  .mdx-content h2 {
+    margin-top: 2rem;
+    font-size: 0.875rem;
+    color: var(--color-highlight);
+  }
+
+  .mdx-content h3 {
+    margin-top: 1.5rem;
+    font-size: 0.75rem;
+    color: var(--color-foreground);
+  }
+
+  .mdx-content p {
+    margin-top: 1rem;
+    font-size: 1.25rem;
+    color: var(--color-foreground);
+  }
+
+  .mdx-content ul,
+  .mdx-content ol {
+    margin-top: 1rem;
+    padding-left: 1.5rem;
+    font-size: 1.25rem;
+    list-style: square;
+  }
+
+  .mdx-content blockquote {
+    margin-top: 1rem;
+    border-left: 4px solid var(--color-accent);
+    padding: 0.5rem 1rem;
+    background-color: var(--color-surface);
+    color: var(--color-muted);
+  }
+
+  .mdx-content blockquote p {
+    margin-top: 0.25rem;
+    color: inherit;
+  }
+
+  .mdx-content a {
+    color: var(--color-accent-alt);
+    text-decoration: underline;
+  }
+
+  .mdx-content a:hover {
+    color: var(--color-accent);
+  }
+
+  .mdx-content code {
+    background-color: var(--color-surface);
+    padding: 0.125rem 0.375rem;
+    font-size: 1.1rem;
+  }
+
+  .mdx-content pre {
+    margin-top: 1rem;
+    overflow-x: auto;
+    border: 2px solid var(--color-border);
+    background-color: var(--color-surface);
+    padding: 1rem;
+  }
+}
+
 @layer utilities {
   .pixelated {
     image-rendering: pixelated;
