@@ -134,7 +134,7 @@ export default function Terminal({ data, onClose }: TerminalProps) {
     <div
       role="dialog"
       aria-label="Terminal"
-      className="pixel-border fixed left-1/2 top-1/2 z-[90] flex h-[min(560px,72vh)] w-[min(880px,94vw)] -translate-x-1/2 -translate-y-1/2 flex-col bg-surface"
+      className="pixel-border fixed left-1/2 top-1/2 z-[90] flex h-[min(560px,72vh)] w-[min(880px,94vw)] -translate-x-1/2 -translate-y-1/2 flex-col bg-surface motion-safe:animate-crt-on"
     >
       <div className="flex select-none items-center gap-2 border-b-2 border-border bg-background p-2">
         <span

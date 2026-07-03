@@ -35,7 +35,7 @@ export default function HUD() {
           className="h-2 w-24 border border-border bg-background"
         >
           <div
-            className="h-full bg-accent"
+            className="h-full bg-accent motion-safe:transition-[width] motion-safe:duration-500"
             style={{ width: `${progress * 100}%` }}
           />
         </div>

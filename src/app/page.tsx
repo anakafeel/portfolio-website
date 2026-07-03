@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <section className="mx-auto flex max-w-5xl flex-col items-center gap-8 px-4 py-24 text-center">
@@ -9,9 +11,12 @@ export default function Home() {
         Software engineer. This world is under construction — new zones unlock
         with every phase.
       </p>
-      <p className="pixel-border animate-pulse bg-surface px-6 py-3 font-pixel text-xs text-foreground">
-        PRESS START
-      </p>
+      <Link
+        href="/projects"
+        className="pixel-border pixel-border-interactive bg-surface px-6 py-3 font-pixel text-xs text-foreground transition-colors hover:text-accent"
+      >
+        <span className="motion-safe:animate-blink">PRESS START</span>
+      </Link>
     </section>
   );
 }

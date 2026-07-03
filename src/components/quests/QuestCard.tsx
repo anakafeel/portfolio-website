@@ -18,7 +18,7 @@ export default function QuestCard({ project }: { project: Project }) {
   const rarityClass = RARITY_TEXT[frontmatter.rarityTier];
 
   return (
-    <article className="pixel-border group bg-surface transition-transform hover:-translate-x-0.5 hover:-translate-y-0.5">
+    <article className="pixel-border pixel-border-interactive group bg-surface motion-safe:transition-transform motion-safe:hover:-translate-x-0.5 motion-safe:hover:-translate-y-0.5">
       <Link href={`/projects/${slug}`} className="block">
         {frontmatter.image && (
           // eslint-disable-next-line @next/next/no-img-element

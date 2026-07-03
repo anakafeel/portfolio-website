@@ -160,6 +160,67 @@
     box-shadow: 4px 4px 0 0 var(--color-border);
   }
 
+  /* Recolors the pixel border on hover/focus — pair with .pixel-border. */
+  .pixel-border-interactive:hover,
+  .pixel-border-interactive:focus-within {
+    border-color: var(--color-accent);
+    box-shadow: 4px 4px 0 0 var(--color-accent);
+  }
+
+  /* Hard on/off blink, like an arcade cabinet — no easing, steps only. */
+  @keyframes blink-steps {
+    0%,
+    54% {
+      opacity: 1;
+    }
+    55%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  .animate-blink {
+    animation: blink-steps 1.1s steps(1) infinite;
+  }
+
+  /* Entrance for page content on navigation (see src/app/template.tsx). */
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .animate-fade-up {
+    animation: fade-up 300ms ease-out both;
+  }
+
+  /*
+   * CRT power-on for the terminal dialog. The keyframes carry the
+   * centering translate so they compose with the fixed positioning.
+   */
+  @keyframes crt-on {
+    0% {
+      transform: translate(-50%, -50%) scale(1, 0.02);
+      opacity: 0.4;
+    }
+    60% {
+      transform: translate(-50%, -50%) scale(1, 1.04);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1, 1);
+    }
+  }
+
+  .animate-crt-on {
+    animation: crt-on 240ms ease-out both;
+  }
+
   /* Subtle CRT scanline overlay; apply to a fixed, pointer-events-none div. */
   .crt-scanlines {
     background: repeating-linear-gradient(
