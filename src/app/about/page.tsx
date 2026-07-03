@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import LoadoutCard from "@/components/about/LoadoutCard";
 import StoryLevel from "@/components/about/StoryLevel";
 
 export const metadata: Metadata = {
@@ -15,6 +16,7 @@ export default function AboutPage() {
         Every save file has a backstory. Scroll to play through this one.
       </p>
       <StoryLevel />
+      <LoadoutCard />
     </section>
   );
 }
