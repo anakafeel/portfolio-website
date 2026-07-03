@@ -1,8 +1,10 @@
+import HeroBackground from "@/components/hero/HeroBackground";
 import SfxLink from "@/components/sfx/SfxLink";
 
 export default function Home() {
   return (
-    <section className="mx-auto flex max-w-5xl flex-col items-center gap-8 px-4 py-24 text-center">
+    <section className="relative isolate mx-auto flex min-h-[70vh] max-w-5xl flex-col items-center justify-center gap-8 overflow-hidden px-4 py-24 text-center">
+      <HeroBackground />
       <p className="font-pixel text-xs text-accent-alt">PLAYER 1</p>
       <h1 className="font-pixel text-2xl text-highlight sm:text-4xl">
         SAIM HASHMI

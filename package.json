@@ -10,6 +10,8 @@
     "slicemachine": "start-slicemachine"
   },
   "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.6.1",
     "@vercel/speed-insights": "^1.2.0",
     "clsx": "^2.1.1",
     "gray-matter": "^4.0.3",
@@ -18,12 +20,14 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-icons": "^5.5.0",
+    "three": "^0.185.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/node": "^20.17.27",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "@types/three": "^0.185.0",
     "eslint": "^9.0.0",
     "eslint-config-next": "15.5.18",
     "postcss": "^8.5.3",
