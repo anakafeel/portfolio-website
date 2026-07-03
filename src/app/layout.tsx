@@ -6,7 +6,6 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { GameProvider } from "@/components/game/GameProvider";
-import HUD from "@/components/game/HUD";
 import AchievementToast from "@/components/game/AchievementToast";
 import SoundEffects from "@/components/game/SoundEffects";
 import TerminalOverlay from "@/components/terminal/TerminalOverlay";
@@ -67,7 +66,6 @@ export default function RootLayout({
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
-          <HUD />
           <AchievementToast />
           <SoundEffects />
           <TerminalOverlay data={terminalData} />

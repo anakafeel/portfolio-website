@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import clsx from "clsx";
 
 import { useGame } from "@/components/game/GameProvider";
+import { useSound } from "@/components/game/useSound";
 import { SITE } from "@/lib/site";
 import {
   completions,
@@ -35,6 +36,7 @@ interface TerminalProps {
 export default function Terminal({ data, onClose }: TerminalProps) {
   const router = useRouter();
   const { state, setTheme } = useGame();
+  const play = useSound();
 
   const [history, setHistory] = useState<HistoryItem[]>([{ type: "welcome" }]);
   const [input, setInput] = useState("");
@@ -86,7 +88,12 @@ export default function Terminal({ data, onClose }: TerminalProps) {
   };
 
   const onKeyDown = (e: React.KeyboardEvent) => {
+    // Quiet mechanical tick for typing; Enter gets the full click.
+    if (e.key.length === 1 || e.key === "Backspace") {
+      play("tick", 0.4);
+    }
     if (e.key === "Enter") {
+      play("click");
       run(input);
       setInput("");
     } else if (e.key === "ArrowUp") {
@@ -120,6 +127,7 @@ export default function Terminal({ data, onClose }: TerminalProps) {
   const currentWord = input.trim().split(/\s+/).pop() ?? "";
 
   const applyChip = (text: string) => {
+    play("click");
     const parts = input.trimStart().split(/\s+/);
     if (parts.length <= 1) {
       setInput(text + (text.endsWith("/") ? "" : " "));

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import SfxLink from "@/components/sfx/SfxLink";
 
 export default function Home() {
   return (
@@ -11,12 +11,12 @@ export default function Home() {
         Software engineer. This world is under construction — new zones unlock
         with every phase.
       </p>
-      <Link
+      <SfxLink
         href="/projects"
         className="pixel-border pixel-border-interactive bg-surface px-6 py-3 font-pixel text-xs text-foreground transition-colors hover:text-accent"
       >
         <span className="motion-safe:animate-blink">PRESS START</span>
-      </Link>
+      </SfxLink>
     </section>
   );
 }

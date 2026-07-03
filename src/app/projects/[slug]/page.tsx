@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import SfxAnchor from "@/components/sfx/SfxAnchor";
+import SfxLink from "@/components/sfx/SfxLink";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
@@ -43,12 +44,12 @@ export default async function ProjectPage({
   return (
     <article className="mx-auto max-w-3xl px-4 py-16">
       <QuestTracker />
-      <Link
+      <SfxLink
         href="/projects"
         className="font-pixel text-[10px] text-muted transition-colors hover:text-accent"
       >
         ◄ BACK TO QUEST LOG
-      </Link>
+      </SfxLink>
       <h1 className="mt-6 font-pixel text-xl text-highlight">
         {frontmatter.title}
       </h1>
@@ -69,34 +70,34 @@ export default async function ProjectPage({
       )}
       <div className="mt-6 flex flex-wrap gap-4">
         {frontmatter.links.github && (
-          <a
+          <SfxAnchor
             href={frontmatter.links.github}
             target="_blank"
             rel="noopener noreferrer"
             className="font-pixel text-[10px] text-accent-alt underline hover:text-accent"
           >
             GITHUB
-          </a>
+          </SfxAnchor>
         )}
         {frontmatter.links.demo && (
-          <a
+          <SfxAnchor
             href={frontmatter.links.demo}
             target="_blank"
             rel="noopener noreferrer"
             className="font-pixel text-[10px] text-accent-alt underline hover:text-accent"
           >
             DEMO
-          </a>
+          </SfxAnchor>
         )}
         {frontmatter.links.writeup && (
-          <a
+          <SfxAnchor
             href={frontmatter.links.writeup}
             target="_blank"
             rel="noopener noreferrer"
             className="font-pixel text-[10px] text-accent-alt underline hover:text-accent"
           >
             WRITE-UP
-          </a>
+          </SfxAnchor>
         )}
       </div>
       <div className="mdx-content mt-10">

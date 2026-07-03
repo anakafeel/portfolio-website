@@ -4,12 +4,14 @@ import { useEffect, useRef, useState } from "react";
 
 import { CONTACT } from "@/lib/site";
 import { useGame } from "./GameProvider";
+import { useSound } from "./useSound";
 
 const COPIED_FEEDBACK_MS = 2000;
 
 /** Copies the contact email and unlocks SIGNAL SENT. */
 export default function CopyEmailButton() {
   const { award } = useGame();
+  const play = useSound();
   const [copied, setCopied] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -26,6 +28,7 @@ export default function CopyEmailButton() {
       // Clipboard unavailable (permissions/insecure context) — nothing to do.
       return;
     }
+    play("click");
     award("signal_sent");
     setCopied(true);
     if (timerRef.current) clearTimeout(timerRef.current);

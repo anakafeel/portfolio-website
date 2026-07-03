@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import SfxLink from "@/components/sfx/SfxLink";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
@@ -40,12 +40,12 @@ export default async function BlogPostPage({
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-16">
-      <Link
+      <SfxLink
         href="/blog"
         className="font-pixel text-[10px] text-muted transition-colors hover:text-accent"
       >
         ◄ BACK TO DEV LOG
-      </Link>
+      </SfxLink>
       <h1 className="mt-6 font-pixel text-xl text-highlight">
         {post.frontmatter.title}
       </h1>

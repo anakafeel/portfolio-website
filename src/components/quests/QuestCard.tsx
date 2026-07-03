@@ -1,5 +1,4 @@
-import Link from "next/link";
-
+import SfxLink from "@/components/sfx/SfxLink";
 import type { Project, RarityTier } from "@/lib/content";
 
 /*
@@ -19,7 +18,7 @@ export default function QuestCard({ project }: { project: Project }) {
 
   return (
     <article className="pixel-border pixel-border-interactive group bg-surface motion-safe:transition-transform motion-safe:hover:-translate-x-0.5 motion-safe:hover:-translate-y-0.5">
-      <Link href={`/projects/${slug}`} className="block">
+      <SfxLink href={`/projects/${slug}`} className="block">
         {frontmatter.image && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -54,7 +53,7 @@ export default function QuestCard({ project }: { project: Project }) {
             </ul>
           )}
         </div>
-      </Link>
+      </SfxLink>
     </article>
   );
 }

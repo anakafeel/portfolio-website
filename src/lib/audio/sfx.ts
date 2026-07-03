@@ -15,6 +15,8 @@ interface Note {
 
 export type SfxName =
   | "blip"
+  | "click"
+  | "tick"
   | "achievement"
   | "level_up"
   | "theme"
@@ -22,6 +24,10 @@ export type SfxName =
 
 const SFX: Record<SfxName, Note[]> = {
   blip: [{ freq: 660, at: 0, dur: 0.06 }],
+  /* UI click — short and bright so rapid clicks never smear. */
+  click: [{ freq: 880, at: 0, dur: 0.04 }],
+  /* Keystroke tick — quiet, near-percussive. */
+  tick: [{ freq: 1320, at: 0, dur: 0.02 }],
   theme: [
     { freq: 523, at: 0, dur: 0.07 },
     { freq: 784, at: 0.08, dur: 0.09 },

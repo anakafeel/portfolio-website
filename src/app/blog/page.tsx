@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import SfxLink from "@/components/sfx/SfxLink";
 
 import { getBlogPosts } from "@/lib/content";
 
@@ -22,7 +22,7 @@ export default function BlogPage() {
         <ul className="mt-10 flex flex-col gap-6">
           {posts.map((post) => (
             <li key={post.slug} className="pixel-border bg-surface p-4">
-              <Link href={`/blog/${post.slug}`} className="group block">
+              <SfxLink href={`/blog/${post.slug}`} className="group block">
                 <p className="font-pixel text-[10px] text-muted">
                   {post.frontmatter.date}
                 </p>
@@ -32,7 +32,7 @@ export default function BlogPage() {
                 <p className="mt-2 text-lg text-muted">
                   {post.frontmatter.summary}
                 </p>
-              </Link>
+              </SfxLink>
             </li>
           ))}
         </ul>
