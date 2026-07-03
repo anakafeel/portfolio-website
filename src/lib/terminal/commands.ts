@@ -51,6 +51,7 @@ export const TERMINAL_COMMANDS = [
   "about",
   "projects",
   "blog",
+  "rice",
   "home",
   "contact",
   "whoami",
@@ -68,6 +69,7 @@ const NAV_ROUTES: Record<string, string> = {
   about: "/about",
   projects: "/projects",
   blog: "/blog",
+  rice: "/rice",
 };
 
 function err(text: string): CommandResult {
@@ -134,7 +136,7 @@ const HELP_LINES: TerminalLine[] = [
   { text: "  open <slug>        jump to a project quest" },
   { text: "  stats              player card (xp, level, unlocks)" },
   { text: "  theme <name>       switch palette" },
-  { text: "  about|projects|blog|home   navigate" },
+  { text: "  about|projects|blog|rice|home   navigate" },
   { text: "  contact            ways to reach me" },
   { text: "  clear / exit       tidy up / close" },
   { className: DIM, text: "  ─ tip: ↑/↓ history · tab completes" },

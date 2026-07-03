@@ -30,6 +30,11 @@ export const ACHIEVEMENTS = {
     description: "Copied the contact email",
     xp: 25,
   },
+  rice_inspector: {
+    title: "RICE INSPECTOR",
+    description: "Found the hidden rice zone",
+    xp: 50,
+  },
 } as const satisfies Record<string, AchievementDef>;
 
 export type AchievementId = keyof typeof ACHIEVEMENTS;
