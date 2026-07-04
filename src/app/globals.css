@@ -66,6 +66,12 @@
     font-family: var(--font-body), monospace;
     font-size: 1.25rem;
     line-height: 1.5;
+    /*
+     * Full-bleed sections use w-screen (100vw), which includes the vertical
+     * scrollbar on systems with classic scrollbars. clip removes the stray
+     * horizontal scrollbar without creating a new scroll container.
+     */
+    overflow-x: clip;
   }
 
   h1,
@@ -195,8 +201,15 @@
     }
   }
 
+  /*
+   * fill-mode must NOT keep applying after the animation ends: a filled
+   * transform (even an identity one) turns the page wrapper into a
+   * containing block for position: fixed, which breaks ScrollTrigger
+   * pinning (see StorySideScroller). "backwards" releases the transform
+   * on finish; the end state equals the natural style, so nothing jumps.
+   */
   .animate-fade-up {
-    animation: fade-up 300ms ease-out both;
+    animation: fade-up 300ms ease-out backwards;
   }
 
   /*
@@ -219,6 +232,44 @@
 
   .animate-crt-on {
     animation: crt-on 240ms ease-out both;
+  }
+
+  /*
+   * Side-scroller sprite walk cycle (see StorySideScroller). Legs alternate
+   * in hard steps while scroll velocity is non-zero; the body gets a small
+   * bob. Everything freezes on the idle frame when .is-walking is removed.
+   */
+  @keyframes sprite-step {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  @keyframes sprite-bob {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-2px);
+    }
+  }
+
+  .story-sprite.is-walking {
+    animation: sprite-bob 0.32s steps(1) infinite;
+  }
+
+  .story-sprite.is-walking .sprite-leg-a {
+    animation: sprite-step 0.32s steps(1) infinite;
+  }
+
+  .story-sprite.is-walking .sprite-leg-b {
+    animation: sprite-step 0.32s steps(1) infinite;
+    animation-delay: 0.16s;
   }
 
   /* Subtle CRT scanline overlay; apply to a fixed, pointer-events-none div. */

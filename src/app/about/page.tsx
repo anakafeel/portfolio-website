@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import LoadoutCard from "@/components/about/LoadoutCard";
-import StoryLevel from "@/components/about/StoryLevel";
+import StoryStage from "@/components/about/StoryStage";
 
 export const metadata: Metadata = {
   title: "About — Saim Hashmi",
@@ -15,7 +15,7 @@ export default function AboutPage() {
       <p className="mt-6 max-w-2xl text-2xl text-muted">
         Every save file has a backstory. Scroll to play through this one.
       </p>
-      <StoryLevel />
+      <StoryStage />
       <LoadoutCard />
     </section>
   );
