@@ -4,9 +4,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-const GRID_SIZE = 22;
+/** Wider than deep so the floor spans the full viewport on wide screens. */
+const GRID_X = 42;
+const GRID_Z = 22;
 const SPACING = 1.1;
-const VOXEL_COUNT = GRID_SIZE * GRID_SIZE;
+const VOXEL_COUNT = GRID_X * GRID_Z;
 /** Wave height snaps to this step so motion reads as blocky, not smooth. */
 const VOXEL_STEP = 0.25;
 /** Animation ticks at 8 fps for a deliberate low-frame-rate retro feel. */
@@ -83,12 +85,13 @@ function VoxelField({ colors, animate }: VoxelFieldProps) {
     const t = animate
       ? Math.floor(clock.getElapsedTime() * TICK_RATE) / TICK_RATE
       : 0;
-    const half = (GRID_SIZE - 1) / 2;
+    const halfX = (GRID_X - 1) / 2;
+    const halfZ = (GRID_Z - 1) / 2;
     let i = 0;
-    for (let gx = 0; gx < GRID_SIZE; gx++) {
-      for (let gz = 0; gz < GRID_SIZE; gz++) {
-        const x = (gx - half) * SPACING;
-        const z = (gz - half) * SPACING;
+    for (let gx = 0; gx < GRID_X; gx++) {
+      for (let gz = 0; gz < GRID_Z; gz++) {
+        const x = (gx - halfX) * SPACING;
+        const z = (gz - halfZ) * SPACING;
         const wave =
           Math.sin(gx * 0.55 + t * 1.4) * 0.45 +
           Math.cos(gz * 0.45 + t * 0.9) * 0.45;
@@ -123,11 +126,11 @@ export default function VoxelScene() {
   return (
     <Canvas
       dpr={[1, 1.5]}
-      camera={{ position: [0, 7.5, 15], fov: 38, rotation: [-0.5, 0, 0] }}
+      camera={{ position: [0, 7.5, 15], fov: 52, rotation: [-0.5, 0, 0] }}
       gl={{ antialias: false, alpha: true, powerPreference: "low-power" }}
       frameloop={reducedMotion ? "demand" : "always"}
     >
-      <fog attach="fog" args={[colors.background, 10, 26]} />
+      <fog attach="fog" args={[colors.background, 12, 32]} />
       <ambientLight intensity={0.7} />
       <directionalLight position={[4, 10, 6]} intensity={1.4} />
       <VoxelField colors={colors} animate={!reducedMotion} />
