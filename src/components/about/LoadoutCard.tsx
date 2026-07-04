@@ -35,7 +35,7 @@ export default function LoadoutCard() {
                   {rarity.label}
                 </span>
               </div>
-              <h3 className={clsx("mt-4 font-mono text-xl", rarity.text)}>
+              <h3 className={clsx("mt-4 font-pixel text-sm leading-relaxed", rarity.text)}>
                 {item.item}
               </h3>
               <p className="mt-3 text-lg leading-snug text-muted">

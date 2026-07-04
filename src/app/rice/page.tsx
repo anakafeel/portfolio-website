@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 
-import RiceAchievement from "@/components/rice/RiceAchievement";
+import AwardOnVisit from "@/components/game/AwardOnVisit";
 import SfxAnchor from "@/components/sfx/SfxAnchor";
 import { DOTFILES_URL, RICE_SHOTS, RICE_SPECS } from "@/lib/rice";
 
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function RicePage() {
   return (
     <section className="mx-auto max-w-5xl px-4 py-16">
-      <RiceAchievement />
+      <AwardOnVisit id="rice_inspector" />
       <p className="font-pixel text-xs text-accent-alt">SECRET LEVEL</p>
       <h1 className="mt-3 font-pixel text-xl text-highlight">THE RICE ZONE</h1>
       <p className="mt-4 max-w-2xl text-xl text-muted">
@@ -26,7 +26,7 @@ export default function RicePage() {
 
       <div className="pixel-border mt-10 bg-surface p-6">
         <h2 className="font-pixel text-xs text-accent">SYSTEM FETCH</h2>
-        <dl className="mt-4 grid gap-x-10 gap-y-2 font-mono text-lg sm:grid-cols-2">
+        <dl className="mt-4 grid gap-x-10 gap-y-2 text-lg sm:grid-cols-2">
           {RICE_SPECS.map(([key, value]) => (
             <div key={key} className="flex justify-between gap-4">
               <dt className="text-accent-alt">{key}</dt>
@@ -43,7 +43,7 @@ export default function RicePage() {
               <span className="font-pixel text-[10px] text-highlight">
                 {shot.label}
               </span>
-              <span aria-hidden className="font-mono text-xs text-muted">
+              <span aria-hidden className="text-sm text-muted">
                 *.webp
               </span>
             </figcaption>
