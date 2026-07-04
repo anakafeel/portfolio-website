@@ -35,6 +35,11 @@ export const ACHIEVEMENTS = {
     description: "Found the hidden rice zone",
     xp: 50,
   },
+  game_library: {
+    title: "LIBRARY CARD",
+    description: "Browsed the games shelf",
+    xp: 25,
+  },
 } as const satisfies Record<string, AchievementDef>;
 
 export type AchievementId = keyof typeof ACHIEVEMENTS;

@@ -52,6 +52,7 @@ export const TERMINAL_COMMANDS = [
   "projects",
   "blog",
   "rice",
+  "games",
   "home",
   "contact",
   "whoami",
@@ -70,6 +71,7 @@ const NAV_ROUTES: Record<string, string> = {
   projects: "/projects",
   blog: "/blog",
   rice: "/rice",
+  games: "/games",
 };
 
 function err(text: string): CommandResult {
@@ -136,7 +138,7 @@ const HELP_LINES: TerminalLine[] = [
   { text: "  open <slug>        jump to a project quest" },
   { text: "  stats              player card (xp, level, unlocks)" },
   { text: "  theme <name>       switch palette" },
-  { text: "  about|projects|blog|rice|home   navigate" },
+  { text: "  about|projects|blog|rice|games|home   navigate" },
   { text: "  contact            ways to reach me" },
   { text: "  clear / exit       tidy up / close" },
   { className: DIM, text: "  ─ tip: ↑/↓ history · tab completes" },
@@ -203,6 +205,8 @@ export function interpret(
     case "about":
     case "projects":
     case "blog":
+    case "rice":
+    case "games":
     case "home":
       return {
         lines: [{ className: INFO, text: `→ warping to ${name}` }],
