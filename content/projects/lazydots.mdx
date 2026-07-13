@@ -1,0 +1,30 @@
+---
+title: "LazyDots"
+rarityTier: "epic"
+techStack: ["Golang", "Bubbletea", "Lipgloss", "YAML", "Git"]
+links:
+  github: "https://github.com/anakafeel/lazydots"
+date: "2025-11-01"
+summary: "A cross-platform TUI dotfile manager in Go — profiles, Git-backed versioning, and safe symlinks. Built to replace GNU Stow."
+image: "/projects/lazydots.svg"
+---
+
+## Quest briefing
+
+LazyDots is a dotfile manager built from scratch in Go to replace GNU Stow,
+with the interactive workflow Stow never had.
+
+- Automates symlink management and Git-backed versioning across Linux
+  and macOS from a single portable binary.
+- Git-backed versioning with safe rollbacks — break your config, roll
+  back, keep ricing.
+- Interactive Bubbletea TUI for profile management and config switching,
+  a serious usability upgrade over existing CLI-only tools.
+
+## Loot (what was learned)
+
+- The Elm architecture (via Bubbletea) is a genuinely great fit for
+  terminal UIs — state, update, view, done.
+- Symlink edge cases are endless: broken links, nested dirs, cross-device
+  moves. Safety checks earn their keep.
+- Designing a tool you use daily is the fastest feedback loop there is.

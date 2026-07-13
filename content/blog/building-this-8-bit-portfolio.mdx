@@ -1,0 +1,35 @@
+---
+title: "Building this 8-bit portfolio"
+date: "2026-07-13"
+summary: "Why I rebuilt my portfolio as a playable 8-bit world — and what it took: a GSAP side-scroller, an XP system, and a terminal that actually works."
+techStack: ["Next.js", "TypeScript", "GSAP", "Tailwind CSS"]
+---
+
+Most portfolios read like documents. I wanted mine to feel like a game.
+
+This site started life as a fairly standard Next.js + headless CMS
+portfolio. The rebuild ripped that out and replaced it with a self-contained
+8-bit world: MDX content, a global XP and achievement system, theme
+palettes, sound effects, and a working in-page terminal (press it — `help`
+is real).
+
+## The side-scroller
+
+The About page is the piece I'm proudest of. Instead of a timeline, the
+backstory plays as a **side-scrolling level**: GSAP's ScrollTrigger pins the
+stage and converts vertical scroll into horizontal travel through four
+worlds, while a pixel-art sprite walks in place with a two-frame animation
+that only runs while you're actually scrolling. Reduced-motion users get a
+vertical fallback with the same content — no one is locked out of the story.
+
+## The game layer
+
+A React context tracks XP, levels, and achievements, persisted to
+localStorage. Visiting pages, finding the secret rice level, and opening
+projects all award XP. It's a small system, but it changes how the site
+feels: exploration gets rewarded.
+
+## What's next
+
+More log entries — on LazyDots, the homelab, and contributing to Shopify
+CLI. This entry is level 1-1.

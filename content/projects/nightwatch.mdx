@@ -1,0 +1,31 @@
+---
+title: "Nightwatch"
+rarityTier: "epic"
+techStack: ["Python", "FastAPI", "Pydantic", "pytest"]
+links:
+  github: "https://github.com/anakafeel/Nightwatch"
+date: "2026-01-15"
+summary: "Safe nighttime routing that scores paths by streetlight density instead of distance — Top 5 at CUMSA Hacks."
+image: "/projects/nightwatch.svg"
+---
+
+## Quest briefing
+
+Nightwatch answers a simple question: what's the *safest* way to walk home
+at night, not just the shortest? Built at CUMSA Hacks, where it placed
+**Top 5**.
+
+- Built a FastAPI backend that computes safest-vs-shortest routes by
+  scoring paths with streetlight density from Ottawa Open Data.
+- Designed Pydantic schemas with nested models and validation to enforce
+  strict API contracts and reject malformed requests at the boundary.
+- Implemented pytest integration tests with FastAPI's TestClient to
+  validate routing endpoints and schema correctness.
+
+## Loot (what was learned)
+
+- Open municipal data is a goldmine — the hard part is normalizing it
+  into something routable.
+- Schema-first API design catches whole classes of bugs before any route
+  logic runs.
+- Hackathon scope control: one sharp feature beats five half-built ones.

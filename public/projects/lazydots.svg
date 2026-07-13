@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 18" shape-rendering="crispEdges" role="img" aria-label="LazyDots pixel art — terminal prompt with trailing dots">
+  <rect width="32" height="18" fill="#0a0a12"/>
+  <rect x="1" y="1" width="30" height="16" fill="none" stroke="#4ade80" stroke-width="1"/>
+  <g fill="#4ade80">
+    <rect x="5" y="5" width="2" height="2"/>
+    <rect x="7" y="7" width="2" height="2"/>
+    <rect x="5" y="9" width="2" height="2"/>
+    <rect x="11" y="9" width="2" height="2"/>
+    <rect x="15" y="9" width="2" height="2"/>
+    <rect x="19" y="9" width="2" height="2"/>
+  </g>
+  <g fill="#9d8cff">
+    <rect x="24" y="5" width="3" height="1"/>
+    <rect x="24" y="7" width="3" height="1"/>
+    <rect x="24" y="9" width="3" height="1"/>
+  </g>
+  <rect x="5" y="13" width="8" height="1" fill="#4ade80"/>
+</svg>

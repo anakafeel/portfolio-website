@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 18" shape-rendering="crispEdges" role="img" aria-label="Homelab pixel art — server rack with status LEDs">
+  <rect width="32" height="18" fill="#0a0a12"/>
+  <rect x="1" y="1" width="30" height="16" fill="none" stroke="#5eead4" stroke-width="1"/>
+  <g fill="none" stroke="#5eead4" stroke-width="1">
+    <rect x="9.5" y="3.5" width="13" height="3"/>
+    <rect x="9.5" y="7.5" width="13" height="3"/>
+    <rect x="9.5" y="11.5" width="13" height="3"/>
+  </g>
+  <g fill="#4ade80">
+    <rect x="11" y="4" width="1" height="1"/>
+    <rect x="11" y="8" width="1" height="1"/>
+  </g>
+  <g fill="#ffd400">
+    <rect x="11" y="12" width="1" height="1"/>
+  </g>
+  <g fill="#5eead4">
+    <rect x="17" y="4" width="4" height="1"/>
+    <rect x="17" y="8" width="4" height="1"/>
+    <rect x="17" y="12" width="4" height="1"/>
+  </g>
+  <g fill="#9d8cff">
+    <rect x="25" y="5" width="1" height="1"/>
+    <rect x="26" y="4" width="1" height="1"/>
+    <rect x="27" y="5" width="1" height="1"/>
+    <rect x="26" y="6" width="1" height="1"/>
+  </g>
+</svg>

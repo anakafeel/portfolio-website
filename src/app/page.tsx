@@ -11,8 +11,8 @@ export default function Home() {
           SAIM HASHMI
         </h1>
         <p className="max-w-xl text-2xl text-muted">
-          Software engineer. This world is under construction — new zones
-          unlock with every phase.
+          Computer Systems Engineering @ Carleton. SWE intern @ Synopsys.
+          Building systems, tooling, and web experiences that feel like games.
         </p>
         <SfxLink
           href="/projects"

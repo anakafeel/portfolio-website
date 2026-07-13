@@ -1,22 +1,33 @@
 ---
-title: "Shopify CLI contribution"
+title: "Shopify CLI (OSS)"
 rarityTier: "legendary"
-techStack: []
-links: {}
-date: "2025-01-04"
-summary: "TODO: one-line summary of the Shopify CLI open-source contribution."
+techStack: ["TypeScript", "Ruby", "oclif", "Node.js", "GitHub Actions"]
+links:
+  github: "https://github.com/Shopify/cli"
+  writeup: "https://github.com/Shopify/cli/pull/6662"
+date: "2025-11-15"
+summary: "Open-source contributions to Shopify's CLI — smarter config detection, standardized validation, and refactored shared config modules."
 image: "/projects/shopify-cli.svg"
 ---
 
-> **TODO (Saim):** Replace this entire blurb. Placeholder text below — no
-> real details, metrics, or claims. Add the PR link, what the change did,
-> and the review process. Fill in tech stack, links, date, and rarity tier
-> in the frontmatter too.
-
 ## Quest briefing
 
-Open-source contribution to Shopify CLI — description pending.
+Ongoing open-source contributions to [Shopify CLI](https://github.com/Shopify/cli),
+the tool every Shopify app and theme developer runs daily.
+
+- Built `config:pull` to detect `shopify.project.toml` and skip redundant
+  prompts, reducing manual setup for CLI users — merged upstream in
+  [Shopify/cli#6662](https://github.com/Shopify/cli/pull/6662).
+- Standardized config validation across core commands to prevent
+  inconsistent state and avoid common config-related failures.
+- Refactored shared configuration modules to unify core logic, cutting
+  duplication and long-term maintenance overhead.
 
 ## Loot (what was learned)
 
-- TODO
+- Navigating a large production TypeScript monorepo and matching its
+  conventions instead of fighting them.
+- The upstream review process: scoping changes small, writing them up
+  clearly, and iterating with maintainers until merge.
+- oclif command architecture and how Shopify layers config resolution
+  on top of it.

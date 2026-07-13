@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import ExperienceLog from "@/components/about/ExperienceLog";
 import LoadoutCard from "@/components/about/LoadoutCard";
 import StoryStage from "@/components/about/StoryStage";
 
@@ -16,6 +17,7 @@ export default function AboutPage() {
         Every save file has a backstory. Scroll to play through this one.
       </p>
       <StoryStage />
+      <ExperienceLog />
       <LoadoutCard />
     </section>
   );

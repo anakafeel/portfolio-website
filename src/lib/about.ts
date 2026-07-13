@@ -56,21 +56,99 @@ export const STORY_BEATS: StoryBeat[] = [
   {
     world: "WORLD 1-1",
     title: "SPAWN POINT",
-    body: "Computer Systems Engineering at Carleton University, Ottawa. First boot was pure curiosity about how machines actually work — started on Arch, settled on Fedora, never looked back at defaults.",
+    body: "Computer Systems Engineering at Carleton University, Ottawa — third year, graduating May 2027. First boot was pure curiosity about how machines actually work — started on Arch, settled on Fedora, never looked back at defaults.",
   },
   {
     world: "WORLD 1-2",
     title: "SKILL TREE",
-    body: "Points invested in React, Next.js, TypeScript, and systems thinking. The build philosophy: interfaces should feel like native systems — predictable, spatial, keyboard-first.",
+    body: "Points spread across the tree: C, C++, Go, Rust, and Python down the systems branch; TypeScript, React, and Next.js up the web branch. The build philosophy: interfaces should feel like native systems — predictable, spatial, keyboard-first.",
   },
   {
     world: "WORLD 1-3",
     title: "SIDE QUESTS",
-    body: "Hackathons (3rd prize at TechnataHacks 2024), tuning a Linux desktop until every pixel earns its place, and reading Bret Victor essays between compile times.",
+    body: "Top 5 at CUMSA Hacks 2026, 3rd place at Technata Hacks 2024, merged contributions to Shopify CLI, and tuning a Linux desktop until every pixel earns its place.",
   },
   {
     world: "WORLD 1-4",
     title: "CURRENT QUEST",
-    body: "Junior Software Engineer focused on React, Next.js, and AI-driven infrastructure management — shipping web experiences that feel like games instead of documents.",
+    body: "Software Development Intern at Synopsys, building CI/CD pipelines for the Ansys Fluent R&D team — while leading systems & tooling for Autonomous Robotics Carleton on the side.",
+  },
+];
+
+export interface ExperienceEntry {
+  org: string;
+  role: string;
+  period: string;
+  status: "active" | "cleared";
+  tech: string[];
+  highlights: string[];
+}
+
+export const EXPERIENCE: ExperienceEntry[] = [
+  {
+    org: "Synopsys",
+    role: "Software Development Intern",
+    period: "MAY 2026 — AUG 2026",
+    status: "active",
+    tech: ["Azure DevOps", "CI/CD", "Bash", "Docker", "Python"],
+    highlights: [
+      "Built and maintained CI/CD pipelines on Azure DevOps for the Ansys Fluent R&D team, streamlining build and release workflows.",
+      "Automated recurring build and deployment tasks with Bash and Python, reducing manual intervention across the pipeline.",
+    ],
+  },
+  {
+    org: "Shopify CLI (OSS)",
+    role: "Open-Source Contributor",
+    period: "NOV 2025 — PRESENT",
+    status: "active",
+    tech: ["TypeScript", "Ruby", "oclif", "Node.js"],
+    highlights: [
+      "Built config:pull to detect shopify.project.toml and skip redundant prompts, reducing manual setup for CLI users.",
+      "Standardized config validation across core commands and refactored shared config modules to cut duplication.",
+    ],
+  },
+  {
+    org: "Autonomous Robotics Carleton",
+    role: "Software Development Lead: Systems & Tooling",
+    period: "JUL 2025 — PRESENT",
+    status: "active",
+    tech: ["ROS2", "Python", "C++", "Linux"],
+    highlights: [
+      "Led ROS2 data pipelines for perception and navigation, reducing inter-process latency across the autonomy stack.",
+      "Established Docker-based CI, enforced code reviews, and maintained docs that onboarded 20+ new contributors.",
+    ],
+  },
+  {
+    org: "IEEE SPAC",
+    role: "Full Stack Developer & UI/UX Designer",
+    period: "JUL 2025 — OCT 2025",
+    status: "cleared",
+    tech: ["React", "TypeScript", "Figma"],
+    highlights: [
+      "Redesigned responsive, WCAG-compliant UI components, improving accessibility and cross-device usability.",
+      "Built onboarding and submission workflows that significantly reduced failed submissions for candidates and sponsors.",
+    ],
+  },
+  {
+    org: "CuHacking",
+    role: "Full Stack Developer: Website, Dev-Docs, Portal",
+    period: "SEP 2024 — MAY 2025",
+    status: "cleared",
+    tech: ["React", "TypeScript", "Payload CMS", "Node.js"],
+    highlights: [
+      "Engineered a developer portal for 400+ attendees using modular React, keeping it reliable during live events at scale.",
+      "Automated content pipelines via Payload CMS and shell scripts, eliminating JSON editing for non-technical organizers.",
+    ],
+  },
+  {
+    org: "Environmental Health & Safety, Carleton",
+    role: "Web Developer",
+    period: "JAN 2025 — APR 2025",
+    status: "cleared",
+    tech: ["CMS", "SEO", "JavaScript"],
+    highlights: [
+      "Redesigned CMS workflows so non-technical staff could publish events and updates without developer help.",
+      "Restructured site architecture and SEO to improve discoverability while reducing page load times.",
+    ],
   },
 ];

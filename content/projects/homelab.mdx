@@ -1,0 +1,28 @@
+---
+title: "Homelab Infrastructure"
+rarityTier: "rare"
+techStack: ["Cloudflare Tunnels", "Docker", "Nginx", "DNS", "Linux"]
+links: {}
+date: "2025-09-01"
+summary: "A security-first homelab on a Raspberry Pi — services exposed only through Cloudflare Tunnels, with zero inbound ports."
+image: "/projects/homelab.svg"
+---
+
+## Quest briefing
+
+A self-hosted homelab designed security-first for sensitive data, running
+on a Raspberry Pi in the corner of the room.
+
+- Services are exposed **only** via Cloudflare Tunnels — zero inbound
+  ports open on the network edge.
+- Containerized every service with Docker for isolation, reproducibility,
+  and controlled access.
+- Nginx reverse proxying plus local DNS handle secure internal routing,
+  service discovery, and name resolution.
+
+## Loot (what was learned)
+
+- Zero-trust networking in practice: outbound-only tunnels remove an
+  entire class of attack surface.
+- ARM quirks: not every container image loves a Raspberry Pi.
+- DNS is always the problem. Even at home. *Especially* at home.
