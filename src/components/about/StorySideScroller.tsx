@@ -5,15 +5,33 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
+import PlayerSprite from "@/components/about/PlayerSprite";
+import SfxAnchor from "@/components/sfx/SfxAnchor";
 import { STORY_BEATS } from "@/lib/about";
+import { RESUME_URL } from "@/lib/site";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-/** PROTOTYPE: only the first checkpoints ride the track until the feel is approved. */
-const BEATS = STORY_BEATS.slice(0, 2);
-
 /** How long the sprite keeps walking after the last scroll tick. */
 const IDLE_DELAY_MS = 150;
+
+/**
+ * The level has its own fixed daytime-platformer palette on purpose: it
+ * reads as a bright stage inside the dark site, whatever the active theme.
+ */
+const LEVEL = {
+  skyTop: "#5c94fc",
+  skyBottom: "#9cd0ff",
+  hillFar: "#6fc25a",
+  hillMid: "#3fa04a",
+  grass: "#48b04c",
+  dirt: "#a0622d",
+  dirtSeam: "#7c4a1e",
+  pole: "#7c4a1e",
+  flag: "#e23b3b",
+  ink: "#16327c",
+  outline: "#1a2a5a",
+};
 
 /**
  * Pinned side-scrolling level: vertical scroll drives the track horizontally
@@ -60,7 +78,7 @@ export default function StorySideScroller() {
       });
 
       // duration: 1 so the track moves across the entire pin range and the
-      // beat reveals below can address positions as fractions of it.
+      // reveals below can address positions as fractions of it.
       tl.to(track, { x: () => -distance(), duration: 1 }, 0)
         .to(".parallax-far", { x: () => -distance() * 0.15, duration: 1 }, 0)
         .to(".parallax-mid", { x: () => -distance() * 0.4, duration: 1 }, 0);
@@ -94,11 +112,22 @@ export default function StorySideScroller() {
         );
       });
 
-      tl.from(
-        ".scroller-clear",
-        { autoAlpha: 0, scale: 0.5, duration: 0.06, ease: "steps(4)" },
-        0.9,
-      );
+      const clear = stage.querySelector<HTMLElement>(".scroller-clear");
+      if (clear) {
+        const clearAt = gsap.utils.clamp(
+          0,
+          0.94,
+          (clear.getBoundingClientRect().left -
+            trackLeft -
+            window.innerWidth * 0.85) /
+            distance(),
+        );
+        tl.from(
+          clear,
+          { autoAlpha: 0, scale: 0.5, duration: 0.06, ease: "steps(4)" },
+          clearAt,
+        );
+      }
 
       return () => window.clearTimeout(idleTimer.current);
     },
@@ -106,53 +135,114 @@ export default function StorySideScroller() {
   );
 
   return (
-    <div className="mt-16 w-screen ml-[calc(50%-50vw)]">
+    <div className="ml-[calc(50%-50vw)] mt-16 w-screen">
       <div
         ref={stageRef}
-        className="relative h-[85vh] overflow-hidden border-y-2 border-border bg-background"
+        className="relative h-[85vh] overflow-hidden border-y-4"
+        style={{
+          borderColor: LEVEL.outline,
+          background: `linear-gradient(to bottom, ${LEVEL.skyTop} 0%, ${LEVEL.skyBottom} 100%)`,
+        }}
       >
-        {/* Parallax backdrop: far skyline + mid clouds, pure CSS shapes. */}
+        {/* Pixel sun, fixed in the sky. */}
+        <span
+          aria-hidden
+          className="absolute right-[8%] top-[10%] h-12 w-12"
+          style={{
+            background: "#ffd400",
+            boxShadow: "0 0 0 6px #ffdf4d, 0 0 0 12px rgba(255, 223, 77, 0.35)",
+          }}
+        />
+
+        {/* Parallax backdrop: far hill range + mid clouds and bushes. */}
         <div
           aria-hidden
-          className="parallax-far absolute bottom-16 left-0 h-2/5 w-[220vw] bg-[linear-gradient(to_top,var(--color-surface)_0%,transparent_100%)] [clip-path:polygon(0_100%,0_55%,8%_55%,8%_30%,16%_30%,16%_60%,26%_60%,26%_20%,34%_20%,34%_50%,45%_50%,45%_35%,53%_35%,53%_65%,64%_65%,64%_25%,72%_25%,72%_55%,82%_55%,82%_40%,90%_40%,90%_60%,100%_60%,100%_100%)]"
+          className="parallax-far absolute bottom-16 left-0 h-[45%] w-[220vw]"
+          style={{
+            background: LEVEL.hillFar,
+            clipPath:
+              "polygon(0 100%, 0 60%, 6% 45%, 12% 45%, 18% 62%, 25% 30%, 31% 30%, 38% 58%, 46% 42%, 52% 42%, 58% 65%, 66% 25%, 72% 25%, 80% 55%, 87% 40%, 93% 40%, 100% 62%, 100% 100%)",
+          }}
         />
-        <div aria-hidden className="parallax-mid absolute left-0 top-[12%] w-[260vw]">
-          {[12, 38, 61, 84].map((left) => (
+        <div aria-hidden className="parallax-mid absolute inset-x-0 bottom-16 left-0 top-0 w-[260vw]">
+          {[10, 32, 55, 78].map((left) => (
             <span
-              key={left}
-              className="absolute h-6 w-24 bg-surface opacity-80 [box-shadow:12px_-12px_0_0_var(--color-surface),-12px_6px_0_0_var(--color-surface)]"
-              style={{ left: `${left}%` }}
+              key={`cloud-${left}`}
+              className="absolute top-[14%] h-6 w-24 bg-white"
+              style={{
+                left: `${left}%`,
+                boxShadow: "14px -10px 0 0 #fff, -14px 8px 0 0 #fff",
+                opacity: 0.95,
+              }}
+            />
+          ))}
+          {[18, 44, 68, 90].map((left) => (
+            <span
+              key={`bush-${left}`}
+              className="absolute bottom-0 h-8 w-28"
+              style={{
+                left: `${left}%`,
+                background: LEVEL.hillMid,
+                boxShadow: `18px 8px 0 0 ${LEVEL.hillMid}, -16px 10px 0 0 ${LEVEL.hillMid}`,
+              }}
             />
           ))}
         </div>
 
         {/* The level track: panels slide left as the user scrolls down. */}
         <div className="level-track relative flex h-full w-max items-end">
+          {/* Ground: grass lip over brick dirt, spanning the whole track. */}
           <div
             aria-hidden
-            className="absolute inset-x-0 bottom-0 h-16 border-t-4 border-border bg-[repeating-linear-gradient(90deg,var(--color-surface)_0px,var(--color-surface)_30px,var(--color-background)_30px,var(--color-background)_32px)]"
+            className="absolute inset-x-0 bottom-0 h-16"
+            style={{
+              background: `repeating-linear-gradient(90deg, ${LEVEL.dirt} 0px, ${LEVEL.dirt} 30px, ${LEVEL.dirtSeam} 30px, ${LEVEL.dirtSeam} 32px)`,
+              borderTop: `10px solid ${LEVEL.grass}`,
+              boxShadow: `inset 0 4px 0 0 ${LEVEL.outline}`,
+            }}
           />
 
           <div className="flex w-[70vw] shrink-0 items-center self-stretch pl-[10vw]">
             <div>
-              <p className="font-pixel text-[10px] text-accent-alt">STAGE 1</p>
-              <h2 className="mt-3 font-pixel text-lg text-highlight">
+              <p
+                className="font-pixel text-[10px]"
+                style={{ color: LEVEL.ink }}
+              >
+                WORLD 1 — SAIM&apos;S STORY
+              </p>
+              <h2
+                className="mt-3 font-pixel text-lg text-white"
+                style={{ textShadow: `3px 3px 0 ${LEVEL.outline}` }}
+              >
                 CHARACTER SELECT
               </h2>
-              <p className="mt-4 max-w-md text-xl text-muted">
+              <p
+                className="mt-4 max-w-md text-xl"
+                style={{ color: LEVEL.ink }}
+              >
                 Keep scrolling — the level scrolls sideways from here. ►
               </p>
             </div>
           </div>
 
-          {BEATS.map((beat) => (
+          {STORY_BEATS.map((beat) => (
             <div
               key={beat.world}
-              className="flex w-[75vw] shrink-0 items-end gap-6 self-stretch pb-24"
+              className="flex w-[65vw] shrink-0 items-end gap-6 self-stretch pb-24"
             >
               {/* Checkpoint signpost */}
-              <div aria-hidden className="relative ml-[6vw] h-32 w-4 bg-border">
-                <span className="absolute -top-1 left-4 h-10 w-14 bg-accent [clip-path:polygon(0_0,100%_50%,0_100%)]" />
+              <div
+                aria-hidden
+                className="relative ml-[6vw] h-32 w-4 shrink-0"
+                style={{ background: LEVEL.pole }}
+              >
+                <span
+                  className="absolute -top-1 left-4 h-10 w-14"
+                  style={{
+                    background: LEVEL.flag,
+                    clipPath: "polygon(0 0, 100% 50%, 0 100%)",
+                  }}
+                />
               </div>
               <article className="scroller-beat pixel-border max-w-md bg-surface p-6">
                 <p className="font-pixel text-[10px] text-accent-alt">
@@ -168,32 +258,39 @@ export default function StorySideScroller() {
             </div>
           ))}
 
-          <div className="flex w-[55vw] shrink-0 items-end justify-center self-stretch pb-32">
-            <p className="scroller-clear text-center font-pixel text-sm text-accent">
-              ★ CHECKPOINT REACHED ★
-              <span className="mt-4 block font-pixel text-[10px] text-muted">
-                (prototype ends here — worlds 1-3 and 1-4 ship next)
-              </span>
-            </p>
+          <div className="flex w-[60vw] shrink-0 items-center justify-center self-stretch">
+            <div className="scroller-clear pb-24 text-center">
+              <p
+                className="font-pixel text-lg text-white"
+                style={{ textShadow: `3px 3px 0 ${LEVEL.outline}` }}
+              >
+                ★ LEVEL CLEAR ★
+              </p>
+              <p
+                className="mt-4 font-pixel text-[10px]"
+                style={{ color: LEVEL.ink }}
+              >
+                THE FULL SAVE FILE FITS ON ONE PAGE
+              </p>
+              <SfxAnchor
+                href={RESUME_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pixel-border pixel-border-interactive mt-6 inline-block bg-surface px-6 py-3 font-pixel text-xs text-foreground transition-colors hover:text-accent"
+              >
+                VIEW RESUME ►
+              </SfxAnchor>
+            </div>
           </div>
         </div>
 
-        {/* Player sprite: stays put while the world moves past. Placeholder
-            blocky character — swap for a real sprite sheet once approved. */}
+        {/* Player sprite: stays put while the world moves past. */}
         <div
           ref={spriteRef}
           aria-hidden
-          className="story-sprite absolute bottom-16 left-[16vw]"
+          className="story-sprite absolute bottom-[60px] left-[16vw]"
         >
-          <div className="sprite-head mx-auto h-5 w-5 bg-highlight" />
-          <div className="relative mx-auto h-6 w-7 bg-accent">
-            {/* laptop prop */}
-            <span className="absolute -right-2 top-1 h-3 w-3 bg-accent-alt" />
-          </div>
-          <div className="flex justify-center gap-1">
-            <span className="sprite-leg-a h-3 w-2 bg-foreground" />
-            <span className="sprite-leg-b h-3 w-2 bg-foreground" />
-          </div>
+          <PlayerSprite />
         </div>
       </div>
     </div>

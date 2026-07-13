@@ -235,20 +235,10 @@
   }
 
   /*
-   * Side-scroller sprite walk cycle (see StorySideScroller). Legs alternate
-   * in hard steps while scroll velocity is non-zero; the body gets a small
-   * bob. Everything freezes on the idle frame when .is-walking is removed.
+   * Side-scroller sprite walk cycle (see StorySideScroller/PlayerSprite).
+   * Two frames swap in hard steps while scroll velocity is non-zero; the
+   * body gets a small bob. Freezes on the standing frame when idle.
    */
-  @keyframes sprite-step {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-5px);
-    }
-  }
-
   @keyframes sprite-bob {
     0%,
     100% {
@@ -259,17 +249,31 @@
     }
   }
 
+  @keyframes sprite-swap {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .sprite-frame-b {
+    opacity: 0;
+  }
+
   .story-sprite.is-walking {
     animation: sprite-bob 0.32s steps(1) infinite;
   }
 
-  .story-sprite.is-walking .sprite-leg-a {
-    animation: sprite-step 0.32s steps(1) infinite;
+  .story-sprite.is-walking .sprite-frame-a {
+    animation: sprite-swap 0.32s steps(1) infinite;
   }
 
-  .story-sprite.is-walking .sprite-leg-b {
-    animation: sprite-step 0.32s steps(1) infinite;
-    animation-delay: 0.16s;
+  .story-sprite.is-walking .sprite-frame-b {
+    animation: sprite-swap 0.32s steps(1) infinite;
+    animation-delay: -0.16s;
   }
 
   /* Subtle CRT scanline overlay; apply to a fixed, pointer-events-none div. */

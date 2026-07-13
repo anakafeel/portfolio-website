@@ -6,7 +6,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Lenis from "lenis";
 
+import SfxAnchor from "@/components/sfx/SfxAnchor";
 import { STORY_BEATS } from "@/lib/about";
+import { RESUME_URL } from "@/lib/site";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -111,9 +113,17 @@ export default function StoryLevel() {
         ))}
       </ol>
 
-      <p className="story-clear mt-24 text-center font-pixel text-sm text-accent sm:pl-14">
-        ★ LEVEL CLEAR ★
-      </p>
+      <div className="story-clear mt-24 text-center sm:pl-14">
+        <p className="font-pixel text-sm text-accent">★ LEVEL CLEAR ★</p>
+        <SfxAnchor
+          href={RESUME_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="pixel-border pixel-border-interactive mt-6 inline-block bg-surface px-6 py-3 font-pixel text-xs text-foreground transition-colors hover:text-accent"
+        >
+          VIEW RESUME ►
+        </SfxAnchor>
+      </div>
     </div>
   );
 }

@@ -6,6 +6,9 @@ export const SITE = {
     "Saim Hashmi's portfolio — projects, experience, and an 8-bit world to explore.",
 } as const;
 
+/** Drop the actual PDF at public/resume.pdf — the CTA 404s until it exists. */
+export const RESUME_URL = "/resume.pdf";
+
 export const CONTACT = {
   email: "hashmisaim037@gmail.com",
   github: "https://github.com/anakafeel",
