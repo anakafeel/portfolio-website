@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -245,13 +246,25 @@ export default function StorySideScroller() {
                 />
               </div>
               <article className="scroller-beat pixel-border max-w-md bg-surface p-6">
-                <p className="font-pixel text-[10px] text-accent-alt">
-                  {beat.world}
-                </p>
-                <h3 className="mt-3 font-pixel text-sm text-highlight">
-                  {beat.title}
-                </h3>
-                <p className="mt-3 text-lg leading-snug text-muted">
+                <div className="flex items-center gap-4">
+                  <Image
+                    src={beat.logo.src}
+                    alt={beat.logo.alt}
+                    width={48}
+                    height={48}
+                    unoptimized
+                    className="pixelated shrink-0 border-2 border-border"
+                  />
+                  <div>
+                    <p className="font-pixel text-[10px] text-accent-alt">
+                      {beat.world}
+                    </p>
+                    <h3 className="mt-2 font-pixel text-sm text-highlight">
+                      {beat.title}
+                    </h3>
+                  </div>
+                </div>
+                <p className="mt-4 text-lg leading-snug text-muted">
                   {beat.body}
                 </p>
               </article>

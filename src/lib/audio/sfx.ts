@@ -20,7 +20,8 @@ export type SfxName =
   | "achievement"
   | "level_up"
   | "theme"
-  | "terminal";
+  | "terminal"
+  | "terminal_off";
 
 const SFX: Record<SfxName, Note[]> = {
   blip: [{ freq: 660, at: 0, dur: 0.06 }],
@@ -36,6 +37,12 @@ const SFX: Record<SfxName, Note[]> = {
     { freq: 392, at: 0, dur: 0.06 },
     { freq: 523, at: 0.07, dur: 0.06 },
     { freq: 659, at: 0.14, dur: 0.09 },
+  ],
+  /* Mirror of "terminal": the same jingle descending for power-off. */
+  terminal_off: [
+    { freq: 659, at: 0, dur: 0.06 },
+    { freq: 523, at: 0.07, dur: 0.06 },
+    { freq: 392, at: 0.14, dur: 0.09 },
   ],
   achievement: [
     { freq: 523, at: 0, dur: 0.09 },

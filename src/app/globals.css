@@ -234,6 +234,26 @@
     animation: crt-on 240ms ease-out both;
   }
 
+  /* CRT power-off: the power-on sequence played in reverse. */
+  @keyframes crt-off {
+    0% {
+      transform: translate(-50%, -50%) scale(1, 1);
+      opacity: 1;
+    }
+    40% {
+      transform: translate(-50%, -50%) scale(1, 1.04);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1, 0.02);
+      opacity: 0;
+    }
+  }
+
+  .animate-crt-off {
+    animation: crt-off 240ms ease-in both;
+  }
+
   /*
    * Side-scroller sprite walk cycle (see StorySideScroller/PlayerSprite).
    * Two frames swap in hard steps while scroll velocity is non-zero; the

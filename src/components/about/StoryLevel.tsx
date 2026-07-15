@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -100,12 +101,24 @@ export default function StoryLevel() {
       <ol className="flex flex-col gap-24 sm:pl-14">
         {STORY_BEATS.map((beat) => (
           <li key={beat.world} className="story-beat">
-            <p className="font-pixel text-[10px] text-accent-alt">
-              {beat.world}
-            </p>
-            <h2 className="mt-3 font-pixel text-lg text-highlight">
-              {beat.title}
-            </h2>
+            <div className="flex items-center gap-4">
+              <Image
+                src={beat.logo.src}
+                alt={beat.logo.alt}
+                width={48}
+                height={48}
+                unoptimized
+                className="pixelated shrink-0 border-2 border-border"
+              />
+              <div>
+                <p className="font-pixel text-[10px] text-accent-alt">
+                  {beat.world}
+                </p>
+                <h2 className="mt-2 font-pixel text-lg text-highlight">
+                  {beat.title}
+                </h2>
+              </div>
+            </div>
             <p className="mt-4 max-w-2xl text-xl leading-relaxed text-muted">
               {beat.body}
             </p>

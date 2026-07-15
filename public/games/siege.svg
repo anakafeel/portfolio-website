@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="400" viewBox="0 0 300 400" shape-rendering="crispEdges">
+  <rect width="300" height="400" fill="#1c2430"/>
+  <!-- breached brick wall -->
+  <g fill="#3a4a5e">
+    <rect x="20" y="40" width="60" height="28"/><rect x="88" y="40" width="60" height="28"/><rect x="156" y="40" width="60" height="28"/><rect x="224" y="40" width="56" height="28"/>
+    <rect x="20" y="76" width="40" height="28"/><rect x="240" y="76" width="40" height="28"/>
+    <rect x="20" y="112" width="30" height="28"/><rect x="250" y="112" width="30" height="28"/>
+    <rect x="20" y="148" width="44" height="28"/><rect x="236" y="148" width="44" height="28"/>
+    <rect x="20" y="184" width="64" height="28"/><rect x="92" y="184" width="60" height="28"/><rect x="160" y="184" width="60" height="28"/><rect x="228" y="184" width="52" height="28"/>
+  </g>
+  <!-- breach glow -->
+  <rect x="90" y="80" width="120" height="96" fill="#ff8a2a" opacity="0.25"/>
+  <rect x="110" y="96" width="80" height="64" fill="#ffb060" opacity="0.5"/>
+  <rect x="130" y="112" width="40" height="32" fill="#ffe0a0"/>
+  <!-- crosshair -->
+  <g fill="#e8eef6">
+    <rect x="146" y="230" width="8" height="36"/>
+    <rect x="146" y="294" width="8" height="36"/>
+    <rect x="110" y="266" width="36" height="8"/>
+    <rect x="154" y="266" width="36" height="8"/>
+    <rect x="146" y="266" width="8" height="8" fill="#ff8a2a"/>
+  </g>
+  <rect x="0" y="352" width="300" height="48" fill="#10161e"/>
+  <text x="150" y="374" font-family="monospace" font-size="16" font-weight="bold" fill="#e8eef6" text-anchor="middle">RAINBOW SIX</text>
+  <text x="150" y="392" font-family="monospace" font-size="12" fill="#7a8aa0" text-anchor="middle">SIEGE</text>
+</svg>
