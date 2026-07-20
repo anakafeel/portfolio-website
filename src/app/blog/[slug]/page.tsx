@@ -42,7 +42,7 @@ export default async function BlogPostPage({
     <article className="mx-auto max-w-3xl px-4 py-16">
       <SfxLink
         href="/blog"
-        className="font-pixel text-[10px] text-muted transition-colors hover:text-accent"
+        className="font-pixel text-[10px] text-muted transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
       >
         ◄ BACK TO DEV LOG
       </SfxLink>

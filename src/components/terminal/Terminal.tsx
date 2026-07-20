@@ -6,6 +6,7 @@ import clsx from "clsx";
 
 import { useGame } from "@/components/game/GameProvider";
 import { useSound } from "@/components/game/useSound";
+import { useFocusTrap } from "@/components/useFocusTrap";
 import { SITE } from "@/lib/site";
 import {
   completions,
@@ -47,6 +48,9 @@ export default function Terminal({ data, onClose, closing }: TerminalProps) {
 
   const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  useFocusTrap(dialogRef, !closing);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -142,7 +146,9 @@ export default function Terminal({ data, onClose, closing }: TerminalProps) {
 
   return (
     <div
+      ref={dialogRef}
       role="dialog"
+      aria-modal="true"
       aria-label="Terminal"
       className={clsx(
         "pixel-border fixed left-1/2 top-1/2 z-[90] flex h-[min(560px,72vh)] w-[min(880px,94vw)] -translate-x-1/2 -translate-y-1/2 flex-col bg-surface",
@@ -157,8 +163,13 @@ export default function Terminal({ data, onClose, closing }: TerminalProps) {
           aria-label="Close terminal"
           tabIndex={0}
           onClick={onClose}
-          onKeyDown={(e) => e.key === "Enter" && onClose()}
-          className="h-3 w-3 cursor-pointer bg-accent transition-all hover:brightness-125"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              onClose();
+            }
+          }}
+          className="-m-1.5 h-6 w-6 cursor-pointer rounded-none bg-accent bg-clip-content p-1.5 transition-all hover:brightness-125 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         />
         <span className="h-3 w-3 bg-highlight" />
         <span className="h-3 w-3 bg-accent-alt" />
@@ -168,7 +179,7 @@ export default function Terminal({ data, onClose, closing }: TerminalProps) {
         <button
           type="button"
           onClick={onClose}
-          className="border border-border px-1.5 font-pixel text-[10px] text-muted transition-colors hover:border-accent hover:text-accent"
+          className="border border-border px-1.5 py-1 font-pixel text-[10px] text-muted transition-colors hover:border-accent hover:text-accent focus-visible:border-accent focus-visible:text-accent focus-visible:outline-none"
         >
           ×
         </button>
@@ -231,7 +242,7 @@ export default function Terminal({ data, onClose, closing }: TerminalProps) {
             autoComplete="off"
             spellCheck={false}
             aria-label="Terminal input"
-            className="min-w-0 flex-1 border-none bg-transparent text-foreground caret-accent outline-none"
+            className="min-w-0 flex-1 border-none bg-transparent text-foreground caret-accent outline-none focus-visible:underline focus-visible:decoration-accent"
           />
         </div>
       </div>

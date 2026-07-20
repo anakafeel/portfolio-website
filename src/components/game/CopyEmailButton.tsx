@@ -40,7 +40,7 @@ export default function CopyEmailButton() {
       type="button"
       onClick={copy}
       title="Copy email address"
-      className="border border-border px-1.5 py-0.5 font-pixel text-[10px] text-muted transition-colors hover:border-accent hover:text-accent"
+      className="border border-border px-1.5 py-1 font-pixel text-[10px] text-muted transition-colors hover:border-accent hover:text-accent focus-visible:border-accent focus-visible:text-accent focus-visible:outline-none"
     >
       {copied ? "COPIED!" : "COPY"}
     </button>

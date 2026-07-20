@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-20T19:00:00Z",
+  "title": "Design System: Saim Hashmi — Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "arcade-accent": { "role": "primary", "displayName": "Cathode Pink", "canonical": "#ff2d78" },
+      "arcade-highlight": { "role": "primary", "displayName": "Coin Gold", "canonical": "#ffd400" },
+      "arcade-accent-alt": { "role": "secondary", "displayName": "Arcade Cyan", "canonical": "#00e5ff" },
+      "arcade-background": { "role": "neutral", "displayName": "Void Black", "canonical": "#0a0a12" },
+      "arcade-surface": { "role": "neutral", "displayName": "Cabinet Navy", "canonical": "#16162a" },
+      "arcade-border": { "role": "neutral", "displayName": "Circuit Indigo", "canonical": "#34346a" },
+      "arcade-foreground": { "role": "neutral", "displayName": "Phosphor White", "canonical": "#e8e8f4" },
+      "arcade-muted": { "role": "neutral", "displayName": "Dim Lilac", "canonical": "#8f8fb3" },
+      "phosphor-background": { "role": "neutral", "displayName": "CRT Black", "canonical": "#020a04" },
+      "phosphor-surface": { "role": "neutral", "displayName": "Deep Moss", "canonical": "#05170c" },
+      "phosphor-border": { "role": "neutral", "displayName": "Circuit Green", "canonical": "#12522a" },
+      "phosphor-foreground": { "role": "neutral", "displayName": "Phosphor Green", "canonical": "#35ff6d" },
+      "phosphor-muted": { "role": "neutral", "displayName": "Mid Green", "canonical": "#1d9c46" },
+      "phosphor-accent": { "role": "primary", "displayName": "Mint Glow", "canonical": "#8dffb0" },
+      "phosphor-accent-alt": { "role": "secondary", "displayName": "Phosphor Green", "canonical": "#35ff6d" },
+      "phosphor-highlight": { "role": "primary", "displayName": "Pale Mint", "canonical": "#d6ffe2" },
+      "synthwave-background": { "role": "neutral", "displayName": "Night Purple", "canonical": "#170733" },
+      "synthwave-surface": { "role": "neutral", "displayName": "Grid Violet", "canonical": "#261252" },
+      "synthwave-border": { "role": "neutral", "displayName": "Neon Indigo", "canonical": "#4d2b8f" },
+      "synthwave-foreground": { "role": "neutral", "displayName": "Chrome White", "canonical": "#f4e9ff" },
+      "synthwave-muted": { "role": "neutral", "displayName": "Dusty Lavender", "canonical": "#a98fd6" },
+      "synthwave-accent": { "role": "primary", "displayName": "Magenta Drive", "canonical": "#ff3ec8" },
+      "synthwave-accent-alt": { "role": "secondary", "displayName": "Laser Cyan", "canonical": "#00f0ff" },
+      "synthwave-highlight": { "role": "primary", "displayName": "Sunset Amber", "canonical": "#ffb300" },
+      "gameboy-background": { "role": "neutral", "displayName": "GB Darkest", "canonical": "#0f380f" },
+      "gameboy-surface": { "role": "neutral", "displayName": "GB Dark", "canonical": "#306230" },
+      "gameboy-border": { "role": "neutral", "displayName": "GB Light", "canonical": "#8bac0f" },
+      "gameboy-foreground": { "role": "neutral", "displayName": "GB Lightest", "canonical": "#9bbc0e" },
+      "gameboy-muted": { "role": "neutral", "displayName": "GB Light", "canonical": "#8bac0f" },
+      "gameboy-accent": { "role": "primary", "displayName": "GB Pale", "canonical": "#cadc9f" },
+      "gameboy-accent-alt": { "role": "secondary", "displayName": "GB Lightest", "canonical": "#9bbc0e" },
+      "gameboy-highlight": { "role": "primary", "displayName": "GB Pale", "canonical": "#cadc9f" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The single H1 on the homepage hero only." },
+      "title": { "displayName": "Title", "purpose": "Section and card headings." },
+      "label": { "displayName": "Label", "purpose": "Nav items, buttons, HUD readouts, terminal chrome." },
+      "micro": { "displayName": "Micro", "purpose": "Rarity badges, tech-stack tags, index numbers, smallest HUD readouts." },
+      "nano": { "displayName": "Nano", "purpose": "Terminal title bar, modal stat labels, chrome-within-chrome metadata below Micro." },
+      "body": { "displayName": "Body", "purpose": "Paragraph copy and MDX content." },
+      "code": { "displayName": "Code", "purpose": "Inline <code> within MDX prose, a notch under Body." }
+    },
+    "shadows": [
+      { "name": "pixel", "value": "4px 4px 0 0 var(--color-border)", "purpose": "Default resting elevation for cards, buttons, bordered panels." },
+      { "name": "pixel-accent", "value": "4px 4px 0 0 var(--color-accent)", "purpose": "Hover/focus-within state of any .pixel-border-interactive element." }
+    ],
+    "motion": [
+      { "name": "crt-on", "value": "240ms ease-out both", "purpose": "Terminal power-on: vertical scale collapse from 0.02 to 1.04 to 1." },
+      { "name": "crt-off", "value": "240ms ease-in both", "purpose": "Terminal power-off: the power-on sequence in reverse." },
+      { "name": "blink-steps", "value": "1.1s steps(1) infinite", "purpose": "Hard on/off blink, no easing, like an arcade cabinet light." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Square-cornered CTA with a hard offset shadow; text and border/shadow recolor to the theme accent on hover.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">VIEW RESUME &#9658;</a>",
+      "css": ".ds-btn-primary { display: inline-block; background: #16162a; color: #e8e8f4; border: 2px solid #34346a; border-radius: 0; box-shadow: 4px 4px 0 0 #34346a; padding: 12px 24px; font-family: 'Press Start 2P', monospace; font-size: 0.75rem; text-decoration: none; transition: color 0.2s, border-color 0.2s, box-shadow 0.2s; } .ds-btn-primary:hover, .ds-btn-primary:focus-visible { color: #ff2d78; border-color: #ff2d78; box-shadow: 4px 4px 0 0 #ff2d78; }"
+    },
+    {
+      "name": "Project Card",
+      "kind": "card",
+      "refersTo": "card-project",
+      "description": "Rarity-tinted project card: square corners, hard pixel shadow, lifts up-left on hover.",
+      "html": "<article class=\"ds-card-project\"><p class=\"ds-card-project__rarity\">&#9670; EPIC</p><h2 class=\"ds-card-project__title\">Project Title</h2><p class=\"ds-card-project__summary\">One-line summary of the project.</p></article>",
+      "css": ".ds-card-project { background: #16162a; border: 2px solid #34346a; border-radius: 0; box-shadow: 4px 4px 0 0 #34346a; padding: 16px; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; } .ds-card-project:hover, .ds-card-project:focus-within { border-color: #ff2d78; box-shadow: 4px 4px 0 0 #ff2d78; transform: translate(-2px, -2px); } .ds-card-project__rarity { font-family: 'Press Start 2P', monospace; font-size: 0.625rem; text-transform: uppercase; color: #ff2d78; margin: 0 0 12px; } .ds-card-project__title { font-family: 'Press Start 2P', monospace; font-size: 0.875rem; color: #e8e8f4; margin: 0 0 12px; } .ds-card-project__summary { font-family: 'VT323', monospace; font-size: 1.25rem; color: #8f8fb3; margin: 0; }"
+    },
+    {
+      "name": "Nav Item",
+      "kind": "nav",
+      "refersTo": "nav-item",
+      "description": "Numbered nav link with an arrow indicator that's always visible and pulsing when active, otherwise revealed on hover.",
+      "html": "<a class=\"ds-nav-item ds-nav-item--active\" href=\"#\"><span class=\"ds-nav-item__arrow\">&#9658;</span><span class=\"ds-nav-item__index\">01</span>HOME</a>",
+      "css": ".ds-nav-item { display: inline-flex; align-items: baseline; gap: 6px; font-family: 'Press Start 2P', monospace; font-size: 0.75rem; color: #e8e8f4; text-decoration: none; transition: color 0.2s; } .ds-nav-item:hover, .ds-nav-item:focus-visible { color: #ff2d78; } .ds-nav-item--active { color: #ffd400; } .ds-nav-item__arrow { color: #ff2d78; } .ds-nav-item--active .ds-nav-item__arrow { animation: ds-pulse 1.4s ease-in-out infinite; } .ds-nav-item__index { font-size: 0.625rem; color: #8f8fb3; } @keyframes ds-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }"
+    },
+    {
+      "name": "HUD Micro-Button",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Theme swatch / mute / terminal toggle button used inside the persistent HUD strip — bordered-only at rest, filled solid with the accent when active/pressed.",
+      "html": "<button class=\"ds-hud-btn ds-hud-btn--active\" type=\"button\" aria-pressed=\"true\">A</button>",
+      "css": ".ds-hud-btn { border: 1px solid #34346a; background: transparent; color: #8f8fb3; font-family: 'Press Start 2P', monospace; font-size: 0.625rem; text-transform: uppercase; padding: 2px 6px; transition: border-color 0.2s, color 0.2s, background 0.2s; } .ds-hud-btn:hover, .ds-hud-btn:focus-visible { border-color: #ff2d78; color: #e8e8f4; } .ds-hud-btn--active { border-color: #ff2d78; background: #ff2d78; color: #0a0a12; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Cartridge in the Cabinet",
+    "overview": "Every screen is a level in the same cabinet, not a page on a resume site. The system borrows its entire visual grammar from late-80s/early-90s arcade hardware and boxart — hard square corners, offset drop-shadow silhouettes standing in for sprite shading, chunky monospace pixel type, and CRT scanlines laid over the whole viewport. Four selectable palettes (arcade, phosphor, synthwave, gameboy) work like cartridge skins: the layout and components never change shape, only which cartridge is inserted changes the color story. This is explicitly not a SaaS landing page or a generic dev-portfolio template — there is no gradient text, no soft rounded card grid, no tracked-uppercase eyebrows. The wrapper is playful and loud in its references, but every mechanic (XP, achievements, rarity tiers, the hidden terminal) still points back at real projects and a real resume; the game never outruns the substance it's dressed around.",
+    "keyCharacteristics": [
+      "Zero border-radius anywhere — every corner is a hard right angle.",
+      "Elevation is a solid offset duplicate (a pixel shadow), never a blurred drop shadow.",
+      "Two-font system: Press Start 2P for anything structural, VT323 for anything read at length.",
+      "Interactive states recolor to the theme's accent rather than changing shape or adding motion weight.",
+      "The same eight semantic color roles are re-skinned per theme; components must never reference a raw hex value."
+    ],
+    "rules": [
+      { "name": "The One Cartridge Rule", "body": "A component only ever reads the eight semantic tokens via the Tailwind color classes that map to them. A raw hex value hard-coded into a component breaks the instant a visitor switches cartridges.", "section": "colors" },
+      { "name": "The Rarity Rule", "body": "Rarity tiers always map to the same four tokens in the same order regardless of theme: common → muted, rare → accent-alt, epic → accent, legendary → highlight.", "section": "colors" },
+      { "name": "The Cartridge Label Rule", "body": "Press Start 2P never appears below 0.5rem (Nano) or runs longer than a short label/phrase. A sentence that needs to be read comfortably belongs in VT323.", "section": "typography" },
+      { "name": "The Square Corner Rule", "body": "border-radius is 0px, everywhere, with no exceptions. A rounded corner is the fastest way to break the cartridge illusion.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep every color reference to the eight semantic tokens so a component survives a theme switch untouched.",
+      "Do use the pixel shadow (4px 4px 0 0, no blur) for any element that needs to read as raised.",
+      "Do keep Press Start 2P short: labels, headings, badges, never body paragraphs.",
+      "Do map rarity tiers to the same four tokens in the same order every time.",
+      "Do honor prefers-reduced-motion on every hover/entrance animation."
+    ],
+    "donts": [
+      "Don't add border-radius anywhere. Zero exceptions.",
+      "Don't reach for a blurred box-shadow, backdrop-filter glass panel, or glow effect.",
+      "Don't build a generic corporate portfolio layout: hero + skill-icon row + uniform card grid + contact form.",
+      "Don't use gradient text, tracked-uppercase eyebrow labels, or a feature-card grid.",
+      "Don't let a retro effect win over readability or accessibility.",
+      "Don't hard-code a hex value into a component."
+    ]
+  }
+}

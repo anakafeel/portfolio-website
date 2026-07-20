@@ -46,7 +46,7 @@ export default async function ProjectPage({
       <QuestTracker />
       <SfxLink
         href="/projects"
-        className="font-pixel text-[10px] text-muted transition-colors hover:text-accent"
+        className="font-pixel text-[10px] text-muted transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
       >
         ◄ BACK TO QUEST LOG
       </SfxLink>
@@ -74,7 +74,7 @@ export default async function ProjectPage({
             href={frontmatter.links.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-pixel text-[10px] text-accent-alt underline hover:text-accent"
+            className="font-pixel text-[10px] text-accent-alt underline hover:text-accent focus-visible:text-accent focus-visible:outline-none"
           >
             GITHUB
           </SfxAnchor>
@@ -84,7 +84,7 @@ export default async function ProjectPage({
             href={frontmatter.links.demo}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-pixel text-[10px] text-accent-alt underline hover:text-accent"
+            className="font-pixel text-[10px] text-accent-alt underline hover:text-accent focus-visible:text-accent focus-visible:outline-none"
           >
             DEMO
           </SfxAnchor>
@@ -94,7 +94,7 @@ export default async function ProjectPage({
             href={frontmatter.links.writeup}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-pixel text-[10px] text-accent-alt underline hover:text-accent"
+            className="font-pixel text-[10px] text-accent-alt underline hover:text-accent focus-visible:text-accent focus-visible:outline-none"
           >
             WRITE-UP
           </SfxAnchor>

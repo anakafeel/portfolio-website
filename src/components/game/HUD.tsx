@@ -60,7 +60,7 @@ export default function HUD() {
                 aria-pressed={state.theme === theme}
                 title={theme}
                 className={clsx(
-                  "border px-1.5 py-0.5 font-pixel text-[10px] uppercase transition-colors",
+                  "border px-1.5 py-1 font-pixel text-[10px] uppercase transition-colors focus-visible:border-accent focus-visible:text-foreground focus-visible:outline-none",
                   state.theme === theme
                     ? "border-accent bg-accent text-background"
                     : "border-border text-muted hover:border-accent hover:text-foreground",
@@ -75,7 +75,7 @@ export default function HUD() {
             onClick={toggleMuted}
             aria-pressed={!state.muted}
             title={state.muted ? "Unmute" : "Mute"}
-            className="border border-border px-1.5 py-0.5 font-pixel text-[10px] text-muted transition-colors hover:border-accent hover:text-foreground"
+            className="border border-border px-1.5 py-1 font-pixel text-[10px] text-muted transition-colors hover:border-accent hover:text-foreground focus-visible:border-accent focus-visible:text-foreground focus-visible:outline-none"
           >
             {state.muted ? "MUTE" : "SND"}
           </button>
@@ -87,7 +87,7 @@ export default function HUD() {
             }}
             title="Open terminal (Ctrl+`)"
             aria-label="Open terminal"
-            className="border border-border px-1.5 py-0.5 font-pixel text-[10px] text-muted transition-colors hover:border-accent hover:text-accent"
+            className="border border-border px-1.5 py-1 font-pixel text-[10px] text-muted transition-colors hover:border-accent hover:text-accent focus-visible:border-accent focus-visible:text-accent focus-visible:outline-none"
           >
             &gt;_
           </button>

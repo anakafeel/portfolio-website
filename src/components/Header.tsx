@@ -72,7 +72,7 @@ export default function Header() {
         <Link
           href="/"
           onClick={() => play("click")}
-          className="font-pixel text-sm text-highlight transition-colors hover:text-accent"
+          className="font-pixel text-sm text-highlight transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
         >
           {SITE.handle.toUpperCase()}
         </Link>

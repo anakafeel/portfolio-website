@@ -43,7 +43,7 @@ export default function AchievementToast() {
     <div
       role="status"
       aria-live="polite"
-      className="pixel-border fixed left-1/2 top-6 z-[70] -translate-x-1/2 bg-surface px-6 py-3 text-center motion-safe:animate-bounce"
+      className="pixel-border fixed left-1/2 top-6 z-[70] -translate-x-1/2 bg-surface px-6 py-3 text-center motion-safe:animate-fade-up"
     >
       <p className="font-pixel text-[10px] text-highlight">
         ACHIEVEMENT UNLOCKED
