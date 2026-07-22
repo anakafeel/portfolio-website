@@ -199,14 +199,18 @@ function buildLookCurve(): THREE.CatmullRomCurve3 {
 
 interface RigProps {
   progressRef: RefObject<number>;
+  accentColor: string;
 }
 
 /**
  * Camera rig: moves along a hand-authored path driven by `progressRef`.
  * The diagnostic probe is a child of this group, so it rides along for
- * free — no separate tween needed for the probe itself.
+ * free — no separate tween needed for the probe itself. The probe's tip
+ * is accent-colored per the approved spec, so it must track the active
+ * theme's `--color-accent` rather than a fixed hex (Global Constraints:
+ * no hardcoded hex in new UI chrome outside the theme-color hooks).
  */
-function Rig({ progressRef }: RigProps) {
+function Rig({ progressRef, accentColor }: RigProps) {
   const { camera } = useThree();
   const cameraCurve = useMemo(buildCameraCurve, []);
   const lookCurve = useMemo(buildLookCurve, []);
@@ -219,22 +223,22 @@ function Rig({ progressRef }: RigProps) {
 
   return (
     <group position={[0, -0.6, -1.4]}>
-      {/* Diagnostic probe body */}
+      {/* Diagnostic probe body (neutral shell, not theme-reactive) */}
       <mesh>
         <boxGeometry args={[0.35, 0.2, 0.5]} />
         <meshStandardMaterial color="#16162a" />
       </mesh>
-      {/* Glowing tip */}
+      {/* Glowing tip: tracks the active theme's accent color */}
       <mesh position={[0, -0.05, 0.35]}>
         <coneGeometry args={[0.08, 0.3, 8]} />
         <meshStandardMaterial
-          color="#ff2d78"
-          emissive="#ff2d78"
+          color={accentColor}
+          emissive={accentColor}
           emissiveIntensity={2}
         />
       </mesh>
       <pointLight
-        color="#ff2d78"
+        color={accentColor}
         intensity={1.5}
         distance={3}
         position={[0, -0.05, 0.5]}
@@ -285,7 +289,7 @@ export default function CircuitScene({ progressRef }: CircuitSceneProps) {
       <Suspense fallback={<BoardLoader />}>
         <Board />
       </Suspense>
-      <Rig progressRef={progressRef} />
+      <Rig progressRef={progressRef} accentColor={colors.accent} />
     </Canvas>
   );
 }
