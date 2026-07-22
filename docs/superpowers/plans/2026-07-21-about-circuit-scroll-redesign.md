@@ -222,28 +222,35 @@ function Rig({ progressRef, accentColor }: RigProps) {
   });
 
   return (
-    <group position={[0, -0.6, -1.4]}>
-      {/* Diagnostic probe body (neutral shell, not theme-reactive) */}
-      <mesh>
-        <boxGeometry args={[0.35, 0.2, 0.5]} />
-        <meshStandardMaterial color="#16162a" />
-      </mesh>
-      {/* Glowing tip: tracks the active theme's accent color */}
-      <mesh position={[0, -0.05, 0.35]}>
-        <coneGeometry args={[0.08, 0.3, 8]} />
-        <meshStandardMaterial
+    // `<primitive object={camera}>` makes the group a real Three.js child of
+    // the camera (not just a React sibling), so it inherits the camera's
+    // world matrix every frame and rides along with zero extra tweening —
+    // a plain JSX sibling here would sit at a fixed world-space position
+    // and never move as the rig dollies through the board.
+    <primitive object={camera}>
+      <group position={[0, -0.6, -1.4]}>
+        {/* Diagnostic probe body (neutral shell, not theme-reactive) */}
+        <mesh>
+          <boxGeometry args={[0.35, 0.2, 0.5]} />
+          <meshStandardMaterial color="#16162a" />
+        </mesh>
+        {/* Glowing tip: tracks the active theme's accent color */}
+        <mesh position={[0, -0.05, 0.35]}>
+          <coneGeometry args={[0.08, 0.3, 8]} />
+          <meshStandardMaterial
+            color={accentColor}
+            emissive={accentColor}
+            emissiveIntensity={2}
+          />
+        </mesh>
+        <pointLight
           color={accentColor}
-          emissive={accentColor}
-          emissiveIntensity={2}
+          intensity={1.5}
+          distance={3}
+          position={[0, -0.05, 0.5]}
         />
-      </mesh>
-      <pointLight
-        color={accentColor}
-        intensity={1.5}
-        distance={3}
-        position={[0, -0.05, 0.5]}
-      />
-    </group>
+      </group>
+    </primitive>
   );
 }
 
@@ -322,7 +329,7 @@ export default function CircuitPreviewPage() {
 }
 ```
 
-Run `pnpm dev`, open `http://localhost:3000/about/circuit-preview`, confirm: the board renders (green PCB components visible), the camera is framing the `"microchip 1"`/`"microchip 1.001"` area (since `progressRef.current = 0.5` sits mid-path), the probe's glowing pink tip is visible in the lower-center of frame, and no console errors. Then **delete `src/app/about/circuit-preview/`** — it was scaffolding for this check only, not a real route.
+Run `pnpm dev`, open `http://localhost:3000/about/circuit-preview`, confirm: the board renders (green PCB components visible), the camera is framing the `"microchip 1"`/`"microchip 1.001"` area (since `progressRef.current = 0.5` sits mid-path), the probe's glowing accent-colored tip (pink by default, under the arcade theme) is visible in the lower-center of frame and moves as `progressRef.current` changes, and no console errors. Then **delete `src/app/about/circuit-preview/`** — it was scaffolding for this check only, not a real route.
 
 - [ ] **Step 4: Commit**
 
