@@ -1,8 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+
+import {
+  useThemeColors,
+  usePrefersReducedMotion,
+  type ThemeColors,
+} from "@/lib/three/sceneHooks";
 
 /** Wider than deep so the floor spans the full viewport on wide screens. */
 const GRID_X = 42;
@@ -13,58 +19,6 @@ const VOXEL_COUNT = GRID_X * GRID_Z;
 const VOXEL_STEP = 0.25;
 /** Animation ticks at 8 fps for a deliberate low-frame-rate retro feel. */
 const TICK_RATE = 8;
-
-interface ThemeColors {
-  accent: string;
-  accentAlt: string;
-  background: string;
-}
-
-const FALLBACK_COLORS: ThemeColors = {
-  accent: "#ff2d78",
-  accentAlt: "#00e5ff",
-  background: "#0a0a12",
-};
-
-function useThemeColors(): ThemeColors {
-  const [colors, setColors] = useState<ThemeColors>(FALLBACK_COLORS);
-
-  useEffect(() => {
-    const read = () => {
-      const style = getComputedStyle(document.documentElement);
-      const get = (name: string, fallback: string) =>
-        style.getPropertyValue(name).trim() || fallback;
-      setColors({
-        accent: get("--color-accent", FALLBACK_COLORS.accent),
-        accentAlt: get("--color-accent-alt", FALLBACK_COLORS.accentAlt),
-        background: get("--color-background", FALLBACK_COLORS.background),
-      });
-    };
-    read();
-    const observer = new MutationObserver(read);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["data-theme"],
-    });
-    return () => observer.disconnect();
-  }, []);
-
-  return colors;
-}
-
-function usePrefersReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(false);
-
-  useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(query.matches);
-    const onChange = (event: MediaQueryListEvent) => setReduced(event.matches);
-    query.addEventListener("change", onChange);
-    return () => query.removeEventListener("change", onChange);
-  }, []);
-
-  return reduced;
-}
 
 interface VoxelFieldProps {
   colors: ThemeColors;
