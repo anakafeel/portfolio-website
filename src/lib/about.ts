@@ -81,7 +81,7 @@ export const STORY_BEATS: StoryBeat[] = [
     world: "WORLD 1-4",
     title: "CURRENT QUEST",
     body: "Software Development Intern at Synopsys, building CI/CD pipelines for the Ansys Fluent R&D team — while leading systems & tooling for Autonomous Robotics Carleton on the side.",
-    logo: { src: "/logos/synopsys.svg", alt: "Synopsys logo" },
+    logo: { src: "/logos/synopsys.webp", alt: "Synopsys logo" },
   },
 ];
 
@@ -92,6 +92,8 @@ export interface ExperienceEntry {
   status: "active" | "cleared";
   tech: string[];
   highlights: string[];
+  /** Org logo badge. Optional — omit for entries with no real logo on hand. */
+  logo?: { src: string; alt: string };
 }
 
 export const EXPERIENCE: ExperienceEntry[] = [
@@ -105,6 +107,7 @@ export const EXPERIENCE: ExperienceEntry[] = [
       "Built and maintained CI/CD pipelines on Azure DevOps for the Ansys Fluent R&D team, streamlining build and release workflows.",
       "Automated recurring build and deployment tasks with Bash and Python, reducing manual intervention across the pipeline.",
     ],
+    logo: { src: "/logos/synopsys.webp", alt: "Synopsys logo" },
   },
   {
     org: "Shopify CLI (OSS)",
@@ -127,6 +130,10 @@ export const EXPERIENCE: ExperienceEntry[] = [
       "Led ROS2 data pipelines for perception and navigation, reducing inter-process latency across the autonomy stack.",
       "Established Docker-based CI, enforced code reviews, and maintained docs that onboarded 20+ new contributors.",
     ],
+    logo: {
+      src: "/logos/autonomous-robotics-carleton.png",
+      alt: "Autonomous Robotics Carleton (arc) logo",
+    },
   },
   {
     org: "IEEE SPAC",
@@ -138,6 +145,7 @@ export const EXPERIENCE: ExperienceEntry[] = [
       "Redesigned responsive, WCAG-compliant UI components, improving accessibility and cross-device usability.",
       "Built onboarding and submission workflows that significantly reduced failed submissions for candidates and sponsors.",
     ],
+    logo: { src: "/logos/ieee-spac.webp", alt: "IEEE SPAC 2025 logo" },
   },
   {
     org: "CuHacking",
@@ -149,6 +157,7 @@ export const EXPERIENCE: ExperienceEntry[] = [
       "Engineered a developer portal for 400+ attendees using modular React, keeping it reliable during live events at scale.",
       "Automated content pipelines via Payload CMS and shell scripts, eliminating JSON editing for non-technical organizers.",
     ],
+    logo: { src: "/logos/cuhacking.png", alt: "cuHacking logo" },
   },
   {
     org: "Environmental Health & Safety, Carleton",

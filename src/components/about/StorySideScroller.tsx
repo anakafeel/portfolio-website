@@ -253,7 +253,7 @@ export default function StorySideScroller() {
                     width={48}
                     height={48}
                     unoptimized
-                    className="pixelated shrink-0 border-2 border-border"
+                    className="shrink-0 border-2 border-border bg-background object-contain p-1"
                   />
                   <div>
                     <p className="font-pixel text-[10px] text-accent-alt">

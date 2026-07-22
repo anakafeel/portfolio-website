@@ -1,3 +1,4 @@
+import Image from "next/image";
 import clsx from "clsx";
 
 import { EXPERIENCE, type ExperienceEntry } from "@/lib/about";
@@ -36,12 +37,28 @@ export default function ExperienceLog() {
                     {status.label}
                   </span>
                 </div>
-                <h3 className="mt-4 font-pixel text-sm leading-relaxed text-foreground">
-                  {entry.org}
-                </h3>
-                <p className="mt-1 font-pixel text-[10px] text-accent-alt">
-                  {entry.role}
-                </p>
+                <div className="mt-4 flex items-start gap-3">
+                  {entry.logo && (
+                    <div className="relative h-12 w-12 shrink-0 border-2 border-border bg-background p-1">
+                      <Image
+                        src={entry.logo.src}
+                        alt={entry.logo.alt}
+                        fill
+                        unoptimized
+                        sizes="48px"
+                        className="object-contain p-0.5"
+                      />
+                    </div>
+                  )}
+                  <div className="min-w-0">
+                    <h3 className="font-pixel text-sm leading-relaxed text-foreground">
+                      {entry.org}
+                    </h3>
+                    <p className="mt-1 font-pixel text-[10px] text-accent-alt">
+                      {entry.role}
+                    </p>
+                  </div>
+                </div>
                 <ul className="mt-3 flex flex-col gap-2">
                   {entry.highlights.map((highlight) => (
                     <li
