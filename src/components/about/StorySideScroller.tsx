@@ -13,14 +13,14 @@ import { RESUME_URL } from "@/lib/site";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const CircuitScene = dynamic(() => import("@/components/about/CircuitScene"), {
+const PCBuildScene = dynamic(() => import("@/components/about/PCBuildScene"), {
   ssr: false,
 });
 
 /**
  * One reveal fraction per STORY_BEATS entry (0-1 along the pinned scroll
  * range), hand-authored to roughly match each camera waypoint in
- * CircuitScene's WAYPOINTS array. Decoupled from the 3D curve's own
+ * PCBuildScene's WAYPOINTS array. Decoupled from the 3D curve's own
  * arc-length parameterization on purpose — exact frame-perfect sync isn't
  * needed, just a close visual match.
  */
@@ -38,13 +38,18 @@ const TRACE_MARKER_POINTS: [number, number][] = [
   [260, 160],
   [380, 100],
 ];
+/**
+ * Part-readout label per STORY_BEATS entry, naming what the camera is
+ * currently framing in PCBuildScene — CPU, RAM, GPU, then the full build.
+ */
+const PART_LABELS = ["CPU_CORE", "MEMORY_BANK", "GPU", "FULL_BUILD"];
 
 /**
- * Pinned circuit-board inspection sequence: vertical scroll drives a
- * camera dolly through a CC0 low-poly circuit board (CircuitScene) while a
- * diagnostic probe rides along, parented to the camera. Mount only on
- * desktop with motion + WebGL available — StoryStage handles that gate
- * and the vertical fallback.
+ * Pinned PC-build inspection sequence: vertical scroll drives a camera
+ * dolly through a procedurally-built CPU/RAM/GPU/motherboard/PSU
+ * (PCBuildScene) while a diagnostic probe rides along, parented to the
+ * camera. Mount only on desktop with motion + WebGL available —
+ * StoryStage handles that gate and the vertical fallback.
  */
 export default function StorySideScroller() {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -77,14 +82,17 @@ export default function StorySideScroller() {
         },
       });
 
-      // Reveal each story-beat card + scan line inside its fraction window,
-      // and the final "LEVEL CLEAR" card near the end. Each ScrollTrigger
-      // only starts a new tween when `inWindow` actually flips, not on
-      // every scrub tick, to avoid spawning redundant tweens continuously
-      // while the user scrolls.
+      // Reveal each story-beat card + scan line + part-readout label
+      // inside its fraction window, and the final "LEVEL CLEAR" card near
+      // the end. Each ScrollTrigger only starts a new tween when
+      // `inWindow` actually flips, not on every scrub tick, to avoid
+      // spawning redundant tweens continuously while the user scrolls.
+      const partLabels = gsap.utils.toArray<HTMLElement>(".scroller-part-label");
       gsap.utils.toArray<HTMLElement>(".scroller-beat").forEach((beat, i) => {
         const at = BEAT_FRACTIONS[i];
+        const label = partLabels[i];
         gsap.set(beat, { autoAlpha: 0, y: 24 });
+        if (label) gsap.set(label, { autoAlpha: 0 });
         let wasInWindow = false;
         ScrollTrigger.create({
           trigger: stage,
@@ -103,6 +111,14 @@ export default function StorySideScroller() {
               ease: "steps(4)",
               overwrite: "auto",
             });
+            if (label) {
+              gsap.to(label, {
+                autoAlpha: inWindow ? 1 : 0,
+                duration: 0.08,
+                ease: "steps(4)",
+                overwrite: "auto",
+              });
+            }
           },
         });
       });
@@ -139,7 +155,7 @@ export default function StorySideScroller() {
       ref={stageRef}
       className="relative mt-16 h-[85vh] overflow-hidden border-y-2 border-border bg-background"
     >
-      <CircuitScene progressRef={progressRef} />
+      <PCBuildScene progressRef={progressRef} />
 
       {/* Trace-line overlay: draws itself as the probe advances. */}
       <svg
@@ -159,6 +175,16 @@ export default function StorySideScroller() {
           <circle key={i} cx={cx} cy={cy} r={5} fill="var(--color-highlight)" />
         ))}
       </svg>
+
+      {/* Part-readout: names whichever PC part the camera is framing. */}
+      {PART_LABELS.map((label) => (
+        <p
+          key={label}
+          className="scroller-part-label pointer-events-none invisible absolute right-6 top-32 font-pixel text-[9px] uppercase tracking-[0.15em] text-accent-alt"
+        >
+          {"> "}TARGET: {label}
+        </p>
+      ))}
 
       {STORY_BEATS.map((beat) => (
         <article
