@@ -15,6 +15,8 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function StoryLevel() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const trackTraceRef = useRef<SVGPathElement>(null);
+  const trackPlayerRef = useRef<HTMLSpanElement>(null);
 
   useGSAP(
     () => {
@@ -27,28 +29,28 @@ export default function StoryLevel() {
         gsap.ticker.add(tick);
         gsap.ticker.lagSmoothing(0);
 
-        // Progress track fills as the player scrolls through the level.
-        gsap.from(".story-track-fill", {
-          scaleY: 0,
-          transformOrigin: "top",
-          ease: "none",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 60%",
-            end: "bottom 75%",
-            scrub: true,
-          },
-        });
+        // Trace-line progress: draws itself as the player scrolls through
+        // the level, same stroke-dashoffset technique as the desktop
+        // circuit-scroll sequence.
+        const trace = trackTraceRef.current;
+        const traceLength = trace?.getTotalLength() ?? 0;
+        if (trace && traceLength > 0) {
+          trace.style.strokeDasharray = `${traceLength}`;
+          trace.style.strokeDashoffset = `${traceLength}`;
+        }
 
-        // The player sprite rides the track in chunky steps.
-        gsap.to(".story-player", {
-          top: "100%",
-          ease: "steps(24)",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 60%",
-            end: "bottom 75%",
-            scrub: true,
+        ScrollTrigger.create({
+          trigger: containerRef.current,
+          start: "top 60%",
+          end: "bottom 75%",
+          scrub: true,
+          onUpdate: (self) => {
+            if (trace && traceLength > 0) {
+              trace.style.strokeDashoffset = `${traceLength * (1 - self.progress)}`;
+            }
+            if (trackPlayerRef.current) {
+              trackPlayerRef.current.style.top = `${self.progress * 100}%`;
+            }
           },
         });
 
@@ -89,14 +91,32 @@ export default function StoryLevel() {
 
   return (
     <div ref={containerRef} className="relative mt-16">
-      {/* Level progress track */}
-      <div
+      {/* Level progress track: a PCB-trace path draws itself as you scroll. */}
+      <svg
         aria-hidden
-        className="absolute bottom-4 left-[7px] top-4 hidden w-1 bg-border sm:block"
+        viewBox="0 0 40 400"
+        preserveAspectRatio="none"
+        className="absolute bottom-4 left-0 top-4 hidden w-4 sm:block"
       >
-        <div className="story-track-fill h-full w-full bg-accent" />
-        <span className="story-player absolute -left-[6px] top-0 block h-4 w-4 -translate-y-1/2 bg-highlight [image-rendering:pixelated]" />
-      </div>
+        <path
+          d="M20,0 L20,120 L8,140 L8,260 L20,280 L20,400"
+          fill="none"
+          stroke="var(--color-border)"
+          strokeWidth={2}
+        />
+        <path
+          ref={trackTraceRef}
+          d="M20,0 L20,120 L8,140 L8,260 L20,280 L20,400"
+          fill="none"
+          stroke="var(--color-accent)"
+          strokeWidth={2}
+        />
+      </svg>
+      <span
+        ref={trackPlayerRef}
+        aria-hidden
+        className="story-player absolute left-[6px] top-4 hidden h-3 w-3 -translate-x-1/2 -translate-y-1/2 bg-highlight sm:block [image-rendering:pixelated]"
+      />
 
       <ol className="flex flex-col gap-24 sm:pl-14">
         {STORY_BEATS.map((beat) => (
