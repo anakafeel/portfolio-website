@@ -13,9 +13,9 @@ This is a re-skin, not a re-architecture. The camera-dolly rig, the diagnostic p
 ## What changes vs. what doesn't
 
 **Changes:**
-- `src/components/about/CircuitScene.tsx` → renamed `src/components/about/PCBuildScene.tsx`, rewritten to compose 5 individual PC parts instead of loading one generic board GLB.
+- `src/components/about/CircuitScene.tsx` → renamed `src/components/about/PCBuildScene.tsx`, rewritten to compose 5 procedurally-built PC parts instead of loading one generic board GLB.
 - `WAYPOINTS` repositioned to visit CPU → RAM → GPU → Motherboard (one per existing story beat, in beat order).
-- New asset directory `public/models/pc/` (4 FBX files + `CREDITS.md`), replacing `public/models/circuit/` (deleted).
+- `public/models/circuit/` (the old GLB + its CREDITS.md) deleted — no replacement asset directory; the new scene has no external asset dependency at all.
 - A new small "part readout" label per waypoint (e.g. "TARGET: CPU_CORE"), using the same reveal-window mechanism the beat cards already use.
 - Import path update in `StorySideScroller.tsx` (`CircuitScene` → `PCBuildScene`).
 
@@ -29,26 +29,35 @@ This is a re-skin, not a re-architecture. The camera-dolly rig, the diagnostic p
 
 ## Assets
 
-Source: **NullSys, "Simple PC parts (Low Poly)"** (itch.io: `nullsys.itch.io/simple-pc-parts-low-polly`). FBX format, made in Blender for Unity — loads fine via `@react-three/drei`'s `useFBX` (already a dependency; no new npm package). Files used: `Motherboard.fbx`, `CPU.fbx`, `RAM.fbx`, `NovaForce-GX-670.fbx` (used as the GPU).
+**None.** All 5 parts (motherboard, CPU, RAM ×2, GPU, PSU) are built from Three.js primitives (`BoxGeometry`, `CylinderGeometry`) directly in `PCBuildScene.tsx` — no GLB, no FBX, no external asset pipeline, no license to track.
 
-**License note (read before implementing):** the author's stated terms are informal — "You are free to use them like you want, tell me if u use them for a cool game!" — not a formal CC0/MIT/CC-BY grant like the previous circuit-board asset. Acceptable for a personal, non-commercial portfolio with clear credit, but `public/models/pc/CREDITS.md` must state the source URL, author, and quote the actual terms verbatim (not paraphrase them as "CC0") so provenance is honest if this is ever revisited.
+This was a deliberate reversal from an earlier draft of this spec, which planned to load a free itch.io FBX pack ("Simple PC parts (Low Poly)" by NullSys). Investigation during planning downloaded and inspected the actual files via a headless Three.js/FBXLoader harness: every part in that pack is a single mesh literally named `"Cube"` — a plain rectangular block with no sculpted detail (no fan blades, no chip pins, no board traces). Real measured dimensions were extracted before discarding the pack, and are reused below as the authoritative proportions for the procedural boxes, so shape accuracy isn't lost:
 
-**PSU:** not in the pack. Built procedurally in `PCBuildScene.tsx` from primitives — a `BoxGeometry` body, a recessed `CylinderGeometry` fan with a handful of thin blade meshes, a few `BoxGeometry` vents on one face. No new asset, no new dependency.
+| Part | Size (width × height × depth, board-space units) |
+|---|---|
+| Motherboard | 114.8 × 14.0 × 127.4 |
+| CPU | 30.6 × 5.0 × 33.5 |
+| RAM (each stick) | 59.8 × 27.9 × 4.9 |
+| GPU | 150.0 × 66.7 × 30.7 |
+
+Since the pack offered no shape detail beyond these proportions, building plain boxes at the same proportions costs nothing extra while removing the informal license, the new asset directory, and the `useFBX`/Suspense loading path entirely.
+
+**PSU:** no reference dimensions exist for it (not in the pack), so it's authored freehand as a `BoxGeometry` body sized to look proportionate next to the motherboard (roughly 60 × 60 × 90), with a recessed `CylinderGeometry` fan, a handful of thin blade meshes, and a few `BoxGeometry` vents on one face.
 
 ## Scene composition
 
-Rough desk-level layout (board-space units, same scale conventions as the previous scene):
-- **Motherboard**: flat on a base plane, the visual anchor of the scene, other parts arranged on/around it.
-- **CPU**: seated in its socket position on the motherboard, small cooler block implied by the model's own geometry.
-- **RAM**: 2 sticks in slots beside the CPU socket.
-- **GPU**: mounted in a PCIe slot, angled slightly toward camera for silhouette read.
-- **PSU**: off to one side, procedural box.
+Rough desk-level layout (board-space units, same scale conventions as the previous scene, and the same units as the dimension table above):
+- **Motherboard**: flat on a base plane at the origin, the visual anchor of the scene, other parts arranged on/around it.
+- **CPU**: seated at the motherboard's center, given a small stacked heatsink-fin detail (2-3 thin plates) so it doesn't read as an unlabeled slab.
+- **RAM**: 2 sticks standing upright in slots beside the CPU, each with a thin accent-colored strip along the top edge (the "RGB light bar").
+- **GPU**: mounted flat beside the motherboard at one edge (as if in a PCIe slot), with 2 simple `CylinderGeometry` fans on its top face for silhouette read.
+- **PSU**: off to one side, procedural box with a visible fan face.
 
-`WAYPOINTS` (4 entries, matching `STORY_BEATS` order) point at CPU → RAM → GPU → Motherboard. `CAMERA_OFFSET` and the `CatmullRomCurve3` dolly/look-curve construction are reused unchanged — only the waypoint positions themselves are new, authored against the actual part positions (verified via the same headless preview/dimension-inspection approach used for the original circuit board GLB, adapted for FBX).
+`WAYPOINTS` (4 entries, matching `STORY_BEATS` order) point at CPU → RAM → GPU → Motherboard, using each part's actual authored center position in the scene. `CAMERA_OFFSET` and the `CatmullRomCurve3` dolly/look-curve construction are reused unchanged from the existing `CircuitScene.tsx` — only the waypoint positions themselves are new, matching the part layout above.
 
 ## Visual treatment
 
-Override each part's material to the site's flat palette instead of trusting whatever the FBX ships with — no gradients, no photoreal textures, `MeshStandardMaterial` with flat colors pulled from the existing theme tokens (dark PCB green/near-black for the motherboard, neutral metal grey for heatsink/shroud geometry). RGB accents (RAM light bar, GPU fan ring, PSU fan glow) use the live theme's `--color-accent` via `useThemeColors`, exactly like the existing probe tip — this is also a legitimately PC-building-authentic detail (RGB is a real thing on real parts), not just a design-system nicety.
+Every part's material is authored directly (there's no imported material to override) — flat `MeshStandardMaterial`, no gradients, no textures, colors pulled from the existing theme tokens (dark PCB green/near-black for the motherboard, neutral metal grey for heatsink/shroud/fan geometry). RGB accents (RAM light bar, GPU fan ring, PSU fan glow) use the live theme's `--color-accent` via `useThemeColors`, exactly like the existing probe tip — this is also a legitimately PC-building-authentic detail (RGB is a real thing on real parts), not just a design-system nicety.
 
 No hardcoded hex outside the existing theme-color hook, per the project's global constraint carried over from the original plan.
 
@@ -58,8 +67,7 @@ A small `font-pixel` corner readout (visually consistent with the existing "SCAN
 
 ## File changes
 
-- **New:** `public/models/pc/Motherboard.fbx`, `CPU.fbx`, `RAM.fbx`, `GPU.fbx` (renamed from `NovaForce-GX-670.fbx` for clarity), `public/models/pc/CREDITS.md`.
-- **Deleted:** `public/models/circuit/electronic-components.glb`, `public/models/circuit/CREDITS.md`.
+- **Deleted:** `public/models/circuit/electronic-components.glb`, `public/models/circuit/CREDITS.md` — no replacement asset directory.
 - **New:** `src/components/about/PCBuildScene.tsx` (replaces `CircuitScene.tsx`, which is deleted).
 - **Modified:** `src/components/about/StorySideScroller.tsx` (import path + the new part-readout element; `ScrollTrigger`/reveal logic otherwise unchanged).
 - **Unchanged:** everything else, per "What changes vs. what doesn't" above.
@@ -74,7 +82,7 @@ Same approach already established and proven across Tasks 1–5 of the prior pla
 
 ## Global constraints (carried over from the original plan)
 
-- No new npm dependencies (confirmed: `useFBX` already exists in the installed `@react-three/drei`).
+- No new npm dependencies (confirmed unnecessary: the scene is built entirely from primitives already available in the installed `three`).
 - `border-radius: 0` everywhere; no hardcoded hex outside theme-color hooks.
 - Respect `prefers-reduced-motion` (already handled by `StoryStage`'s existing gate — untouched).
 - No test runner in this project — verification is `pnpm build` + manual/headless-browser checks, as above.
