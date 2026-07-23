@@ -42,18 +42,19 @@ This was a deliberate reversal from an earlier draft of this spec, which planned
 
 Since the pack offered no shape detail beyond these proportions, building plain boxes at the same proportions costs nothing extra while removing the informal license, the new asset directory, and the `useFBX`/Suspense loading path entirely.
 
-**PSU:** no reference dimensions exist for it (not in the pack), so it's authored freehand as a `BoxGeometry` body sized to look proportionate next to the motherboard (roughly 60 × 60 × 90), with a recessed `CylinderGeometry` fan, a handful of thin blade meshes, and a few `BoxGeometry` vents on one face.
+**PSU:** no reference dimensions exist for it (not in the pack), so it's authored freehand — a `3 × 3 × 4` `BoxGeometry` body sized to look proportionate next to the rest of the build, with a recessed `CylinderGeometry` fan glowing the theme accent color, mounted on its rear face.
 
 ## Scene composition
 
-Rough desk-level layout (board-space units, same scale conventions as the previous scene, and the same units as the dimension table above):
-- **Motherboard**: flat on a base plane at the origin, the visual anchor of the scene, other parts arranged on/around it.
-- **CPU**: seated at the motherboard's center, given a small stacked heatsink-fin detail (2-3 thin plates) so it doesn't read as an unlabeled slab.
-- **RAM**: 2 sticks standing upright in slots beside the CPU, each with a thin accent-colored strip along the top edge (the "RGB light bar").
-- **GPU**: mounted flat beside the motherboard at one edge (as if in a PCIe slot), with 2 simple `CylinderGeometry` fans on its top face for silhouette read.
-- **PSU**: off to one side, procedural box with a visible fan face.
+The FBX pack's measured proportions above were a useful *starting point*, but since the parts turned out to be inconsistently scaled relative to each other (its GPU is nominally larger than its motherboard — a plausible detail on a real oversized card, but not usable as a literal cross-part scale reference), the final layout was hand-composed and verified with an actual headless Three.js render during planning (screenshotting the camera's view at all 4 waypoints) rather than computed mechanically from the table. Final board-space layout:
 
-`WAYPOINTS` (4 entries, matching `STORY_BEATS` order) point at CPU → RAM → GPU → Motherboard, using each part's actual authored center position in the scene. `CAMERA_OFFSET` and the `CatmullRomCurve3` dolly/look-curve construction are reused unchanged from the existing `CircuitScene.tsx` — only the waypoint positions themselves are new, matching the part layout above.
+- **Motherboard**: `12 × 0.6 × 13` flat slab at the origin — the visual anchor, other parts arranged on top of it.
+- **CPU**: `3 × 0.5 × 3`, centered on the motherboard, with 3 stacked `2.2 × 0.15 × 2.2` heatsink-fin plates above it so it doesn't read as an unlabeled slab.
+- **RAM**: 2 `0.5 × 2.8 × 1.1` sticks standing upright beside the CPU, each with a thin `0.55 × 0.15 × 1.15` accent-colored strip along the top edge (the "RGB light bar").
+- **GPU**: `7 × 0.7 × 3` card mounted flat beside the motherboard at one edge, with 2 `1.1`-radius `CylinderGeometry` fans on its top face for silhouette read.
+- **PSU**: `3 × 3 × 4` box off to one side, with a glowing rear fan.
+
+`WAYPOINTS` (4 entries, matching `STORY_BEATS` order) target CPU → RAM → GPU → a pulled-back full-build overview, using each part's actual authored center position. Unlike the previous scene (one constant `CAMERA_OFFSET` for every waypoint), the final waypoint uses a larger, more elevated offset so the whole build is visible at once for the closing beat — verified via the headless render to read clearly as a "full picture" finale rather than looking near-identical to the CPU waypoint's tight framing.
 
 ## Visual treatment
 
@@ -63,7 +64,7 @@ No hardcoded hex outside the existing theme-color hook, per the project's global
 
 ## Part readout label
 
-A small `font-pixel` corner readout (visually consistent with the existing "SCANNING: ..." line style) shows which part is currently in view, e.g. `TARGET: CPU_CORE`, `TARGET: MEMORY`, `TARGET: GPU`, `TARGET: MOTHERBOARD`. Driven by the same per-waypoint reveal-window / `wasInWindow` guard pattern already used for `.scroller-beat` cards in `StorySideScroller.tsx` — same `BEAT_FRACTIONS` timing, just a second small element revealed/hidden in sync, not a new animation system.
+A small `font-pixel` corner readout (visually consistent with the existing "SCANNING: ..." line style) shows which part is currently in view: `TARGET: CPU_CORE`, `TARGET: MEMORY_BANK`, `TARGET: GPU`, `TARGET: FULL_BUILD` (the last matching the final waypoint's pulled-back overview framing, not a single part). Driven by the same per-waypoint reveal-window / `wasInWindow` guard pattern already used for `.scroller-beat` cards in `StorySideScroller.tsx` — same `BEAT_FRACTIONS` timing, just a second small element revealed/hidden in sync, not a new animation system.
 
 ## File changes
 
