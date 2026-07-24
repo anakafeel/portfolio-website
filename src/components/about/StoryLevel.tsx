@@ -1,96 +1,136 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import Image from "next/image";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-import Lenis from "lenis";
+import { animate, createDrawable } from "animejs";
 
 import SfxAnchor from "@/components/sfx/SfxAnchor";
 import { STORY_BEATS } from "@/lib/about";
 import { RESUME_URL } from "@/lib/site";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
-
+/**
+ * Mobile-friendly vertical story level. SVG PCB trace draws itself
+ * as the user scrolls; beat cards and the final "LEVEL CLEAR" overlay
+ * animate in via IntersectionObserver + anime.js.
+ */
 export default function StoryLevel() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const trackTraceRef = useRef<SVGPathElement>(null);
-  const trackPlayerRef = useRef<HTMLSpanElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
 
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const lenis = new Lenis({ autoRaf: false });
-        const tick = (time: number) => lenis.raf(time * 1000);
-        lenis.on("scroll", ScrollTrigger.update);
-        gsap.ticker.add(tick);
-        gsap.ticker.lagSmoothing(0);
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
-        // Trace-line progress: draws itself as the player scrolls through
-        // the level, same stroke-dashoffset technique as the desktop
-        // circuit-scroll sequence.
-        const trace = trackTraceRef.current;
-        const traceLength = trace?.getTotalLength() ?? 0;
-        if (trace && traceLength > 0) {
-          trace.style.strokeDasharray = `${traceLength}`;
-          trace.style.strokeDashoffset = `${traceLength}`;
-        }
+    const tracePath = root.querySelector<SVGPathElement>(".level-trace");
+    const playerDot = root.querySelector<HTMLElement>(".level-player");
+    const beatEls = root.querySelectorAll<HTMLElement>(".level-beat");
+    const clearEl = root.querySelector<HTMLElement>(".level-clear");
 
-        ScrollTrigger.create({
-          trigger: containerRef.current,
-          start: "top 60%",
-          end: "bottom 75%",
-          scrub: true,
-          onUpdate: (self) => {
-            if (trace && traceLength > 0) {
-              trace.style.strokeDashoffset = `${traceLength * (1 - self.progress)}`;
-            }
-            if (trackPlayerRef.current) {
-              trackPlayerRef.current.style.top = `${self.progress * 100}%`;
-            }
-          },
-        });
+    if (prefersReducedMotion) {
+      beatEls.forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
+      if (clearEl) {
+        clearEl.style.opacity = "1";
+        clearEl.style.transform = "none";
+      }
+      return;
+    }
 
-        gsap.utils.toArray<HTMLElement>(".story-beat").forEach((beat) => {
-          gsap.from(beat, {
-            autoAlpha: 0,
-            y: 48,
-            duration: 0.5,
-            ease: "steps(6)",
-            scrollTrigger: {
-              trigger: beat,
-              start: "top 78%",
-              toggleActions: "play none none reverse",
-            },
+    // Create SVG drawing via anime.js createDrawable
+    const traceAnim = tracePath
+      ? animate(createDrawable(".level-trace"), {
+          draw: ["0 0", "1 1"],
+          ease: "inOut(3)",
+          duration: 1000,
+          autoplay: false,
+        })
+      : null;
+
+    // Initialize beats as hidden
+    beatEls.forEach((el) => {
+      el.style.opacity = "0";
+      el.style.transform = "translateY(24px)";
+    });
+    if (clearEl) {
+      clearEl.style.opacity = "0";
+      clearEl.style.transform = "scale(0.9)";
+    }
+
+    // Scroll-driven trace + player position
+    const onScroll = () => {
+      const rect = root.getBoundingClientRect();
+      const scrollRange = root.offsetHeight - window.innerHeight;
+      if (scrollRange <= 0) return;
+      const progress = Math.max(0, Math.min(1, -rect.top / scrollRange));
+
+      if (traceAnim) {
+        traceAnim.currentTime = progress * 1000;
+      }
+      if (playerDot) {
+        playerDot.style.top = `${progress * 100}%`;
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    // Intersection Observer for beat reveals
+    const beatObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const el = entry.target as HTMLElement;
+          animate(el, {
+            opacity: entry.isIntersecting ? [0, 1] : [1, 0],
+            translateY: entry.isIntersecting ? ["24px", "0px"] : ["0px", "24px"],
+            duration: 350,
+            ease: "outQuad",
           });
         });
+      },
+      { threshold: 0.2 },
+    );
 
-        gsap.from(".story-clear", {
-          autoAlpha: 0,
-          scale: 0.6,
-          duration: 0.6,
-          ease: "steps(5)",
-          scrollTrigger: {
-            trigger: ".story-clear",
-            start: "top 85%",
-            toggleActions: "play none none reverse",
-          },
-        });
+    beatEls.forEach((beat) => beatObserver.observe(beat));
 
-        return () => {
-          gsap.ticker.remove(tick);
-          lenis.destroy();
-        };
-      });
-    },
-    { scope: containerRef },
-  );
+    // Intersection Observer for clear section
+    if (clearEl) {
+      const clearObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            animate(clearEl, {
+              opacity: entry.isIntersecting ? [0, 1] : [1, 0],
+              scale: entry.isIntersecting ? [0.9, 1] : [1, 0.9],
+              duration: 400,
+              ease: "outBack",
+            });
+          });
+        },
+        { threshold: 0.3 },
+      );
+      clearObserver.observe(clearEl);
+
+      return () => {
+        window.removeEventListener("scroll", onScroll);
+        traceAnim?.cancel();
+        beatObserver.disconnect();
+        clearObserver.disconnect();
+      };
+    }
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      traceAnim?.cancel();
+      beatObserver.disconnect();
+    };
+  }, []);
 
   return (
-    <div ref={containerRef} className="relative mt-16">
+    <div ref={rootRef} className="relative mt-16">
       {/* Level progress track: a PCB-trace path draws itself as you scroll. */}
       <svg
         aria-hidden
@@ -105,22 +145,18 @@ export default function StoryLevel() {
           strokeWidth={2}
         />
         <path
-          ref={trackTraceRef}
+          className="level-trace"
           d="M20,0 L20,120 L8,140 L8,260 L20,280 L20,400"
           fill="none"
           stroke="var(--color-accent)"
           strokeWidth={2}
         />
       </svg>
-      <span
-        ref={trackPlayerRef}
-        aria-hidden
-        className="story-player absolute left-[6px] top-4 hidden h-3 w-3 -translate-x-1/2 -translate-y-1/2 bg-highlight sm:block [image-rendering:pixelated]"
-      />
+      <span className="level-player absolute left-[6px] top-4 hidden h-3 w-3 -translate-x-1/2 -translate-y-1/2 bg-highlight sm:block [image-rendering:pixelated]" />
 
       <ol className="flex flex-col gap-24 sm:pl-14">
         {STORY_BEATS.map((beat) => (
-          <li key={beat.world} className="story-beat">
+          <li key={beat.world} className="level-beat">
             <div className="flex items-center gap-4">
               <Image
                 src={beat.logo.src}
@@ -146,7 +182,7 @@ export default function StoryLevel() {
         ))}
       </ol>
 
-      <div className="story-clear mt-24 text-center sm:pl-14">
+      <div className="level-clear mt-24 text-center sm:pl-14">
         <p className="font-pixel text-sm text-accent">★ LEVEL CLEAR ★</p>
         <SfxAnchor
           href={RESUME_URL}

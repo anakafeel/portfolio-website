@@ -204,9 +204,9 @@
   /*
    * fill-mode must NOT keep applying after the animation ends: a filled
    * transform (even an identity one) turns the page wrapper into a
-   * containing block for position: fixed, which breaks ScrollTrigger
-   * pinning (see StorySideScroller). "backwards" releases the transform
-   * on finish; the end state equals the natural style, so nothing jumps.
+   * containing block for position: fixed, which breaks pinning layouts.
+   * "backwards" releases the transform on finish; the end state equals
+   * the natural style, so nothing jumps.
    */
   .animate-fade-up {
     animation: fade-up 300ms ease-out backwards;
