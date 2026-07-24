@@ -9,31 +9,34 @@ import { useThemeColors, usePrefersReducedMotion } from "@/lib/three/sceneHooks"
 /**
  * Board-space target positions the camera visits, one per STORY_BEATS
  * entry, in order: SPAWN POINT (CPU), SKILL TREE (RAM), SIDE QUESTS (GPU),
- * CURRENT QUEST (full-build overview). Matches the part positions in
- * <Parts> below exactly — verified via a headless Three.js render before
- * committing these numbers (see
+ * CURRENT QUEST (full-build overview, centroid of all 4 parts including
+ * the PSU at (7, 1.5, 3) so the finale actually frames the whole build).
+ * Matches the part positions in <Parts> below exactly — verified via a
+ * headless Three.js render before committing these numbers (see
  * docs/superpowers/specs/2026-07-22-about-pc-build-scroll-redesign-design.md).
  */
 const WAYPOINTS: THREE.Vector3[] = [
   new THREE.Vector3(0, 0.85, 0), // CPU
   new THREE.Vector3(2.55, 2.0, 0), // RAM (midpoint of both sticks)
   new THREE.Vector3(-2, 0.95, -5), // GPU
-  new THREE.Vector3(1, 1.5, -1), // full-build overview
+  new THREE.Vector3(1.89, 1.33, -0.5), // full-build overview (centroid of CPU/RAM/GPU/PSU)
 ];
 
 /**
  * Camera offset per waypoint (added to the matching WAYPOINTS entry
- * before building the dolly curve). The first 3 keep a tight, consistent
- * "inspection" framing; the last pulls back further so the whole build
- * is visible at once for the final beat.
+ * before building the dolly curve). Each of the first 3 has a distinct
+ * azimuth so the viewing angle actually changes between stops — a shared
+ * offset here previously dwarfed the ~3-7 unit deltas between waypoints,
+ * making all 3 inspection stops look nearly identical. The last pulls back
+ * further so the whole build (including the PSU) is visible at once for
+ * the final beat; verified via headless Three.js frustum projection that
+ * all 4 parts land within the camera's NDC bounds at that offset.
  */
-const CAMERA_OFFSET = new THREE.Vector3(-4, 6, 8);
-const OVERVIEW_OFFSET = new THREE.Vector3(-9, 13, 16);
 const CAMERA_OFFSETS: THREE.Vector3[] = [
-  CAMERA_OFFSET,
-  CAMERA_OFFSET,
-  CAMERA_OFFSET,
-  OVERVIEW_OFFSET,
+  new THREE.Vector3(-4, 5, 7), // CPU: front-left
+  new THREE.Vector3(6, 4, 5), // RAM: front-right
+  new THREE.Vector3(-6, 4, -7), // GPU: back-left
+  new THREE.Vector3(13, 15, 19), // full-build overview pull-back
 ];
 
 function buildCameraCurve(): THREE.CatmullRomCurve3 {

@@ -88,8 +88,14 @@ export default function StorySideScroller() {
       // `inWindow` actually flips, not on every scrub tick, to avoid
       // spawning redundant tweens continuously while the user scrolls.
       const partLabels = gsap.utils.toArray<HTMLElement>(".scroller-part-label");
+      const lastBeatIndex = BEAT_FRACTIONS.length - 1;
       gsap.utils.toArray<HTMLElement>(".scroller-beat").forEach((beat, i) => {
         const at = BEAT_FRACTIONS[i];
+        // The last beat's window must close at CLEAR_FRACTION, not
+        // REVEAL_WINDOW later — otherwise it stays visible into the
+        // "SCAN COMPLETE" overlay's own fade-in window and the two stack.
+        const windowEnd =
+          i === lastBeatIndex ? CLEAR_FRACTION : at + REVEAL_WINDOW;
         const label = partLabels[i];
         gsap.set(beat, { autoAlpha: 0, y: 24 });
         if (label) gsap.set(label, { autoAlpha: 0 });
@@ -100,8 +106,7 @@ export default function StorySideScroller() {
           end: "+=400%",
           scrub: true,
           onUpdate: (self) => {
-            const inWindow =
-              self.progress >= at && self.progress < at + REVEAL_WINDOW;
+            const inWindow = self.progress >= at && self.progress < windowEnd;
             if (inWindow === wasInWindow) return;
             wasInWindow = inWindow;
             gsap.to(beat, {
@@ -161,6 +166,7 @@ export default function StorySideScroller() {
       <svg
         aria-hidden
         viewBox="0 0 400 200"
+        preserveAspectRatio="none"
         className="pointer-events-none absolute inset-x-6 top-6 h-24 w-[calc(100%-3rem)] opacity-80"
       >
         <path
@@ -180,7 +186,7 @@ export default function StorySideScroller() {
       {PART_LABELS.map((label) => (
         <p
           key={label}
-          className="scroller-part-label pointer-events-none invisible absolute right-6 top-32 font-pixel text-[9px] uppercase tracking-[0.15em] text-accent-alt"
+          className="scroller-part-label pointer-events-none invisible absolute right-6 top-32 font-pixel text-[10px] uppercase tracking-[0.15em] text-accent-alt"
         >
           {"> "}TARGET: {label}
         </p>
