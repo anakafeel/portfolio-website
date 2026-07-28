@@ -40,8 +40,13 @@ export default function DoomScrollEffect({ onCleared, cleared }: Props) {
 
       {/* Career wall cards — scroll-driven, keyed to corridor rooms */}
       <div className="doom-card doom-card-1">
-        <p className="doom-card-world">WORLD 1-1</p>
-        <h2 className="doom-card-title">SPAWN POINT</h2>
+        <div className="doom-card-header">
+          <img src="/logos/carleton.svg" alt="Carleton University" className="doom-card-logo" />
+          <div>
+            <p className="doom-card-world">WORLD 1-1</p>
+            <h2 className="doom-card-title">SPAWN POINT</h2>
+          </div>
+        </div>
         <p className="doom-card-body">
           Carleton University · Computer Science. First boot curiosity →
           systems obsession.
@@ -49,24 +54,39 @@ export default function DoomScrollEffect({ onCleared, cleared }: Props) {
       </div>
 
       <div className="doom-card doom-card-2">
-        <p className="doom-card-world">WORLD 1-2</p>
-        <h2 className="doom-card-title">SKILL TREE</h2>
+        <div className="doom-card-header">
+          <img src="/logos/skill-tree.svg" alt="Skill tree" className="doom-card-logo" />
+          <div>
+            <p className="doom-card-world">WORLD 1-2</p>
+            <h2 className="doom-card-title">SKILL TREE</h2>
+          </div>
+        </div>
         <p className="doom-card-body">
           C / C++ / Go / Rust / Python · TypeScript / React / Next.js
         </p>
       </div>
 
       <div className="doom-card doom-card-3">
-        <p className="doom-card-world">WORLD 1-3</p>
-        <h2 className="doom-card-title">SIDE QUESTS</h2>
+        <div className="doom-card-header">
+          <img src="/logos/side-quests.svg" alt="Side quests" className="doom-card-logo" />
+          <div>
+            <p className="doom-card-world">WORLD 1-3</p>
+            <h2 className="doom-card-title">SIDE QUESTS</h2>
+          </div>
+        </div>
         <p className="doom-card-body">
           CUMSA Hacks Top 5 · Technata 3rd · Shopify CLI OSS · ARC
         </p>
       </div>
 
       <div className="doom-card doom-card-4">
-        <p className="doom-card-world">WORLD 1-4</p>
-        <h2 className="doom-card-title">CURRENT QUEST</h2>
+        <div className="doom-card-header">
+          <img src="/logos/synopsys.webp" alt="Synopsys" className="doom-card-logo" />
+          <div>
+            <p className="doom-card-world">WORLD 1-4</p>
+            <h2 className="doom-card-title">CURRENT QUEST</h2>
+          </div>
+        </div>
         <p className="doom-card-body">
           Synopsys intern · ARC Software Lead. Two active missions.
         </p>
@@ -649,6 +669,24 @@ const DOOM_CSS = `
   font-size: 0.6rem;
   color: #ffd400;
   margin: 0 0 10px;
+}
+
+.doom-scroll .doom-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.doom-scroll .doom-card-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+  border: 2px solid #34346a;
+  background: #0a0a12;
+  padding: 4px;
 }
 
 .doom-scroll .doom-card-body {
