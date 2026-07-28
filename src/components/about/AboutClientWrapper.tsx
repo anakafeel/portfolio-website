@@ -8,35 +8,41 @@ import LoadoutCard from "@/components/about/LoadoutCard";
 
 export default function AboutClientWrapper() {
   const [cleared, setCleared] = useState(false);
-  const [hidden, setHidden] = useState(false);
+  const [doomGone, setDoomGone] = useState(false);
+  const [contentVisible, setContentVisible] = useState(false);
 
   const handleCleared = useCallback(() => {
     setCleared(true);
+    // Wait for slide-out animation (1.2s) + small buffer, then remove Doom
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: "instant" });
-      setHidden(true);
-    }, 1600);
+      setDoomGone(true);
+      // Double RAF: let browser paint the section at opacity:0 before transitioning
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setContentVisible(true);
+        });
+      });
+    }, 1400);
   }, []);
 
   return (
     <>
-      {!hidden && (
+      {!doomGone && (
         <DoomScrollEffect onCleared={handleCleared} cleared={cleared} />
       )}
-      <section
-        className="mx-auto max-w-5xl px-4 py-16"
-        style={{
-          opacity: cleared ? 1 : 0,
-          transition: cleared ? "opacity 0.9s ease 0.4s" : "none",
-          pointerEvents: cleared ? "auto" : "none",
-          userSelect: cleared ? "auto" : "none",
-          position: cleared ? "static" : "absolute",
-          top: cleared ? undefined : "-9999px",
-        }}
-      >
-        <ExperienceLog />
-        <LoadoutCard />
-      </section>
+      {doomGone && (
+        <section
+          className="mx-auto max-w-5xl px-4 py-16"
+          style={{
+            opacity: contentVisible ? 1 : 0,
+            transition: "opacity 0.9s ease",
+          }}
+        >
+          <ExperienceLog />
+          <LoadoutCard />
+        </section>
+      )}
     </>
   );
 }

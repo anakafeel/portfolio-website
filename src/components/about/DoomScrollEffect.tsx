@@ -627,7 +627,7 @@ const DOOM_CSS = `
     animation-range: 38% 55%;
   }
   .doom-scroll:has(.doom-logo input:checked) .doom-card-3 {
-    animation-name: doom-card-in-center;
+    animation-name: doom-card-in;
     animation-range: 55% 75%;
   }
   .doom-scroll:has(.doom-logo input:checked) .doom-card-4 {
@@ -645,9 +645,8 @@ const DOOM_CSS = `
   right: 5%;
 }
 .doom-scroll .doom-card-3 {
-  bottom: 22%;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 20%;
+  left: 5%;
 }
 .doom-scroll .doom-card-4 {
   top: 15%;
