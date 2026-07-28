@@ -11,8 +11,9 @@ export default function Home() {
           SAIM HASHMI
         </h1>
         <p className="max-w-xl text-2xl text-muted">
-          Computer Systems Engineering @ Carleton. SWE intern @ Synopsys.
-          Building systems, tooling, and web experiences that feel like games.
+          Computer Systems Engineering @ Carleton.
+          <br />
+          SWE intern @ Synopsys. <br /> 
         </p>
         <SfxLink
           href="/projects"

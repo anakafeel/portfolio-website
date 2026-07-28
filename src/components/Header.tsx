@@ -7,6 +7,7 @@ import clsx from "clsx";
 
 import HUD from "@/components/game/HUD";
 import { useSound } from "@/components/game/useSound";
+import TextRoll from "@/components/ui/text-roll";
 import { NAV_LINKS, SITE } from "@/lib/site";
 
 function isActiveRoute(pathname: string, href: string): boolean {
@@ -51,7 +52,7 @@ function NavItem({ href, label, index, active, onNavigate }: NavItemProps) {
       <span className="text-[10px] text-muted">
         {String(index + 1).padStart(2, "0")}
       </span>
-      {label}
+      <TextRoll center>{label}</TextRoll>
     </Link>
   );
 }

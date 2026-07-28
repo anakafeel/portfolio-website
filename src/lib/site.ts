@@ -1,9 +1,9 @@
 export const SITE = {
   name: "Saim Hashmi",
-  handle: "anakafeel",
-  title: "Saim Hashmi — Portfolio",
+  handle: "Saim Hashmi:)",
+  title: "Saim Hashmi Portfolio",
   description:
-    "Saim Hashmi's portfolio — projects, experience, and an 8-bit world to explore.",
+    "Saim Hashmi's portfolio website:  projects, experience, and an 8-bit world to explore :)",
 } as const;
 
 export const RESUME_URL = "/resume.pdf";
@@ -18,7 +18,8 @@ export const NAV_LINKS = [
   { label: "HOME", href: "/" },
   { label: "ABOUT", href: "/about" },
   { label: "PROJECTS", href: "/projects" },
-  { label: "BLOG", href: "/blog" },
+  { label: "RICE", href: "/rice" },
+  
 ] as const;
 
 /**
@@ -27,6 +28,6 @@ export const NAV_LINKS = [
  * footer and via the terminal's `rice`/`games` commands instead.
  */
 export const EXTRA_LINKS = [
-  { label: "RICE", href: "/rice" },
   { label: "GAMES", href: "/games" },
+  { label: "BLOG", href: "/blog" },
 ] as const;
