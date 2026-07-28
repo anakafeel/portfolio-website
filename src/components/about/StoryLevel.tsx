@@ -7,6 +7,7 @@ import { animate, createDrawable } from "animejs";
 import SfxAnchor from "@/components/sfx/SfxAnchor";
 import { STORY_BEATS } from "@/lib/about";
 import { RESUME_URL } from "@/lib/site";
+import { usePrefersReducedMotion } from "@/lib/three/sceneHooks";
 
 /**
  * Mobile-friendly vertical story level. SVG PCB trace draws itself
@@ -15,14 +16,11 @@ import { RESUME_URL } from "@/lib/site";
  */
 export default function StoryLevel() {
   const rootRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
 
     const tracePath = root.querySelector<SVGPathElement>(".level-trace");
     const playerDot = root.querySelector<HTMLElement>(".level-player");
@@ -127,7 +125,7 @@ export default function StoryLevel() {
       traceAnim?.cancel();
       beatObserver.disconnect();
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <div ref={rootRef} className="relative mt-16">

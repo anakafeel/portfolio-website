@@ -2,6 +2,9 @@
 
 import { useEffect, useRef } from "react";
 
+import { STORY_BEATS } from "@/lib/about";
+import { usePrefersReducedMotion } from "@/lib/three/sceneHooks";
+
 interface Props {
   onCleared: () => void;
   cleared: boolean;
@@ -9,6 +12,7 @@ interface Props {
 
 export default function DoomScrollEffect({ onCleared, cleared }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const root = rootRef.current;
@@ -30,67 +34,39 @@ export default function DoomScrollEffect({ onCleared, cleared }: Props) {
     return () => lastCheckbox.removeEventListener("change", handleChange);
   }, [onCleared]);
 
+  const classes = [
+    "doom-scroll",
+    cleared ? "doom-cleared" : "",
+    reducedMotion ? "doom-reduced-motion" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <div
-      className={`doom-scroll${cleared ? " doom-cleared" : ""}`}
+      className={classes}
       aria-hidden="true"
       ref={rootRef}
     >
       <style>{DOOM_CSS}</style>
 
       {/* Career wall cards — scroll-driven, keyed to corridor rooms */}
-      <div className="doom-card doom-card-1">
-        <div className="doom-card-header">
-          <img src="/logos/carleton.svg" alt="Carleton University" className="doom-card-logo" />
-          <div>
-            <p className="doom-card-world">WORLD 1-1</p>
-            <h2 className="doom-card-title">SPAWN POINT</h2>
+      {STORY_BEATS.map((beat, i) => (
+        <div key={i} className={`doom-card pixel-border doom-card-${i + 1}`}>
+          <div className="doom-card-header">
+            <img
+              src={beat.logo.src}
+              alt={beat.logo.alt}
+              className="doom-card-logo pixel-border"
+            />
+            <div>
+              <p className="doom-card-world">{beat.world}</p>
+              <h2 className="doom-card-title">{beat.title}</h2>
+            </div>
           </div>
+          <p className="doom-card-body">{beat.body}</p>
         </div>
-        <p className="doom-card-body">
-          Carleton University · Computer Science. First boot curiosity →
-          systems obsession.
-        </p>
-      </div>
-
-      <div className="doom-card doom-card-2">
-        <div className="doom-card-header">
-          <img src="/logos/skill-tree.svg" alt="Skill tree" className="doom-card-logo" />
-          <div>
-            <p className="doom-card-world">WORLD 1-2</p>
-            <h2 className="doom-card-title">SKILL TREE</h2>
-          </div>
-        </div>
-        <p className="doom-card-body">
-          C / C++ / Go / Rust / Python · TypeScript / React / Next.js
-        </p>
-      </div>
-
-      <div className="doom-card doom-card-3">
-        <div className="doom-card-header">
-          <img src="/logos/side-quests.svg" alt="Side quests" className="doom-card-logo" />
-          <div>
-            <p className="doom-card-world">WORLD 1-3</p>
-            <h2 className="doom-card-title">SIDE QUESTS</h2>
-          </div>
-        </div>
-        <p className="doom-card-body">
-          CUMSA Hacks Top 5 · Technata 3rd · Shopify CLI OSS · ARC
-        </p>
-      </div>
-
-      <div className="doom-card doom-card-4">
-        <div className="doom-card-header">
-          <img src="/logos/synopsys.webp" alt="Synopsys" className="doom-card-logo" />
-          <div>
-            <p className="doom-card-world">WORLD 1-4</p>
-            <h2 className="doom-card-title">CURRENT QUEST</h2>
-          </div>
-        </div>
-        <p className="doom-card-body">
-          Synopsys intern · ARC Software Lead. Two active missions.
-        </p>
-      </div>
+      ))}
 
       <div className="doom-wrapper">
         <div className="doom-level">
@@ -604,8 +580,6 @@ const DOOM_CSS = `
   position: fixed;
   max-width: min(340px, 80vw);
   background: rgba(10, 10, 18, 0.88);
-  border: 2px solid #34346a;
-  box-shadow: 4px 4px 0 0 #34346a;
   padding: 14px 18px;
   z-index: 5;
   opacity: 0;
@@ -631,7 +605,7 @@ const DOOM_CSS = `
     animation-range: 55% 75%;
   }
   .doom-scroll:has(.doom-logo input:checked) .doom-card-4 {
-    animation-name: doom-card-in-center;
+    animation-name: doom-card-in;
     animation-range: 75% 95%;
   }
 }
@@ -653,12 +627,13 @@ const DOOM_CSS = `
   left: 50%;
   transform: translateX(-50%);
   max-width: min(480px, 90vw);
+  --card-tx: -50%;
 }
 
 .doom-scroll .doom-card-world {
   font-family: "Press Start 2P", sans-serif;
   font-size: 0.5rem;
-  color: #00e5ff;
+  color: var(--color-accent-alt);
   margin: 0 0 6px;
   letter-spacing: 0.08em;
 }
@@ -666,7 +641,7 @@ const DOOM_CSS = `
 .doom-scroll .doom-card-title {
   font-family: "Press Start 2P", sans-serif;
   font-size: 0.6rem;
-  color: #ffd400;
+  color: var(--color-highlight);
   margin: 0 0 10px;
 }
 
@@ -683,29 +658,22 @@ const DOOM_CSS = `
   object-fit: contain;
   image-rendering: pixelated;
   flex-shrink: 0;
-  border: 2px solid #34346a;
-  background: #0a0a12;
+  background: var(--color-background);
   padding: 4px;
 }
 
 .doom-scroll .doom-card-body {
   font-family: "VT323", monospace;
   font-size: 1.1rem;
-  color: #e8e8f4;
+  color: var(--color-foreground);
   margin: 0;
   line-height: 1.4;
 }
 
 @keyframes doom-card-in {
-  0%, 8%   { opacity: 0; transform: translateY(8px); }
-  18%, 82% { opacity: 1; transform: translateY(0); }
-  92%, 100% { opacity: 0; transform: translateY(0); }
-}
-
-@keyframes doom-card-in-center {
-  0%, 8%   { opacity: 0; transform: translateX(-50%) translateY(8px); }
-  18%, 82% { opacity: 1; transform: translateX(-50%) translateY(0); }
-  92%, 100% { opacity: 0; transform: translateX(-50%) translateY(0); }
+  0%, 8%   { opacity: 0; transform: translateX(var(--card-tx, 0)) translateY(8px); }
+  18%, 82% { opacity: 1; transform: translateX(var(--card-tx, 0)) translateY(0); }
+  92%, 100% { opacity: 0; transform: translateX(var(--card-tx, 0)) translateY(0); }
 }
 
 /* Mobile: hide cards */
@@ -766,16 +734,14 @@ const DOOM_CSS = `
 }
 
 /* ── Reduced motion ─────────────────────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-  .doom-scroll .doom-inner { animation: none; }
-  .doom-scroll .doom-inner > span { animation: none; }
-  .doom-scroll .doom-logo { animation: none; opacity: 0; }
-  .doom-scroll .doom-weapon { animation: none; }
-  .doom-scroll .doom-card { display: none; }
-  .doom-scroll.doom-cleared {
-    transform: none;
-    transition: opacity 0.1s ease;
-    opacity: 0;
-  }
+.doom-reduced-motion .doom-inner { animation: none; }
+.doom-reduced-motion .doom-inner > span { animation: none; }
+.doom-reduced-motion .doom-logo { animation: none; opacity: 0; }
+.doom-reduced-motion .doom-weapon { animation: none; }
+.doom-reduced-motion .doom-card { display: none; }
+.doom-reduced-motion.doom-cleared {
+  transform: none;
+  transition: opacity 0.1s ease;
+  opacity: 0;
 }
 `;

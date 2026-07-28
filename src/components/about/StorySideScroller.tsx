@@ -7,6 +7,7 @@ import { animate, createDrawable, stagger } from "animejs";
 import SfxAnchor from "@/components/sfx/SfxAnchor";
 import { STORY_BEATS } from "@/lib/about";
 import { RESUME_URL } from "@/lib/site";
+import { usePrefersReducedMotion } from "@/lib/three/sceneHooks";
 
 /**
  * Each beat gets a unique SVG circuit-trace pattern that draws itself
@@ -42,14 +43,11 @@ const TOTAL_TRACE_DURATION =
  */
 export default function StorySideScroller() {
   const rootRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
 
     const beatEls = root.querySelectorAll<HTMLElement>(".story-beat");
     const logoEls = root.querySelectorAll<HTMLElement>(".story-logo");
@@ -152,7 +150,7 @@ export default function StorySideScroller() {
       window.removeEventListener("scroll", onScroll);
       traceAnim.cancel();
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <div ref={rootRef} className="relative h-[500vh]">
