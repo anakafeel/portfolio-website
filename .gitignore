@@ -1,5 +1,12 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# all dot folders (except .github, .vscode, .husky if they exist)
+.*
+!.gitignore
+!.eslintrc*
+!.prettierrc*
+!.editorconfig
+
 # dependencies
 /node_modules
 /.pnp
