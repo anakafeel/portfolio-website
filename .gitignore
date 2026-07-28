@@ -8,6 +8,7 @@
 !.editorconfig
 !.impeccable/
 !.superpowers/
+!.claude/
 
 # dependencies
 /node_modules
