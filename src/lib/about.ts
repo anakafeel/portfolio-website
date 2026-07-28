@@ -1,7 +1,7 @@
 export interface StoryBeat {
   world: string;
   title: string;
-  body: string;
+  body: string[];
   /**
    * Card badge. The files in public/logos/ are pixel placeholders — swap
    * each one for the real company/org logo (keep the path, or update it
@@ -62,25 +62,42 @@ export const STORY_BEATS: StoryBeat[] = [
   {
     world: "WORLD 1-1",
     title: "SPAWN POINT",
-    body: "Computer Systems Engineering at Carleton University, Ottawa — third year, graduating May 2027. First boot was pure curiosity about how machines actually work — started on Arch, settled on Fedora, never looked back at defaults.",
+    body: [
+      "Computer Systems Engineering at Carleton University, Ottawa — third year, graduating May 2027",
+      "First boot was pure curiosity about how machines actually work",
+      "Started on Arch, settled on Fedora, never looked back at defaults",
+    ],
     logo: { src: "/logos/carleton.svg", alt: "Carleton University logo" },
   },
   {
     world: "WORLD 1-2",
     title: "SKILL TREE",
-    body: "Points spread across the tree: C, C++, Go, Rust, and Python down the systems branch; TypeScript, React, and Next.js up the web branch. The build philosophy: interfaces should feel like native systems — predictable, spatial, keyboard-first.",
+    body: [
+      "Systems branch: C, C++, Go, Rust, and Python",
+      "Web branch: TypeScript, React, and Next.js",
+      "Build philosophy: interfaces should feel like native systems — predictable, spatial, keyboard-first",
+    ],
     logo: { src: "/logos/skill-tree.svg", alt: "Skill tree badge" },
   },
   {
     world: "WORLD 1-3",
     title: "SIDE QUESTS",
-    body: "Top 5 at CUMSA Hacks 2026, 3rd place at Technata Hacks 2024, merged contributions to Shopify CLI, and tuning a Linux desktop until every pixel earns its place.",
+    body: [
+      "Top 5 at CUMSA Hacks 2026",
+      "3rd place at Technata Hacks 2024",
+      "Merged contributions to Shopify CLI",
+      "Tuning a Linux desktop until every pixel earns its place",
+    ],
     logo: { src: "/logos/side-quests.svg", alt: "Side quests trophy badge" },
   },
   {
     world: "WORLD 1-4",
     title: "CURRENT QUEST",
-    body: "Software Development Intern at Synopsys, building CI/CD pipelines for the Ansys Fluent R&D team — while leading systems & tooling for Autonomous Robotics Carleton on the side.",
+    body: [
+      "Software Development Intern at Synopsys",
+      "Building CI/CD pipelines for the Ansys Fluent R&D team",
+      "Leading systems & tooling for Autonomous Robotics Carleton",
+    ],
     logo: { src: "/logos/synopsys.webp", alt: "Synopsys logo" },
   },
 ];

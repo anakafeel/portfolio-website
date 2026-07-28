@@ -64,7 +64,11 @@ export default function DoomScrollEffect({ onCleared, cleared }: Props) {
               <h2 className="doom-card-title">{beat.title}</h2>
             </div>
           </div>
-          <p className="doom-card-body">{beat.body}</p>
+          <ul className="doom-card-body">
+            {beat.body.map((point, idx) => (
+              <li key={idx}>{point}</li>
+            ))}
+          </ul>
         </div>
       ))}
 
@@ -668,6 +672,21 @@ const DOOM_CSS = `
   color: var(--color-foreground);
   margin: 0;
   line-height: 1.4;
+  list-style: none;
+  padding: 0;
+}
+
+.doom-scroll .doom-card-body li {
+  position: relative;
+  padding-left: 16px;
+  margin-bottom: 6px;
+}
+
+.doom-scroll .doom-card-body li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
 }
 
 @keyframes doom-card-in {

@@ -55,14 +55,14 @@ Six career moments injected as overlays inside `.doom-wrapper`, positioned in 3D
 
 **Scroll → Room → Career moment mapping:**
 
-| Scroll % | Corridor room | Career card |
-|----------|---------------|-------------|
-| 0–15% | Entry / title screen | None — let the Doom logo / weapon reveal breathe |
-| 20–35% | First corridor turn (Room 1) | **SPAWN POINT** — Carleton University, CSE, first boot curiosity |
-| 38–52% | Side passage (Room 2) | **SKILL TREE** — Systems branch (C/C++/Go/Rust/Python) + Web branch (TS/React) |
-| 55–70% | The wide room (Room 3) | **SIDE QUESTS** — CUMSA Hacks Top 5, Technata 3rd, Shopify CLI OSS, ARC |
-| 75–92% | Boss room (Room 4) | **CURRENT QUEST** — Synopsys + ARC lead; two active entries |
-| 95–100% | Boss defeated | VICTORY screen → exit |
+| Scroll % | Corridor room                | Career card                                                                    |
+| -------- | ---------------------------- | ------------------------------------------------------------------------------ |
+| 0–15%    | Entry / title screen         | None — let the Doom logo / weapon reveal breathe                               |
+| 20–35%   | First corridor turn (Room 1) | **SPAWN POINT** — Carleton University, CSE, first boot curiosity               |
+| 38–52%   | Side passage (Room 2)        | **SKILL TREE** — Systems branch (C/C++/Go/Rust/Python) + Web branch (TS/React) |
+| 55–70%   | The wide room (Room 3)       | **SIDE QUESTS** — CUMSA Hacks Top 5, Technata 3rd, Shopify CLI OSS, ARC        |
+| 75–92%   | Boss room (Room 4)           | **CURRENT QUEST** — Synopsys + ARC lead; two active entries                    |
+| 95–100%  | Boss defeated                | VICTORY screen → exit                                                          |
 
 ### 3.4 Career Card Visual Design
 
@@ -101,15 +101,15 @@ The existing checkbox mechanic (shooting enemies) is preserved exactly. No chang
 
 ### 3.7 Stacking Fix Summary
 
-| Layer | z-index | Notes |
-|-------|---------|-------|
-| `.doom-scroll` (fixed overlay) | 0 (host) | Fixed, covers viewport |
-| `.doom-wrapper` (3D scene) | -1 | Behind HUD |
-| Career wall cards | 5 | Above walls, below weapon |
-| `.doom-weapon` | 9 | Fixed bottom-center |
-| `.doom-hud` | 999 | Fixed bottom strip |
-| `.doom-logo` | 10 | Fixed, hides after click |
-| `.about-content` (below game) | auto | Normal flow, starts opacity 0 |
+| Layer                          | z-index  | Notes                         |
+| ------------------------------ | -------- | ----------------------------- |
+| `.doom-scroll` (fixed overlay) | 0 (host) | Fixed, covers viewport        |
+| `.doom-wrapper` (3D scene)     | -1       | Behind HUD                    |
+| Career wall cards              | 5        | Above walls, below weapon     |
+| `.doom-weapon`                 | 9        | Fixed bottom-center           |
+| `.doom-hud`                    | 999      | Fixed bottom strip            |
+| `.doom-logo`                   | 10       | Fixed, hides after click      |
+| `.about-content` (below game)  | auto     | Normal flow, starts opacity 0 |
 
 ---
 
@@ -126,11 +126,11 @@ The existing checkbox mechanic (shooting enemies) is preserved exactly. No chang
 
 ## 5. What Gets Changed
 
-| File | Change |
-|------|--------|
-| `src/app/about/page.tsx` | Remove `height: 2000vh` wrapper; add `about-content` section with initial `opacity: 0`; wire `onCleared` callback |
+| File                                        | Change                                                                                                                                                |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/app/about/page.tsx`                    | Remove `height: 2000vh` wrapper; add `about-content` section with initial `opacity: 0`; wire `onCleared` callback                                     |
 | `src/components/about/DoomScrollEffect.tsx` | Add career wall cards (6 CSS-animated overlays); add `MutationObserver` for last-enemy detection; add victory exit animation; accept `onCleared` prop |
-| `src/app/globals.css` | Add `.doom-card` styles, `.doom-cleared` transition classes, `@keyframes doom-card-in` |
+| `src/app/globals.css`                       | Add `.doom-card` styles, `.doom-cleared` transition classes, `@keyframes doom-card-in`                                                                |
 
 `StorySideScroller.tsx`, `StoryLevel.tsx`, `StoryStage.tsx` — **not touched**. They remain as the content below the game once Doom exits.
 
