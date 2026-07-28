@@ -306,4 +306,28 @@
       transparent 3px
     );
   }
+
+  /* GitHub contributions calendar cells */
+  .contribution-cell {
+    width: 10px;
+    height: 10px;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+  }
+
+  .contribution-cell[data-level="1"] {
+    background-color: color-mix(in srgb, var(--color-accent) 25%, var(--color-surface));
+  }
+
+  .contribution-cell[data-level="2"] {
+    background-color: color-mix(in srgb, var(--color-accent) 50%, var(--color-surface));
+  }
+
+  .contribution-cell[data-level="3"] {
+    background-color: color-mix(in srgb, var(--color-accent) 75%, var(--color-surface));
+  }
+
+  .contribution-cell[data-level="4"] {
+    background-color: var(--color-accent);
+  }
 }
