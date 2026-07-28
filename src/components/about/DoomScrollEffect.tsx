@@ -1,15 +1,76 @@
 "use client";
 
-/**
- * Doom Scroll – CSS scroll-timeline corridor effect.
- * Exact recreation from Adam Kuhn's CodePen (cobra_winfrey/oNOMRav).
- * Pure CSS animation driven by scroll position; zero JS animation logic.
- * All selectors scoped under .doom-scroll to avoid clashing with the app layout.
- */
-export default function DoomScrollEffect() {
+import { useEffect, useRef } from "react";
+
+interface Props {
+  onCleared: () => void;
+  cleared: boolean;
+}
+
+export default function DoomScrollEffect({ onCleared, cleared }: Props) {
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    const lastCheckbox = root.querySelector<HTMLInputElement>(
+      ".doom-inner span:nth-of-type(6) input",
+    );
+    if (!lastCheckbox) return;
+
+    let fired = false;
+    const handleChange = () => {
+      if (fired || !lastCheckbox.checked) return;
+      fired = true;
+      setTimeout(onCleared, 1500);
+    };
+
+    lastCheckbox.addEventListener("change", handleChange);
+    return () => lastCheckbox.removeEventListener("change", handleChange);
+  }, [onCleared]);
+
   return (
-    <div className="doom-scroll" aria-hidden="true">
+    <div
+      className={`doom-scroll${cleared ? " doom-cleared" : ""}`}
+      aria-hidden="true"
+      ref={rootRef}
+    >
       <style>{DOOM_CSS}</style>
+
+      {/* Career wall cards — scroll-driven, keyed to corridor rooms */}
+      <div className="doom-card doom-card-1">
+        <p className="doom-card-world">WORLD 1-1</p>
+        <h2 className="doom-card-title">SPAWN POINT</h2>
+        <p className="doom-card-body">
+          Carleton University · Computer Science. First boot curiosity →
+          systems obsession.
+        </p>
+      </div>
+
+      <div className="doom-card doom-card-2">
+        <p className="doom-card-world">WORLD 1-2</p>
+        <h2 className="doom-card-title">SKILL TREE</h2>
+        <p className="doom-card-body">
+          C / C++ / Go / Rust / Python · TypeScript / React / Next.js
+        </p>
+      </div>
+
+      <div className="doom-card doom-card-3">
+        <p className="doom-card-world">WORLD 1-3</p>
+        <h2 className="doom-card-title">SIDE QUESTS</h2>
+        <p className="doom-card-body">
+          CUMSA Hacks Top 5 · Technata 3rd · Shopify CLI OSS · ARC
+        </p>
+      </div>
+
+      <div className="doom-card doom-card-4">
+        <p className="doom-card-world">WORLD 1-4</p>
+        <h2 className="doom-card-title">CURRENT QUEST</h2>
+        <p className="doom-card-body">
+          Synopsys intern · ARC Software Lead. Two active missions.
+        </p>
+      </div>
 
       <div className="doom-wrapper">
         <div className="doom-level">
@@ -50,9 +111,6 @@ export default function DoomScrollEffect() {
   );
 }
 
-/* ──────────────────────────────────────────────────────────────
-   Original CSS from cobra_winfrey/oNOMRav, scoped under .doom-scroll
-   ────────────────────────────────────────────────────────────── */
 const DOOM_CSS = `
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 @font-face {
@@ -78,6 +136,13 @@ const DOOM_CSS = `
 .doom-scroll *::before,
 .doom-scroll *::after {
   cursor: crosshair;
+}
+
+/* Victory exit — slides the whole overlay up off-screen */
+.doom-scroll.doom-cleared {
+  transform: translateY(-100vh);
+  transition: transform 1.2s cubic-bezier(0.76, 0, 0.24, 1);
+  pointer-events: none;
 }
 
 /* Victory overlay — shows when last enemy is killed */
@@ -514,6 +579,103 @@ const DOOM_CSS = `
   z-index: 999;
 }
 
+/* ── Career Wall Cards ──────────────────────────────────────── */
+.doom-scroll .doom-card {
+  position: fixed;
+  max-width: min(340px, 80vw);
+  background: rgba(10, 10, 18, 0.88);
+  border: 2px solid #34346a;
+  box-shadow: 4px 4px 0 0 #34346a;
+  padding: 14px 18px;
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .doom-scroll:has(.doom-logo input:checked) .doom-card {
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll();
+  }
+  .doom-scroll:has(.doom-logo input:checked) .doom-card-1 {
+    animation-name: doom-card-in;
+    animation-range: 20% 38%;
+  }
+  .doom-scroll:has(.doom-logo input:checked) .doom-card-2 {
+    animation-name: doom-card-in;
+    animation-range: 38% 55%;
+  }
+  .doom-scroll:has(.doom-logo input:checked) .doom-card-3 {
+    animation-name: doom-card-in-center;
+    animation-range: 55% 75%;
+  }
+  .doom-scroll:has(.doom-logo input:checked) .doom-card-4 {
+    animation-name: doom-card-in-center;
+    animation-range: 75% 95%;
+  }
+}
+
+.doom-scroll .doom-card-1 {
+  top: 20%;
+  left: 5%;
+}
+.doom-scroll .doom-card-2 {
+  top: 15%;
+  right: 5%;
+}
+.doom-scroll .doom-card-3 {
+  bottom: 22%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.doom-scroll .doom-card-4 {
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: min(480px, 90vw);
+}
+
+.doom-scroll .doom-card-world {
+  font-family: "Press Start 2P", sans-serif;
+  font-size: 0.5rem;
+  color: #00e5ff;
+  margin: 0 0 6px;
+  letter-spacing: 0.08em;
+}
+
+.doom-scroll .doom-card-title {
+  font-family: "Press Start 2P", sans-serif;
+  font-size: 0.6rem;
+  color: #ffd400;
+  margin: 0 0 10px;
+}
+
+.doom-scroll .doom-card-body {
+  font-family: "VT323", monospace;
+  font-size: 1.1rem;
+  color: #e8e8f4;
+  margin: 0;
+  line-height: 1.4;
+}
+
+@keyframes doom-card-in {
+  0%, 8%   { opacity: 0; transform: translateY(8px); }
+  18%, 82% { opacity: 1; transform: translateY(0); }
+  92%, 100% { opacity: 0; transform: translateY(0); }
+}
+
+@keyframes doom-card-in-center {
+  0%, 8%   { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  18%, 82% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  92%, 100% { opacity: 0; transform: translateX(-50%) translateY(0); }
+}
+
+/* Mobile: hide cards */
+@media (max-width: 640px) {
+  .doom-scroll .doom-card { display: none; }
+}
+
 /* ── Keyframes ──────────────────────────────────────────────── */
 @keyframes doom-rotate {
   0%   { transform: translateY(0px); }
@@ -572,5 +734,11 @@ const DOOM_CSS = `
   .doom-scroll .doom-inner > span { animation: none; }
   .doom-scroll .doom-logo { animation: none; opacity: 0; }
   .doom-scroll .doom-weapon { animation: none; }
+  .doom-scroll .doom-card { display: none; }
+  .doom-scroll.doom-cleared {
+    transform: none;
+    transition: opacity 0.1s ease;
+    opacity: 0;
+  }
 }
 `;
