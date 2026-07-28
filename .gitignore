@@ -6,6 +6,8 @@
 !.eslintrc*
 !.prettierrc*
 !.editorconfig
+!.impeccable/
+!.superpowers/
 
 # dependencies
 /node_modules
