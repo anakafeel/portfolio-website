@@ -19,9 +19,8 @@ export default function AboutClientWrapper() {
   const handleCleared = useCallback(() => {
     setPhase("exiting");
     setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: "instant" });
-      requestAnimationFrame(() => setPhase("ready"));
-    }, 1400);
+      setPhase("ready");
+    }, 1800);
   }, []);
 
   if (isMobile) {
@@ -45,8 +44,8 @@ export default function AboutClientWrapper() {
           cleared={phase === "exiting"}
         />
       )}
-      {phase === "ready" && (
-        <section className="mx-auto max-w-5xl px-4 py-16">
+      {phase !== "doom" && (
+        <section className="mx-auto max-w-5xl px-4 py-16 animate-fade-up">
           <div className="space-y-8">
             <ExperienceLog />
             <GitHubContributions username="anakafeel" />

@@ -138,10 +138,16 @@ const DOOM_CSS = `
   cursor: crosshair;
 }
 
-/* Victory exit — slides the whole overlay up off-screen */
+/* Victory exit — revert to fixed overlay and slide up off-screen */
 .doom-scroll.doom-cleared {
+  position: fixed !important;
+  height: 100vh !important;
+  overflow: hidden !important;
+  top: 0;
+  left: 0;
+  width: 100vw;
   transform: translateY(-100vh);
-  transition: transform 1.2s cubic-bezier(0.76, 0, 0.24, 1);
+  transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
 }
 
