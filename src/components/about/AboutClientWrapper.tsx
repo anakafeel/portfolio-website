@@ -25,10 +25,14 @@ export default function AboutClientWrapper() {
 
   useEffect(() => {
     if (phase !== "ready") return;
-    const el = document.getElementById("main-quests");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    const timer = setTimeout(() => {
+      const el = document.getElementById("main-quests");
+      if (el) {
+        const y = el.getBoundingClientRect().top + window.scrollY - 16;
+        window.scrollTo({ top: y, behavior: "instant" });
+      }
+    }, 50);
+    return () => clearTimeout(timer);
   }, [phase]);
 
   if (isMobile) {
@@ -53,7 +57,7 @@ export default function AboutClientWrapper() {
         />
       )}
       {phase !== "doom" && (
-        <section className="mx-auto max-w-5xl px-4 py-16 animate-fade-up">
+        <section className="mx-auto max-w-5xl px-4 py-16">
           <div className="space-y-8">
             <ExperienceLog />
             <GitHubContributions username="anakafeel" />
