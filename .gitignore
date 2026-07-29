@@ -45,6 +45,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# source assets (not directly used in public/)
+assets/project\ pics/
+
 # claude local settings
 .claude/settings.local.json*
 

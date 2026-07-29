@@ -32,28 +32,65 @@ export const GAMES: GameEntry[] = [
     title: "Rainbow Six Siege",
     genre: "TACTICAL FPS",
     status: "favorite",
-    blurb:
-      "The long-time main. Droning, angles, and one-speed brain — thousands of hours of destructible walls.",
+    blurb: "I hate droning in this game",
     cover: "/games/siege.svg",
     details: {
-      hours: "2,000+ HRS",
-      mains: "ASH / JÄGER",
+      hours: "400+ HRS",
+      mains: "ACE / JÄGER",
       memory:
-        "The game that taught map knowledge as a skill. Every wall is a door if you believe hard enough — and every ranked season starts with 'this is the one where the aim comes back.' Droning first, peeking second, blaming the spawn peek third.",
+        "The game that taught map knowledge as a skill. Every wall is a door if you believe hard enough and every ranked season starts with 'this is the one where the aim comes back.' Droning first, peeking second, blaming the spawn peek third.",
+    },
+  },
+  {
+    title: "Marvel Rivals",
+    genre: "HERO SHOOTER",
+    status: "playing",
+    blurb: "US AGAINST THE WORLD !!!!",
+    cover: "/games/marvel-rivals.svg",
+    details: {
+      hours: "300+ HRS",
+      mains: "MOONKNIGHT / CLOAK AND DAGGER",
+      memory: "10/10 will recommend if you got friends who can carry you ",
+    },
+  },
+  {
+    title: "CS:GO",
+    genre: "TACTICAL FPS",
+    status: "favorite",
+    blurb:
+      "The competitive shooter that defined a genre. Plant, defuse, eco, rush B — the callouts never leave you.",
+    cover: "/games/csgo.svg",
+    details: {
+      hours: "300+ HRS",
+      mains: "AK-47 / AWP",
+      memory:
+        "Before Siege, there was Dust 2. The fundamentals crosshair placement, spray control, map awareness — all came from hours of deathmatch and competitive matchmaking. The inventory of sticker-covered skins is worth more than the ranked medals, and 'one more game' has been a lie since 2015.",
+    },
+  },
+  {
+    title: "Rocket League",
+    genre: "VEHICLE SOCCER",
+    status: "playing",
+    blurb:
+      "Car soccer with a ranked grind that never quits. Aerial mechanics, flip resets, and the best 5-minute rounds in gaming.",
+    cover: "/games/rocket-league.svg",
+    details: {
+      hours: "400+ HRS",
+      mains: "OCTANE / DOMINUS",
+      memory:
+        "The only game where 'git gud' means learning to fly your car upside down. Rotations from ranked 3s translate well the hard part is telling your brain that the ball is the objective, not the enemy. Ceiling shots and air dribbles are the flex, but a solid powershot on target is the real skill.",
     },
   },
   {
     title: "Valorant",
     genre: "TACTICAL FPS",
-    status: "playing",
-    blurb:
-      "The current competitive grind. Crosshair placement carried over from Siege; the aim training never ends.",
+    status: "favorite",
+    blurb: "Its been a while and im glad it has",
     cover: "/games/valorant.svg",
     details: {
       hours: "600+ HRS",
       mains: "JETT / KILLJOY",
-      memory:
-        "Where the Siege habits went to get re-trained. Utility lineups live rent-free in memory that should be holding course material. The rank climbs in the summer and mysteriously decays every exam season.",
+      memory: "stop playing this if you love your family",
     },
   },
   {
@@ -68,90 +105,6 @@ export const GAMES: GameEntry[] = [
       mains: "WRAITH / PATHFINDER",
       memory:
         "The movement game. Tap-strafing around a corner that nobody was watching remains one of gaming's purest joys. Wins come in threes; so do the squads that arrive mid-fight.",
-    },
-  },
-  {
-    title: "Overwatch",
-    genre: "HERO SHOOTER",
-    status: "favorite",
-    blurb:
-      "Where the hero-shooter itch started. Still convinced the tank diff was never my fault.",
-    cover: "/games/overwatch.svg",
-    details: {
-      hours: "1,000+ HRS",
-      mains: "GENJI / LÚCIO",
-      memory:
-        "The origin story for caring about team comps in pubs. 'I need healing' was a lifestyle, not a voice line. The tank diff was — and this is important — never my fault.",
-    },
-  },
-  {
-    title: "Mortal Kombat 1",
-    genre: "FIGHTING",
-    status: "completed",
-    blurb:
-      "Story mode cleared. Kombos half-remembered, fatalities fully remembered.",
-    cover: "/games/mk1.svg",
-    details: {
-      hours: "80+ HRS",
-      mains: "SCORPION",
-      memory:
-        "The couch game. Story mode cleared start to finish, then straight into teaching friends the hard way that 'button mashing' is a legitimate mid-tier strategy. Fatality inputs are stored more reliably than most passwords.",
-    },
-  },
-  {
-    title: "Marvel Rivals",
-    genre: "HERO SHOOTER",
-    status: "playing",
-    blurb:
-      "Third-person hero shooter chaos. Quick matches, stylish abilities, and the Marvel roster done right.",
-    cover: "/games/marvel-rivals.svg",
-    details: {
-      hours: "100+ HRS",
-      mains: "MAGIK / SPIDER-MAN",
-      memory:
-        "The newest competitive rotation. Third-person gives the movement a whole different feel from the usual tactical FPS lineup — and Magik's sword combos scratch an entirely different itch. Great for sessions between ranked Siege games when the brain needs a break from one-tap headshots.",
-    },
-  },
-  {
-    title: "CS:GO",
-    genre: "TACTICAL FPS",
-    status: "favorite",
-    blurb:
-      "The competitive shooter that defined a genre. Plant, defuse, eco, rush B — the callouts never leave you.",
-    cover: "/games/csgo.svg",
-    details: {
-      hours: "800+ HRS",
-      mains: "AK-47 / AWP",
-      memory:
-        "Before Siege, there was Dust 2. The fundamentals — crosshair placement, spray control, map awareness — all came from hours of deathmatch and competitive matchmaking. The inventory of sticker-covered skins is worth more than the ranked medals, and 'one more game' has been a lie since 2015.",
-    },
-  },
-  {
-    title: "Rocket League",
-    genre: "VEHICLE SOCCER",
-    status: "playing",
-    blurb:
-      "Car soccer with a ranked grind that never quits. Aerial mechanics, flip resets, and the best 5-minute rounds in gaming.",
-    cover: "/games/rocket-league.svg",
-    details: {
-      hours: "500+ HRS",
-      mains: "OCTANE / DOMINUS",
-      memory:
-        "The only game where 'git gud' means learning to fly your car upside down. Rotations from ranked 3s translate well — the hard part is telling your brain that the ball is the objective, not the enemy. Ceiling shots and air dribbles are the flex, but a solid powershot on target is the real skill.",
-    },
-  },
-  {
-    title: "Steam Summer Sale Haul",
-    genre: "MYSTERY LOOT",
-    status: "backlog",
-    blurb:
-      "Fresh from the sale, still shrink-wrapped. Titles to be revealed once they leave the download queue.",
-    cover: "/games/backlog.svg",
-    details: {
-      hours: "0 HRS",
-      mains: "TBD",
-      memory:
-        "Acquired at 80% off, which everyone knows makes them free. Currently seasoning in the library. The plan is to play them 'after this semester,' a phrase that has now survived four semesters.",
     },
   },
 ];

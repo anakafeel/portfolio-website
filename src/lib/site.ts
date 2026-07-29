@@ -12,7 +12,7 @@ export const CONTACT = {
   email: "hashmisaim037@gmail.com",
   github: "https://github.com/anakafeel",
   linkedin: "https://www.linkedin.com/in/saim-hashmi-2230b6243/",
-  discord: "https://discord.com/users/YOUR_USER_ID",
+  discord: "https://discord.com/users/587612275460931595",
 } as const;
 
 export const NAV_LINKS = [
