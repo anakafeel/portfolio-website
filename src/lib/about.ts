@@ -63,9 +63,7 @@ export const STORY_BEATS: StoryBeat[] = [
     world: "WORLD 1-1",
     title: "SPAWN POINT",
     body: [
-      "Computer Systems Engineering at Carleton University, Ottawa — third year, graduating May 2027",
-      "First boot was pure curiosity about how machines actually work",
-      "Started on Arch, settled on Fedora, never looked back at defaults",
+      "Computer Systems Engineering at Carleton University, 4th year -  graduating May 2027",
     ],
     logo: { src: "/logos/carleton.svg", alt: "Carleton University logo" },
   },
@@ -75,7 +73,7 @@ export const STORY_BEATS: StoryBeat[] = [
     body: [
       "Systems branch: C, C++, Go, Rust, and Python",
       "Web branch: TypeScript, React, and Next.js",
-      "Build philosophy: interfaces should feel like native systems — predictable, spatial, keyboard-first",
+      "DevOps branch: CI/CD, Docker, and Azure DevOps",
     ],
     logo: { src: "/logos/skill-tree.svg", alt: "Skill tree badge" },
   },
@@ -84,9 +82,8 @@ export const STORY_BEATS: StoryBeat[] = [
     title: "SIDE QUESTS",
     body: [
       "Top 5 at CUMSA Hacks 2026",
+      "OSS contributions to Shopify CLI",
       "3rd place at Technata Hacks 2024",
-      "Merged contributions to Shopify CLI",
-      "Tuning a Linux desktop until every pixel earns its place",
     ],
     logo: { src: "/logos/side-quests.svg", alt: "Side quests trophy badge" },
   },
@@ -96,7 +93,6 @@ export const STORY_BEATS: StoryBeat[] = [
     body: [
       "Software Development Intern at Synopsys",
       "Building CI/CD pipelines for the Ansys Fluent R&D team",
-      "Leading systems & tooling for Autonomous Robotics Carleton",
     ],
     logo: { src: "/logos/synopsys.webp", alt: "Synopsys logo" },
   },
