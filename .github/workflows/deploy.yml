@@ -1,4 +1,5 @@
-# Triggered on every push to main — builds arm64 Docker image and pushes to Docker Hub
+# Triggered on every push to main — builds Docker image and pushes to Docker Hub
+# Uses separate jobs per architecture so arm64 builds on a native ARM runner (no QEMU crashes)
 name: Build and push Docker image
 
 on:
@@ -6,16 +7,17 @@ on:
     branches:
       - main
 
+env:
+  REGISTRY_IMAGE: anakafeel/nextjs-portfolio
+
 jobs:
-  build-and-push:
+  build-amd64:
+    name: Build linux/amd64
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -23,15 +25,56 @@ jobs:
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-      - name: Build and push Docker image
+      - name: Build and push (amd64)
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          platforms: linux/amd64,linux/arm64
-          tags: |
-            anakafeel/nextjs-portfolio:latest
-            anakafeel/nextjs-portfolio:${{ github.sha }}
+          platforms: linux/amd64
+          tags: ${{ env.REGISTRY_IMAGE }}:amd64-${{ github.sha }}
+          file: ./Dockerfile
+          cache-from: type=registry,ref=${{ env.REGISTRY_IMAGE }}:cache
+          cache-to: type=registry,ref=${{ env.REGISTRY_IMAGE }}:cache,mode=max
+
+  build-arm64:
+    name: Build linux/arm64
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Build and push (arm64)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          platforms: linux/arm64
+          tags: ${{ env.REGISTRY_IMAGE }}:arm64-${{ github.sha }}
           file: ./Dockerfile
 
+  merge:
+    name: Merge multi-arch manifest
+    needs: [build-amd64, build-arm64]
+    runs-on: ubuntu-latest
 
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Create and push multi-arch manifest
+        run: |
+          docker buildx imagetools create \
+            -t ${{ env.REGISTRY_IMAGE }}:latest \
+            -t ${{ env.REGISTRY_IMAGE }}:${{ github.sha }} \
+            ${{ env.REGISTRY_IMAGE }}:amd64-${{ github.sha }} \
+            ${{ env.REGISTRY_IMAGE }}:arm64-${{ github.sha }}
