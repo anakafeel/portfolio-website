@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 import DoomScrollEffect from "@/components/about/DoomScrollEffect";
 import ExperienceLog from "@/components/about/ExperienceLog";
@@ -23,6 +23,14 @@ export default function AboutClientWrapper() {
     }, 1800);
   }, []);
 
+  useEffect(() => {
+    if (phase !== "ready") return;
+    const el = document.getElementById("main-quests");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [phase]);
+
   if (isMobile) {
     return (
       <section className="mx-auto max-w-5xl px-4 py-16">
@@ -30,7 +38,7 @@ export default function AboutClientWrapper() {
         <div className="mt-16 space-y-8">
           <ExperienceLog />
           <GitHubContributions username="anakafeel" />
-          <LoadoutCard />
+          {/* <LoadoutCard /> */}
         </div>
       </section>
     );
@@ -49,7 +57,7 @@ export default function AboutClientWrapper() {
           <div className="space-y-8">
             <ExperienceLog />
             <GitHubContributions username="anakafeel" />
-            <LoadoutCard />
+            {/* <LoadoutCard /> */}
           </div>
         </section>
       )}
