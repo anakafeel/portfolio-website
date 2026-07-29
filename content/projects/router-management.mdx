@@ -1,30 +1,53 @@
 ---
 title: "AI Router Management"
 rarityTier: "rare"
-techStack: ["Python", "Flask", "Scikit-learn", "Pandas"]
+techStack: ["Python", "Flask", "Scikit-learn", "Pandas", "Next.js", "GSAP"]
 links:
   github: "https://github.com/anakafeel/Technata-24-AI_router_Management_System"
-date: "2024-10-15"
-summary: "ML-driven router control that cut simulated power consumption by ~20% — 3rd place at Technata Hacks."
+  demo: "https://technata-24-dashboard.vercel.app/"
+date: "2024-10-10"
+summary: "An AI-powered Eco Intelligence Dashboard that cut simulated power consumption by ~20% — 3rd place at Technata Hacks 2024."
 image: "/projects/router-management.svg"
 ---
 
 ## Quest briefing
 
-An ML-driven router management system built at Technata Hacks 2024, where
-it took **3rd place**.
+The Eco Intelligence Dashboard, created for Technata Hacks 2024, is an interactive platform designed to optimize energy efficiency in IT infrastructure — specifically targeting router heat dissipation and energy consumption in large tech hubs like Kanata North.
 
-- Built the control system in Flask, reducing power consumption by ~20%
-  under simulated network workloads.
-- Trained and validated models on live telemetry data with Scikit-learn,
-  improving stability while cutting excess heat and energy waste.
-- Paired with a Next.js dashboard showing real-time router activity,
-  energy savings, and heat insights for IT administrators.
+I trained my first-ever machine learning model (a random forest regressor) to predict energy consumption based on heat data from routers, and integrated it into the dashboard via a REST API for real-time predictions.
+
+![Eco Intelligence Dashboard overview](/images/projects/router-management/Zwqy_4F3NbkBXXQS_resized.avif)
+
+### Problem
+
+Excessive energy consumption and heat waste from continuously running routers in IT hubs. Most infrastructure runs at full power 24/7 regardless of actual traffic load.
+
+### Solution
+
+An AI-powered router management system that dynamically controls routers — turning them off when idle and repurposing the generated heat for cooling systems.
+
+### Key features
+
+- **Data Collection** — Simulated network traffic using public datasets to train regression models.
+- **Linear Regression** — Predicted continuous traffic trends and bandwidth usage.
+- **Random Forest Regressor** — Determined optimal power-on/off schedules based on non-linear traffic patterns.
+
+![Random Forest regression results](/images/projects/router-management/ZwqzmIF3NbkBXXQW_random_forest.avif)
+
+![Linear regression model](/images/projects/router-management/Zwqzl4F3NbkBXXQV_linear_regression.avif)
+
+- **Interactive Dashboard** — Built with Next.js + GSAP animations showing real-time router activity, energy savings, and heat management data.
+- **API Integration** — RESTful backend connecting trained models to the frontend for live predictions and data updates.
+
+![Mobile dashboard view](/images/projects/router-management/Zwqz-YF3NbkBXXQX_phone.avif)
+
+### Challenges
+
+Data simulation quirks, keeping predictions in sync in real time, and wrapping my head around conceptual heat-repurposing integration. Every blocker was a crash course in something new.
 
 ## Loot (what was learned)
 
-- Feature engineering on telemetry data matters more than model choice
-  for problems like this.
-- The gap between "model works in a notebook" and "model drives a control
-  loop" is where the real engineering lives.
+- Feature engineering on telemetry data matters more than model choice for energy-efficiency problems.
+- The gap between "model works in a notebook" and "model drives a control loop" is where the real engineering lives.
+- GSAP + Next.js makes for a dangerously fun prototyping loop — animations got polished before the API was stable.
 - First hackathon podium — proof that a tight demo story wins judges.
