@@ -1,3 +1,4 @@
+# Triggered on every push to main — builds arm64 Docker image and pushes to Docker Hub
 name: Build and push Docker image
 
 on:
@@ -32,3 +33,5 @@ jobs:
             anakafeel/nextjs-portfolio:latest
             anakafeel/nextjs-portfolio:${{ github.sha }}
           file: ./Dockerfile
+
+
