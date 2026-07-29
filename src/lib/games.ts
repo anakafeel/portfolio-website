@@ -113,6 +113,34 @@ export const GAMES: GameEntry[] = [
     },
   },
   {
+    title: "CS:GO",
+    genre: "TACTICAL FPS",
+    status: "favorite",
+    blurb:
+      "The competitive shooter that defined a genre. Plant, defuse, eco, rush B — the callouts never leave you.",
+    cover: "/games/csgo.svg",
+    details: {
+      hours: "800+ HRS",
+      mains: "AK-47 / AWP",
+      memory:
+        "Before Siege, there was Dust 2. The fundamentals — crosshair placement, spray control, map awareness — all came from hours of deathmatch and competitive matchmaking. The inventory of sticker-covered skins is worth more than the ranked medals, and 'one more game' has been a lie since 2015.",
+    },
+  },
+  {
+    title: "Rocket League",
+    genre: "VEHICLE SOCCER",
+    status: "playing",
+    blurb:
+      "Car soccer with a ranked grind that never quits. Aerial mechanics, flip resets, and the best 5-minute rounds in gaming.",
+    cover: "/games/rocket-league.svg",
+    details: {
+      hours: "500+ HRS",
+      mains: "OCTANE / DOMINUS",
+      memory:
+        "The only game where 'git gud' means learning to fly your car upside down. Rotations from ranked 3s translate well — the hard part is telling your brain that the ball is the objective, not the enemy. Ceiling shots and air dribbles are the flex, but a solid powershot on target is the real skill.",
+    },
+  },
+  {
     title: "Steam Summer Sale Haul",
     genre: "MYSTERY LOOT",
     status: "backlog",
