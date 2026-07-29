@@ -36,7 +36,7 @@ export const INITIAL_STATE: GameState = {
   level: 1,
   achievements: [],
   theme: "arcade",
-  muted: true,
+  muted: false,
   volume: 0.5,
 };
 
