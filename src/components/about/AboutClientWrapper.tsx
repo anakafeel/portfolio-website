@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback } from "react";
 
 import DoomScrollEffect from "@/components/about/DoomScrollEffect";
 import ExperienceLog from "@/components/about/ExperienceLog";
@@ -13,7 +13,6 @@ type Phase = "doom" | "exiting" | "ready";
 
 export default function AboutClientWrapper() {
   const isMobile = useMediaQuery("(max-width: 639px)");
-  const questsRef = useRef<HTMLDivElement>(null);
 
   const [phase, setPhase] = useState<Phase>("doom");
 
@@ -26,7 +25,8 @@ export default function AboutClientWrapper() {
 
     // Phase 3: during the slide-up, scroll behind the overlay to MAIN QUESTS
     setTimeout(() => {
-      questsRef.current?.scrollIntoView({ block: "start", behavior: "instant" });
+      const el = document.getElementById("main-quests");
+      el?.scrollIntoView({ block: "start", behavior: "instant" });
     }, 250);
 
     // Phase 4: after the slide-up fully completes, remove the doom overlay
@@ -58,7 +58,7 @@ export default function AboutClientWrapper() {
       )}
       {phase !== "doom" && (
         <section className="mx-auto max-w-5xl px-4 py-16">
-          <div className="space-y-8" ref={questsRef}>
+          <div className="space-y-8">
             <ExperienceLog />
             <GitHubContributions username="anakafeel" />
             {/* <LoadoutCard /> */}

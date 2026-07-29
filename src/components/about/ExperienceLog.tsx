@@ -13,9 +13,9 @@ const STATUS_STYLES: Record<
 
 export default function ExperienceLog() {
   return (
-    <div className="mt-24" id="main-quests">
+    <div id="main-quests">
       <p className="font-pixel text-[10px] text-accent-alt">QUEST LOG</p>
-      <h2 className="mt-3 font-pixel text-lg text-highlight">MAIN QUESTS</h2>
+      <h2 id="main-quests-heading" className="mt-3 font-pixel text-lg text-highlight">MAIN QUESTS</h2>
       <ol className="mt-8 flex flex-col gap-6">
         {EXPERIENCE.map((entry) => {
           const status = STATUS_STYLES[entry.status];
