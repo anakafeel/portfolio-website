@@ -90,3 +90,16 @@ export function getBlogPosts(): BlogPost[] {
 export function getBlogPost(slug: string): BlogPost | null {
   return getBlogPosts().find((post) => post.slug === slug) ?? null;
 }
+
+export function getAdjacentProjects(slug: string): {
+  prev: Project | null;
+  next: Project | null;
+} {
+  const projects = getProjects();
+  const index = projects.findIndex((p) => p.slug === slug);
+  if (index === -1) return { prev: null, next: null };
+  return {
+    prev: index > 0 ? projects[index - 1] : null,
+    next: index < projects.length - 1 ? projects[index + 1] : null,
+  };
+}

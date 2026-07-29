@@ -3,6 +3,7 @@ import SfxLink from "@/components/sfx/SfxLink";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
+import { MDXComponents } from "@/components/mdx/MDXComponents";
 import { getBlogPost, getBlogPosts } from "@/lib/content";
 
 type Params = { slug: string };
@@ -53,7 +54,7 @@ export default async function BlogPostPage({
         {post.frontmatter.date}
       </p>
       <div className="mdx-content mt-10">
-        <MDXRemote source={post.body} />
+        <MDXRemote source={post.body} components={MDXComponents} />
       </div>
     </article>
   );

@@ -23,8 +23,14 @@ export default function ProjectsPage() {
         </p>
       ) : (
         <div className="mt-10 grid gap-8 sm:grid-cols-2">
-          {projects.map((project) => (
-            <QuestCard key={project.slug} project={project} />
+          {projects.map((project, index) => (
+            <div
+              key={project.slug}
+              className="animate-fade-up"
+              style={{ animationDelay: `${index * 80}ms` }}
+            >
+              <QuestCard project={project} />
+            </div>
           ))}
         </div>
       )}

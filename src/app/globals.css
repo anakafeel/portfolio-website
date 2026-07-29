@@ -330,4 +330,13 @@
   .contribution-cell[data-level="4"] {
     background-color: var(--color-accent);
   }
+
+  /* Respect reduced-motion: disable entrance animations */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-up {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
 }

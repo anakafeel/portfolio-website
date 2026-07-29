@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
-import SfxAnchor from "@/components/sfx/SfxAnchor";
 import SfxLink from "@/components/sfx/SfxLink";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
+import { MDXComponents } from "@/components/mdx/MDXComponents";
+import MissionBriefing from "@/components/quests/MissionBriefing";
+import ProjectNavigation from "@/components/quests/ProjectNavigation";
 import QuestTracker from "@/components/quests/QuestTracker";
-import { getProject, getProjects } from "@/lib/content";
+import { getAdjacentProjects, getProject, getProjects } from "@/lib/content";
 
 type Params = { slug: string };
 
@@ -40,69 +42,29 @@ export default async function ProjectPage({
     notFound();
   }
   const { frontmatter, body } = project;
+  const { prev, next } = getAdjacentProjects(slug);
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-16">
       <QuestTracker />
-      <SfxLink
-        href="/projects"
-        className="font-pixel text-[10px] text-muted transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
-      >
-        ◄ BACK TO QUEST LOG
-      </SfxLink>
+      <nav className="flex items-center gap-2 font-pixel text-[10px]">
+        <SfxLink
+          href="/projects"
+          className="text-muted transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
+        >
+          QUEST LOG
+        </SfxLink>
+        <span className="text-muted">►</span>
+        <span className="text-highlight">{frontmatter.title}</span>
+      </nav>
       <h1 className="mt-6 font-pixel text-xl text-highlight">
         {frontmatter.title}
       </h1>
-      <p className="mt-3 font-pixel text-[10px] uppercase text-accent">
-        ◆ {frontmatter.rarityTier}
-      </p>
-      {frontmatter.techStack.length > 0 && (
-        <ul className="mt-4 flex flex-wrap gap-2">
-          {frontmatter.techStack.map((tech) => (
-            <li
-              key={tech}
-              className="border border-border px-1.5 py-0.5 font-pixel text-[10px] text-muted"
-            >
-              {tech}
-            </li>
-          ))}
-        </ul>
-      )}
-      <div className="mt-6 flex flex-wrap gap-4">
-        {frontmatter.links.github && (
-          <SfxAnchor
-            href={frontmatter.links.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-pixel text-[10px] text-accent-alt underline hover:text-accent focus-visible:text-accent focus-visible:outline-none"
-          >
-            GITHUB
-          </SfxAnchor>
-        )}
-        {frontmatter.links.demo && (
-          <SfxAnchor
-            href={frontmatter.links.demo}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-pixel text-[10px] text-accent-alt underline hover:text-accent focus-visible:text-accent focus-visible:outline-none"
-          >
-            DEMO
-          </SfxAnchor>
-        )}
-        {frontmatter.links.writeup && (
-          <SfxAnchor
-            href={frontmatter.links.writeup}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-pixel text-[10px] text-accent-alt underline hover:text-accent focus-visible:text-accent focus-visible:outline-none"
-          >
-            WRITE-UP
-          </SfxAnchor>
-        )}
-      </div>
+      <MissionBriefing frontmatter={frontmatter} />
       <div className="mdx-content mt-10">
-        <MDXRemote source={body} />
+        <MDXRemote source={body} components={MDXComponents} />
       </div>
+      <ProjectNavigation prev={prev} next={next} />
     </article>
   );
 }
