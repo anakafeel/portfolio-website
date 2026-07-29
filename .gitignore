@@ -48,6 +48,11 @@ next-env.d.ts
 # source assets (not directly used in public/)
 assets/project\ pics/
 
+# project docs (design system / strategy — keep local)
+/CLAUDE.md
+/DESIGN.md
+/PRODUCT.md
+
 # claude local settings
 .claude/settings.local.json*
 
