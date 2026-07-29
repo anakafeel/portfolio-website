@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import SfxLink from "@/components/sfx/SfxLink";
+import TechStackPills from "@/components/ui/TechStackPills";
 
 import { getBlogPosts } from "@/lib/content";
+
+const STAGGER_DELAY_MS = 80;
 
 export const metadata: Metadata = {
   title: "Blog — Saim Hashmi",
@@ -27,7 +30,7 @@ export default function BlogPage() {
             <article
               key={post.slug}
               className="pixel-border pixel-border-interactive group bg-surface motion-safe:transition-transform motion-safe:hover:-translate-x-0.5 motion-safe:hover:-translate-y-0.5 animate-fade-up"
-              style={{ animationDelay: `${index * 80}ms` }}
+              style={{ animationDelay: `${index * STAGGER_DELAY_MS}ms` }}
             >
               <SfxLink href={`/blog/${post.slug}`} className="block">
                 {post.frontmatter.image ? (
@@ -52,16 +55,7 @@ export default function BlogPage() {
                     {post.frontmatter.summary}
                   </p>
                   {post.frontmatter.techStack.length > 0 && (
-                    <ul className="flex flex-wrap gap-2">
-                      {post.frontmatter.techStack.map((tech) => (
-                        <li
-                          key={tech}
-                          className="border border-border px-1.5 py-0.5 font-pixel text-[10px] text-muted"
-                        >
-                          {tech}
-                        </li>
-                      ))}
-                    </ul>
+                    <TechStackPills items={post.frontmatter.techStack} />
                   )}
                 </div>
               </SfxLink>

@@ -1,12 +1,35 @@
 import SfxLink from "@/components/sfx/SfxLink";
-import type { Project, RarityTier } from "@/lib/content";
+import type { Project } from "@/lib/content";
+import { RARITY_CLASS } from "@/lib/content";
 
-const RARITY_TEXT: Record<RarityTier, string> = {
-  common: "text-muted",
-  rare: "text-accent-alt",
-  epic: "text-accent",
-  legendary: "text-highlight",
-};
+function NavCard({
+  project,
+  direction,
+}: {
+  project: Project;
+  direction: "prev" | "next";
+}) {
+  const isNext = direction === "next";
+
+  return (
+    <SfxLink
+      href={`/projects/${project.slug}`}
+      className={`group flex flex-1 flex-col pixel-border pixel-border-interactive bg-surface p-4 transition-colors${isNext ? " items-end text-right" : ""}`}
+    >
+      <span className="font-pixel text-[10px] text-muted transition-colors group-hover:text-accent">
+        {isNext ? "NEXT QUEST ►" : "◄ PREV QUEST"}
+      </span>
+      <span className="mt-2 font-pixel text-sm text-foreground transition-colors group-hover:text-accent">
+        {project.frontmatter.title}
+      </span>
+      <span
+        className={`mt-1 font-pixel text-[10px] uppercase ${RARITY_CLASS[project.frontmatter.rarityTier]}`}
+      >
+        ◆ {project.frontmatter.rarityTier}
+      </span>
+    </SfxLink>
+  );
+}
 
 export default function ProjectNavigation({
   prev,
@@ -24,42 +47,12 @@ export default function ProjectNavigation({
     <nav className="mt-16 border-t-2 border-border pt-8">
       <div className="flex items-stretch gap-4">
         {prev ? (
-          <SfxLink
-            href={`/projects/${prev.slug}`}
-            className="group flex flex-1 flex-col pixel-border bg-surface p-4 transition-colors hover:border-accent hover:shadow-pixel-accent"
-          >
-            <span className="font-pixel text-[10px] text-muted transition-colors group-hover:text-accent">
-              ◄ PREV QUEST
-            </span>
-            <span className="mt-2 font-pixel text-sm text-foreground transition-colors group-hover:text-accent">
-              {prev.frontmatter.title}
-            </span>
-            <span
-              className={`mt-1 font-pixel text-[10px] uppercase ${RARITY_TEXT[prev.frontmatter.rarityTier]}`}
-            >
-              ◆ {prev.frontmatter.rarityTier}
-            </span>
-          </SfxLink>
+          <NavCard project={prev} direction="prev" />
         ) : (
           <div className="flex-1" />
         )}
         {next ? (
-          <SfxLink
-            href={`/projects/${next.slug}`}
-            className="group flex flex-1 flex-col items-end pixel-border bg-surface p-4 text-right transition-colors hover:border-accent hover:shadow-pixel-accent"
-          >
-            <span className="font-pixel text-[10px] text-muted transition-colors group-hover:text-accent">
-              NEXT QUEST ►
-            </span>
-            <span className="mt-2 font-pixel text-sm text-foreground transition-colors group-hover:text-accent">
-              {next.frontmatter.title}
-            </span>
-            <span
-              className={`mt-1 font-pixel text-[10px] uppercase ${RARITY_TEXT[next.frontmatter.rarityTier]}`}
-            >
-              ◆ {next.frontmatter.rarityTier}
-            </span>
-          </SfxLink>
+          <NavCard project={next} direction="next" />
         ) : (
           <div className="flex-1" />
         )}

@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import QuestCard from "@/components/quests/QuestCard";
 import { getProjects } from "@/lib/content";
 
+const STAGGER_DELAY_MS = 80;
+
 export const metadata: Metadata = {
   title: "Projects — Saim Hashmi",
   description: "Quest log — projects built by Saim Hashmi.",
@@ -27,7 +29,7 @@ export default function ProjectsPage() {
             <div
               key={project.slug}
               className="animate-fade-up"
-              style={{ animationDelay: `${index * 80}ms` }}
+              style={{ animationDelay: `${index * STAGGER_DELAY_MS}ms` }}
             >
               <QuestCard project={project} />
             </div>

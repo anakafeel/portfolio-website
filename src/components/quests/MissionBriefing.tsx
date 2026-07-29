@@ -1,22 +1,24 @@
 import SfxAnchor from "@/components/sfx/SfxAnchor";
-import type { ProjectFrontmatter, RarityTier } from "@/lib/content";
+import TechStackPills from "@/components/ui/TechStackPills";
+import type { ProjectFrontmatter } from "@/lib/content";
+import { RARITY_CLASS } from "@/lib/content";
 
-const RARITY_COLOR: Record<RarityTier, string> = {
-  common: "text-muted",
-  rare: "text-accent-alt",
-  epic: "text-accent",
-  legendary: "text-highlight",
-};
+const LINK_CONFIG: { key: keyof ProjectFrontmatter["links"]; label: string }[] =
+  [
+    { key: "github", label: "GITHUB" },
+    { key: "demo", label: "DEMO" },
+    { key: "writeup", label: "WRITE-UP" },
+  ];
+
+const LINK_CLASS =
+  "font-pixel text-[10px] text-accent-alt underline hover:text-accent focus-visible:text-accent focus-visible:outline-none";
 
 export default function MissionBriefing({
   frontmatter,
 }: {
   frontmatter: ProjectFrontmatter;
 }) {
-  const hasLinks =
-    frontmatter.links.github ||
-    frontmatter.links.demo ||
-    frontmatter.links.writeup;
+  const hasLinks = LINK_CONFIG.some(({ key }) => frontmatter.links[key]);
 
   return (
     <div className="pixel-border mt-8 bg-surface p-5">
@@ -29,7 +31,7 @@ export default function MissionBriefing({
           <div>
             <p className="font-pixel text-[8px] text-muted">RARITY</p>
             <p
-              className={`mt-0.5 font-pixel text-[10px] uppercase ${RARITY_COLOR[frontmatter.rarityTier]}`}
+              className={`mt-0.5 font-pixel text-[10px] uppercase ${RARITY_CLASS[frontmatter.rarityTier]}`}
             >
               ◆ {frontmatter.rarityTier}
             </p>
@@ -47,52 +49,29 @@ export default function MissionBriefing({
           {frontmatter.techStack.length > 0 && (
             <div>
               <p className="font-pixel text-[8px] text-muted">STACK</p>
-              <ul className="mt-1 flex flex-wrap gap-2">
-                {frontmatter.techStack.map((tech) => (
-                  <li
-                    key={tech}
-                    className="border border-border px-1.5 py-0.5 font-pixel text-[10px] text-muted"
-                  >
-                    {tech}
-                  </li>
-                ))}
-              </ul>
+              <div className="mt-1">
+                <TechStackPills items={frontmatter.techStack} />
+              </div>
             </div>
           )}
           {hasLinks && (
             <div>
               <p className="font-pixel text-[8px] text-muted">LINKS</p>
               <div className="mt-1 flex flex-wrap gap-3">
-                {frontmatter.links.github && (
-                  <SfxAnchor
-                    href={frontmatter.links.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-pixel text-[10px] text-accent-alt underline hover:text-accent focus-visible:text-accent focus-visible:outline-none"
-                  >
-                    GITHUB
-                  </SfxAnchor>
-                )}
-                {frontmatter.links.demo && (
-                  <SfxAnchor
-                    href={frontmatter.links.demo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-pixel text-[10px] text-accent-alt underline hover:text-accent focus-visible:text-accent focus-visible:outline-none"
-                  >
-                    DEMO
-                  </SfxAnchor>
-                )}
-                {frontmatter.links.writeup && (
-                  <SfxAnchor
-                    href={frontmatter.links.writeup}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-pixel text-[10px] text-accent-alt underline hover:text-accent focus-visible:text-accent focus-visible:outline-none"
-                  >
-                    WRITE-UP
-                  </SfxAnchor>
-                )}
+                {LINK_CONFIG.map(({ key, label }) => {
+                  const href = frontmatter.links[key];
+                  return href ? (
+                    <SfxAnchor
+                      key={key}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={LINK_CLASS}
+                    >
+                      {label}
+                    </SfxAnchor>
+                  ) : null;
+                })}
               </div>
             </div>
           )}

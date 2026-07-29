@@ -2,10 +2,22 @@ import fs from "fs";
 import path from "path";
 
 import matter from "gray-matter";
+import { cache } from "react";
 import { z } from "zod";
 
 export const RARITY_TIERS = ["common", "rare", "epic", "legendary"] as const;
 export type RarityTier = (typeof RARITY_TIERS)[number];
+
+/**
+ * Shared RarityTier → Tailwind text-color mapping.
+ * Centralised here so every component uses one source of truth.
+ */
+export const RARITY_CLASS: Record<RarityTier, string> = {
+  common: "text-muted",
+  rare: "text-accent-alt",
+  epic: "text-accent",
+  legendary: "text-highlight",
+};
 
 const linksSchema = z
   .object({
@@ -72,24 +84,31 @@ function readEntries<T>(
     });
 }
 
-export function getProjects(): Project[] {
-  return readEntries("projects", projectFrontmatterSchema).sort((a, b) =>
-    b.frontmatter.date.localeCompare(a.frontmatter.date),
-  );
+function findBySlug<T extends ContentEntry<unknown>>(
+  entries: T[],
+  slug: string,
+): T | null {
+  return entries.find((e) => e.slug === slug) ?? null;
 }
+
+export const getProjects = cache((): Project[] =>
+  readEntries("projects", projectFrontmatterSchema).sort((a, b) =>
+    b.frontmatter.date.localeCompare(a.frontmatter.date),
+  ),
+);
 
 export function getProject(slug: string): Project | null {
-  return getProjects().find((project) => project.slug === slug) ?? null;
+  return findBySlug(getProjects(), slug);
 }
 
-export function getBlogPosts(): BlogPost[] {
-  return readEntries("blog", blogFrontmatterSchema).sort((a, b) =>
+export const getBlogPosts = cache((): BlogPost[] =>
+  readEntries("blog", blogFrontmatterSchema).sort((a, b) =>
     b.frontmatter.date.localeCompare(a.frontmatter.date),
-  );
-}
+  ),
+);
 
 export function getBlogPost(slug: string): BlogPost | null {
-  return getBlogPosts().find((post) => post.slug === slug) ?? null;
+  return findBySlug(getBlogPosts(), slug);
 }
 
 export function getAdjacentProjects(slug: string): {

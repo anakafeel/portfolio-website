@@ -1,20 +1,11 @@
 import SfxLink from "@/components/sfx/SfxLink";
-import type { Project, RarityTier } from "@/lib/content";
-
-/*
- * Rarity maps onto theme tokens so cards recolor with the active theme:
- * common → muted, rare → accent-alt, epic → accent, legendary → highlight.
- */
-const RARITY_TEXT: Record<RarityTier, string> = {
-  common: "text-muted",
-  rare: "text-accent-alt",
-  epic: "text-accent",
-  legendary: "text-highlight",
-};
+import TechStackPills from "@/components/ui/TechStackPills";
+import type { Project } from "@/lib/content";
+import { RARITY_CLASS } from "@/lib/content";
 
 export default function QuestCard({ project }: { project: Project }) {
   const { slug, frontmatter } = project;
-  const rarityClass = RARITY_TEXT[frontmatter.rarityTier];
+  const rarityClass = RARITY_CLASS[frontmatter.rarityTier];
 
   return (
     <article className="pixel-border pixel-border-interactive group bg-surface motion-safe:transition-transform motion-safe:hover:-translate-x-0.5 motion-safe:hover:-translate-y-0.5">
@@ -40,18 +31,7 @@ export default function QuestCard({ project }: { project: Project }) {
           <p className="text-lg leading-snug text-muted">
             {frontmatter.summary}
           </p>
-          {frontmatter.techStack.length > 0 && (
-            <ul className="flex flex-wrap gap-2">
-              {frontmatter.techStack.map((tech) => (
-                <li
-                  key={tech}
-                  className="border border-border px-1.5 py-0.5 font-pixel text-[10px] text-muted"
-                >
-                  {tech}
-                </li>
-              ))}
-            </ul>
-          )}
+          <TechStackPills items={frontmatter.techStack} />
         </div>
       </SfxLink>
     </article>
