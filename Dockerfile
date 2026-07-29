@@ -1,23 +1,29 @@
 # ---------- 1. Builder Stage ----------
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 
-# Copy only package files first for better caching
-COPY package*.json ./
+# Enable corepack and install the correct pnpm version
+RUN corepack enable && corepack prepare pnpm@10.28.1 --activate
+
+# Copy package files first for better caching
+COPY package.json pnpm-lock.yaml ./
 
 # Install all dependencies (including devDependencies)
-RUN npm ci
+RUN pnpm install --frozen-lockfile
 
 # Copy all source code
 COPY . .
 
 # Build the Next.js production bundle
-RUN npm run build
+RUN pnpm run build
 
 
 # ---------- 2. Runner Stage ----------
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 WORKDIR /app
+
+# Enable corepack for pnpm
+RUN corepack enable && corepack prepare pnpm@10.28.1 --activate
 
 # Set environment variables for production
 ENV NODE_ENV=production
@@ -26,10 +32,11 @@ ENV PORT=3000
 # Copy only necessary build artifacts and node_modules
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/pnpm-lock.yaml ./
 
 # Install only production dependencies
-RUN npm ci --omit=dev
+RUN pnpm install --prod --frozen-lockfile
 
 # Expose the same port your app listens on
 EXPOSE 3000
@@ -39,4 +46,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=20s \
   CMD wget -qO- http://localhost:3000 || exit 1
 
 # Start the server
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]
