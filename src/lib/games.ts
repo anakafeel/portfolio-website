@@ -99,6 +99,20 @@ export const GAMES: GameEntry[] = [
     },
   },
   {
+    title: "Marvel Rivals",
+    genre: "HERO SHOOTER",
+    status: "playing",
+    blurb:
+      "Third-person hero shooter chaos. Quick matches, stylish abilities, and the Marvel roster done right.",
+    cover: "/games/marvel-rivals.svg",
+    details: {
+      hours: "100+ HRS",
+      mains: "MAGIK / SPIDER-MAN",
+      memory:
+        "The newest competitive rotation. Third-person gives the movement a whole different feel from the usual tactical FPS lineup — and Magik's sword combos scratch an entirely different itch. Great for sessions between ranked Siege games when the brain needs a break from one-tap headshots.",
+    },
+  },
+  {
     title: "Steam Summer Sale Haul",
     genre: "MYSTERY LOOT",
     status: "backlog",

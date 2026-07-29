@@ -53,6 +53,18 @@ export default async function BlogPostPage({
       <p className="mt-3 font-pixel text-[10px] text-muted">
         {post.frontmatter.date}
       </p>
+      {post.frontmatter.image && (
+        <div className="mt-6">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={post.frontmatter.image}
+            alt={`${post.frontmatter.title} cover`}
+            className="w-full pixelated border-2 border-border pixel-border"
+            width={720}
+            height={405}
+          />
+        </div>
+      )}
       <div className="mdx-content mt-10">
         <MDXRemote source={post.body} components={MDXComponents} />
       </div>
