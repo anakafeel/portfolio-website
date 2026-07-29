@@ -22,7 +22,7 @@ RUN pnpm run build
 FROM node:22-alpine AS runner
 WORKDIR /app
 
-# Enable corepack for pnpm
+# Enable corepack for pnpm (used only for install — runtime uses npm)
 RUN corepack enable && corepack prepare pnpm@10.28.1 --activate
 
 # Set environment variables for production
@@ -46,4 +46,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=20s \
   CMD wget -qO- http://localhost:3000 || exit 1
 
 # Start the server
-CMD ["pnpm", "start"]
+CMD ["node", "node_modules/.bin/next", "start"]
