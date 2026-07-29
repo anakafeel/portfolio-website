@@ -4,9 +4,10 @@ import { useState, useCallback } from "react";
 
 import DoomScrollEffect from "@/components/about/DoomScrollEffect";
 import ExperienceLog from "@/components/about/ExperienceLog";
-import LoadoutCard from "@/components/about/LoadoutCard";
+import PersonalPicsCarousel from "@/components/about/PersonalPicsCarousel";
 import StoryLevel from "@/components/about/StoryLevel";
 import GitHubContributions from "@/components/ui/github-contributions";
+import { PERSONAL_PICS } from "@/lib/gallery";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 type Phase = "doom" | "exiting" | "ready";
@@ -44,6 +45,9 @@ export default function AboutClientWrapper() {
           <GitHubContributions username="anakafeel" />
           {/* <LoadoutCard /> */}
         </div>
+        <div className="mt-16">
+          <PersonalPicsCarousel images={PERSONAL_PICS} />
+        </div>
       </section>
     );
   }
@@ -57,13 +61,16 @@ export default function AboutClientWrapper() {
         />
       )}
       {phase !== "doom" && (
-        <section className="mx-auto max-w-5xl px-4 py-16">
-          <div className="space-y-8">
-            <ExperienceLog />
-            <GitHubContributions username="anakafeel" />
-            {/* <LoadoutCard /> */}
-          </div>
-        </section>
+        <>
+          <section className="mx-auto max-w-5xl px-4 py-16">
+            <div className="space-y-8">
+              <ExperienceLog />
+              <GitHubContributions username="anakafeel" />
+              {/* <LoadoutCard /> */}
+            </div>
+          </section>
+          <PersonalPicsCarousel images={PERSONAL_PICS} />
+        </>
       )}
     </>
   );
