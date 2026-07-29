@@ -24,11 +24,11 @@ export default function AboutClientWrapper() {
     // Phase 2: switch doom to fixed — content section renders behind it at y=0
     setPhase("exiting");
 
-    // Phase 3: during the slide-up, scroll behind the overlay to MAIN QUESTS
+    // Phase 3: during the slide-up, scroll behind the overlay to the gallery
     setTimeout(() => {
-      const el = document.getElementById("main-quests");
-      el?.scrollIntoView({ block: "start", behavior: "instant" });
-    }, 250);
+      const el = document.getElementById("gallery");
+      el?.scrollIntoView({ block: "start", behavior: "smooth" });
+    }, 100);
 
     // Phase 4: after the slide-up fully completes, remove the doom overlay
     setTimeout(() => {
@@ -62,7 +62,7 @@ export default function AboutClientWrapper() {
       )}
       {phase !== "doom" && (
         <>
-          <section className="mx-auto max-w-5xl px-4 py-16">
+          <section id="gallery" className="mx-auto max-w-5xl px-4 py-16 scroll-mt-16">
             <PersonalPicsCarousel images={PERSONAL_PICS} />
           </section>
           <section className="mx-auto max-w-5xl px-4 py-16">
