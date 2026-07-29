@@ -46,4 +46,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=20s \
   CMD wget -qO- http://localhost:3000 || exit 1
 
 # Start the server
-CMD ["node", "node_modules/.bin/next", "start"]
+CMD ["node_modules/.bin/next", "start"]
