@@ -14,62 +14,60 @@ export default function BlogPage() {
   return (
     <section className="mx-auto max-w-5xl px-4 py-16">
       <h1 className="font-pixel text-xl text-highlight">DEV LOG</h1>
+      <p className="mt-4 text-xl text-muted">
+        Field notes from the dev cycle — shipped features, hard-won lessons, and the occasional digression.
+      </p>
       {posts.length === 0 ? (
-        <p className="mt-6 max-w-2xl text-2xl text-muted">
+        <p className="mt-10 text-2xl text-muted">
           No entries yet. New log entries will appear here.
         </p>
       ) : (
-        <ul className="mt-10 flex flex-col gap-6">
+        <div className="mt-10 grid gap-8 sm:grid-cols-2">
           {posts.map((post, index) => (
-            <li key={post.slug} className="relative pixel-border bg-surface p-4 transition-all hover:translate-x-2">
-              <SfxLink href={`/blog/${post.slug}`} className="group block">
-                <div className="absolute -left-[140px] top-1/2 z-50 w-[120px] -translate-y-1/2 scale-90 opacity-0 transition-all duration-300 ease-out pixel-border bg-surface p-3 pointer-events-none group-hover:scale-100 group-hover:opacity-100 group-hover:-left-[130px]">
-                  {post.frontmatter.image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={post.frontmatter.image}
-                      alt=""
-                      className="w-full pixelated border border-border"
-                      width={120}
-                      height={68}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <>
-                      <p className="font-pixel text-[8px] text-accent">
-                        LOG #{String(index + 1).padStart(3, "0")}
-                      </p>
-                      <p className="mt-1 font-pixel text-[10px] text-highlight">
-                        {post.frontmatter.title}
-                      </p>
-                      {post.frontmatter.techStack.length > 0 && (
-                        <div className="mt-2 flex flex-wrap gap-1">
-                          {post.frontmatter.techStack.slice(0, 2).map((tech) => (
-                            <span
-                              key={tech}
-                              className="font-pixel text-[8px] text-muted"
-                            >
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </>
+            <article
+              key={post.slug}
+              className="pixel-border pixel-border-interactive group bg-surface motion-safe:transition-transform motion-safe:hover:-translate-x-0.5 motion-safe:hover:-translate-y-0.5 animate-fade-up"
+              style={{ animationDelay: `${index * 80}ms` }}
+            >
+              <SfxLink href={`/blog/${post.slug}`} className="block">
+                {post.frontmatter.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={post.frontmatter.image}
+                    alt={`${post.frontmatter.title} cover`}
+                    width={640}
+                    height={360}
+                    loading="lazy"
+                    className="pixelated w-full border-b-2 border-border"
+                  />
+                ) : null}
+                <div className="flex flex-col gap-3 p-4">
+                  <p className="font-pixel text-[10px] text-muted">
+                    LOG #{String(index + 1).padStart(3, "0")} — {post.frontmatter.date}
+                  </p>
+                  <h2 className="font-pixel text-sm text-foreground transition-colors group-hover:text-accent">
+                    {post.frontmatter.title}
+                  </h2>
+                  <p className="text-lg leading-snug text-muted">
+                    {post.frontmatter.summary}
+                  </p>
+                  {post.frontmatter.techStack.length > 0 && (
+                    <ul className="flex flex-wrap gap-2">
+                      {post.frontmatter.techStack.map((tech) => (
+                        <li
+                          key={tech}
+                          className="border border-border px-1.5 py-0.5 font-pixel text-[10px] text-muted"
+                        >
+                          {tech}
+                        </li>
+                      ))}
+                    </ul>
                   )}
                 </div>
-                <p className="font-pixel text-[10px] text-muted">
-                  {post.frontmatter.date}
-                </p>
-                <h2 className="mt-2 font-pixel text-sm text-foreground transition-colors group-hover:text-accent">
-                  {post.frontmatter.title}
-                </h2>
-                <p className="mt-2 text-lg text-muted">
-                  {post.frontmatter.summary}
-                </p>
               </SfxLink>
-            </li>
+            </article>
           ))}
-        </ul>
+        </div>
       )}
     </section>
   );
