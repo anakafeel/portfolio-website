@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 
 import DoomScrollEffect from "@/components/about/DoomScrollEffect";
 import ExperienceLog from "@/components/about/ExperienceLog";
@@ -13,27 +13,27 @@ type Phase = "doom" | "exiting" | "ready";
 
 export default function AboutClientWrapper() {
   const isMobile = useMediaQuery("(max-width: 639px)");
+  const questsRef = useRef<HTMLDivElement>(null);
 
   const [phase, setPhase] = useState<Phase>("doom");
 
   const handleCleared = useCallback(() => {
+    // Phase 1: scroll to top while victory overlay still covers everything
+    window.scrollTo({ top: 0, behavior: "instant" });
+
+    // Phase 2: switch doom to fixed — content section renders behind it at y=0
     setPhase("exiting");
+
+    // Phase 3: during the slide-up, scroll behind the overlay to MAIN QUESTS
+    setTimeout(() => {
+      questsRef.current?.scrollIntoView({ block: "start", behavior: "instant" });
+    }, 250);
+
+    // Phase 4: after the slide-up fully completes, remove the doom overlay
     setTimeout(() => {
       setPhase("ready");
-    }, 1800);
+    }, 1700);
   }, []);
-
-  useEffect(() => {
-    if (phase !== "ready") return;
-    const timer = setTimeout(() => {
-      const el = document.getElementById("main-quests");
-      if (el) {
-        const y = el.getBoundingClientRect().top + window.scrollY - 16;
-        window.scrollTo({ top: y, behavior: "instant" });
-      }
-    }, 50);
-    return () => clearTimeout(timer);
-  }, [phase]);
 
   if (isMobile) {
     return (
@@ -58,7 +58,7 @@ export default function AboutClientWrapper() {
       )}
       {phase !== "doom" && (
         <section className="mx-auto max-w-5xl px-4 py-16">
-          <div className="space-y-8">
+          <div className="space-y-8" ref={questsRef}>
             <ExperienceLog />
             <GitHubContributions username="anakafeel" />
             {/* <LoadoutCard /> */}
