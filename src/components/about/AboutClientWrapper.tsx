@@ -46,7 +46,6 @@ export default function AboutClientWrapper() {
         <div className="mt-16 space-y-8">
           <ExperienceLog />
           <GitHubContributions username="anakafeel" />
-          {/* <LoadoutCard /> */}
         </div>
       </section>
     );
@@ -69,7 +68,6 @@ export default function AboutClientWrapper() {
             <div className="space-y-8" id="main-quests">
               <ExperienceLog />
               <GitHubContributions username="anakafeel" />
-              {/* <LoadoutCard /> */}
             </div>
           </section>
         </>

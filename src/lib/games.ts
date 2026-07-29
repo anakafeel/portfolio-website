@@ -1,4 +1,4 @@
-export type GameStatus = "playing" | "favorite" | "completed" | "backlog";
+export type GameStatus = "playing" | "favorite" | "completed";
 
 export interface GameDetails {
   /** e.g. "1,200+ HRS" — shown as a stat row in the detail popup. */
@@ -13,16 +13,7 @@ export interface GameEntry {
   title: string;
   genre: string;
   status: GameStatus;
-  /**
-   * DRAFT COPY — placeholder blurbs, hours, and mains written for layout.
-   * Replace each one with Saim's real history with the game before
-   * publishing.
-   */
   blurb: string;
-  /**
-   * Public path to self-hosted cover art. The SVGs in public/games/ are
-   * original pixel-art placeholders — drop in real art and update the path.
-   */
   cover?: string;
   details: GameDetails;
 }

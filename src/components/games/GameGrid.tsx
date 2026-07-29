@@ -12,7 +12,6 @@ const STATUS_STYLES: Record<GameStatus, { label: string; text: string }> = {
   playing: { label: "CURRENTLY PLAYING", text: "text-accent-alt" },
   favorite: { label: "ALL-TIME FAVORITE", text: "text-highlight" },
   completed: { label: "COMPLETED", text: "text-accent" },
-  backlog: { label: "BACKLOG", text: "text-muted" },
 };
 
 /** Matches the crt-off animation duration in globals.css. */

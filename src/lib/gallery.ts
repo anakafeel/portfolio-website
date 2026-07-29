@@ -3,15 +3,6 @@ export interface GalleryImage {
   alt: string;
 }
 
-/**
- * Personal photo gallery — images live in /public/images/personal/.
- *
- * To reorder, just move the entries around in this array.
- * To add new pics, drop them in /public/images/personal/ and add
- * a new entry here.
- *
- * ⚠ Filenames must be URL-safe (no spaces, no special chars).
- */
 export const PERSONAL_PICS: GalleryImage[] = [
   { src: "/images/personal/pic-01.jpeg", alt: "Personal pic 01" },
   { src: "/images/personal/pic-02.jpeg", alt: "Personal pic 02" },

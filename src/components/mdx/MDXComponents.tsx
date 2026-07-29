@@ -1,3 +1,5 @@
+import type { VideoHTMLAttributes } from "react";
+
 function MDXImage({ src, alt, title }: { src: string; alt: string; title?: string }) {
   return (
     <figure className="my-6">
@@ -23,4 +25,11 @@ function MDXImage({ src, alt, title }: { src: string; alt: string; title?: strin
  */
 export const MDXComponents = {
   img: MDXImage,
+  video: (props: VideoHTMLAttributes<HTMLVideoElement>) => (
+    <video
+      {...props}
+      className="w-full pixelated border-2 border-border pixel-border"
+      controls={false}
+    />
+  ),
 };
