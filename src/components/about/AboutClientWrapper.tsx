@@ -40,13 +40,13 @@ export default function AboutClientWrapper() {
     return (
       <section className="mx-auto max-w-5xl px-4 py-16">
         <StoryLevel />
+        <div className="mt-16">
+          <PersonalPicsCarousel images={PERSONAL_PICS} />
+        </div>
         <div className="mt-16 space-y-8">
           <ExperienceLog />
           <GitHubContributions username="anakafeel" />
           {/* <LoadoutCard /> */}
-        </div>
-        <div className="mt-16">
-          <PersonalPicsCarousel images={PERSONAL_PICS} />
         </div>
       </section>
     );
@@ -63,13 +63,15 @@ export default function AboutClientWrapper() {
       {phase !== "doom" && (
         <>
           <section className="mx-auto max-w-5xl px-4 py-16">
-            <div className="space-y-8">
+            <PersonalPicsCarousel images={PERSONAL_PICS} />
+          </section>
+          <section className="mx-auto max-w-5xl px-4 py-16">
+            <div className="space-y-8" id="main-quests">
               <ExperienceLog />
               <GitHubContributions username="anakafeel" />
               {/* <LoadoutCard /> */}
             </div>
           </section>
-          <PersonalPicsCarousel images={PERSONAL_PICS} />
         </>
       )}
     </>
