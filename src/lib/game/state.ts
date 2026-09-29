@@ -36,7 +36,9 @@ export const INITIAL_STATE: GameState = {
   level: 1,
   achievements: [],
   theme: "arcade",
-  muted: false,
+  // Sound is opt-in: a recruiter in an open office should never be surprised.
+  // A saved preference (see sanitizeGameState) still wins over this default.
+  muted: true,
   volume: 0.5,
 };
 

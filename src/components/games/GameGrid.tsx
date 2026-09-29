@@ -117,14 +117,14 @@ export default function GameGrid() {
                     <span className="font-pixel text-3xl text-border transition-colors group-hover:text-accent">
                       {monogram(game.title)}
                     </span>
-                    <span className="bg-background px-2 py-1 font-pixel text-[8px] text-muted">
+                    <span className="bg-background px-2 py-1 font-pixel text-[10px] text-muted">
                       INSERT CARTRIDGE
                     </span>
                   </div>
                 )}
                 <span
                   className={clsx(
-                    "absolute left-0 top-3 bg-background px-2 py-1 font-pixel text-[8px]",
+                    "absolute left-0 top-3 bg-background px-2 py-1 font-pixel text-[10px]",
                     status.text,
                   )}
                 >
@@ -141,7 +141,8 @@ export default function GameGrid() {
                 <p className="mt-3 text-lg leading-snug text-muted">
                   {game.blurb}
                 </p>
-                <span className="mt-4 font-pixel text-[8px] text-muted opacity-70 transition-colors group-hover:text-accent group-hover:opacity-100">
+                {/* Full-opacity muted text at 10px+ (axe flagged 8px at 70%). */}
+                <span className="mt-4 font-pixel text-[10px] text-muted transition-colors group-hover:text-accent">
                   ► LOAD SAVE FILE
                 </span>
               </div>
@@ -156,7 +157,7 @@ export default function GameGrid() {
             aria-hidden
             onClick={closeCard}
             className={clsx(
-              "fixed inset-0 z-[80] bg-background/70 transition-opacity duration-200",
+              "fixed inset-0 z-[80] bg-[color-mix(in_srgb,var(--color-background)_70%,transparent)] transition-opacity duration-200",
               closing ? "opacity-0" : "opacity-100",
             )}
           />
@@ -174,30 +175,25 @@ export default function GameGrid() {
             )}
           >
             <div className="flex select-none items-center gap-2 border-b-2 border-border bg-background p-2">
+              {/* Decorative window dots; the labelled × is the real control. */}
               <span
-                role="button"
-                aria-label="Close details"
-                tabIndex={0}
+                aria-hidden
                 onClick={closeCard}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    closeCard();
-                  }
-                }}
-                className="-m-1.5 h-6 w-6 cursor-pointer rounded-none bg-accent bg-clip-content p-1.5 transition-all hover:brightness-125 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                className="-m-1.5 h-6 w-6 cursor-pointer bg-accent bg-clip-content p-1.5 transition-all hover:brightness-125"
               />
-              <span className="h-3 w-3 bg-highlight" />
-              <span className="h-3 w-3 bg-accent-alt" />
-              <div className="flex-1 text-center font-pixel text-[8px] uppercase tracking-[0.15em] text-muted">
+              <span aria-hidden className="h-3 w-3 bg-highlight" />
+              <span aria-hidden className="h-3 w-3 bg-accent-alt" />
+              <div className="flex-1 text-center font-pixel text-[10px] text-muted">
                 save file — {selected.title}
               </div>
               <button
                 type="button"
                 onClick={closeCard}
-                className="border border-border px-1.5 py-1 font-pixel text-[10px] text-muted transition-colors hover:border-accent hover:text-accent focus-visible:border-accent focus-visible:text-accent focus-visible:outline-none"
+                aria-label="Close details"
+                title="Close (Esc)"
+                className="inline-flex min-h-8 min-w-8 items-center justify-center border border-[color:var(--color-control)] font-pixel text-xs text-muted transition-colors hover:border-accent hover:text-accent focus-visible:border-accent focus-visible:text-accent"
               >
-                ×
+                <span aria-hidden>×</span>
               </button>
             </div>
 
@@ -216,7 +212,7 @@ export default function GameGrid() {
                 <div>
                   <p
                     className={clsx(
-                      "font-pixel text-[8px]",
+                      "font-pixel text-[10px]",
                       selectedStatus.text,
                     )}
                   >
@@ -233,7 +229,7 @@ export default function GameGrid() {
 
               <dl className="mt-6 grid grid-cols-2 gap-px border-2 border-border bg-border">
                 <div className="bg-surface p-3">
-                  <dt className="font-pixel text-[8px] text-muted">
+                  <dt className="font-pixel text-[10px] text-muted">
                     HOURS LOGGED
                   </dt>
                   <dd className="mt-2 font-pixel text-xs text-accent">
@@ -241,7 +237,7 @@ export default function GameGrid() {
                   </dd>
                 </div>
                 <div className="bg-surface p-3">
-                  <dt className="font-pixel text-[8px] text-muted">MAINS</dt>
+                  <dt className="font-pixel text-[10px] text-muted">MAINS</dt>
                   <dd className="mt-2 font-pixel text-xs text-accent-alt">
                     {selected.details.mains}
                   </dd>
@@ -252,7 +248,7 @@ export default function GameGrid() {
                 {selected.details.memory}
               </p>
 
-              <p className="mt-6 text-right font-pixel text-[8px] text-muted opacity-60">
+              <p className="mt-6 text-right font-pixel text-[10px] text-muted">
                 ESC TO EJECT
               </p>
             </div>

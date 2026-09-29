@@ -84,6 +84,10 @@ export default function Terminal({ data, onClose, closing }: TerminalProps) {
       case "setTheme":
         setTheme(action.theme);
         break;
+      case "openUrl":
+        // Runs inside the Enter keypress, so popup blockers allow it.
+        window.open(action.url, "_blank", "noopener,noreferrer");
+        break;
       case "navigate":
         setTimeout(() => {
           router.push(action.path);
@@ -158,30 +162,29 @@ export default function Terminal({ data, onClose, closing }: TerminalProps) {
       )}
     >
       <div className="flex select-none items-center gap-2 border-b-2 border-border bg-background p-2">
+        {/*
+         * Window-chrome dots are decoration. The red one still closes on
+         * click for mouse users, but the one control in the accessibility
+         * tree and tab order is the labelled × button.
+         */}
         <span
-          role="button"
-          aria-label="Close terminal"
-          tabIndex={0}
+          aria-hidden
           onClick={onClose}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              onClose();
-            }
-          }}
-          className="-m-1.5 h-6 w-6 cursor-pointer rounded-none bg-accent bg-clip-content p-1.5 transition-all hover:brightness-125 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="-m-1.5 h-6 w-6 cursor-pointer bg-accent bg-clip-content p-1.5 transition-all hover:brightness-125"
         />
-        <span className="h-3 w-3 bg-highlight" />
-        <span className="h-3 w-3 bg-accent-alt" />
-        <div className="flex-1 text-center font-pixel text-[8px] uppercase tracking-[0.15em] text-muted">
+        <span aria-hidden className="h-3 w-3 bg-highlight" />
+        <span aria-hidden className="h-3 w-3 bg-accent-alt" />
+        <div className="flex-1 text-center font-pixel text-[10px] text-muted">
           {SITE.handle}@portfolio — term
         </div>
         <button
           type="button"
           onClick={onClose}
-          className="border border-border px-1.5 py-1 font-pixel text-[10px] text-muted transition-colors hover:border-accent hover:text-accent focus-visible:border-accent focus-visible:text-accent focus-visible:outline-none"
+          aria-label="Close terminal"
+          title="Close (Esc)"
+          className="inline-flex min-h-8 min-w-8 items-center justify-center border border-[color:var(--color-control)] font-pixel text-xs text-muted transition-colors hover:border-accent hover:text-accent focus-visible:border-accent focus-visible:text-accent"
         >
-          ×
+          <span aria-hidden>×</span>
         </button>
       </div>
 
@@ -255,7 +258,7 @@ export default function Terminal({ data, onClose, closing }: TerminalProps) {
               type="button"
               onClick={() => applyChip(s)}
               className={clsx(
-                "border px-2 py-0.5 font-pixel text-[8px] transition-colors",
+                "min-h-7 border px-2 py-0.5 font-pixel text-[10px] transition-colors",
                 currentWord && s.startsWith(currentWord)
                   ? "border-accent text-accent hover:bg-accent hover:text-background"
                   : "border-border text-muted hover:bg-muted hover:text-background",
@@ -264,7 +267,7 @@ export default function Terminal({ data, onClose, closing }: TerminalProps) {
               {s}
             </button>
           ))}
-          <span className="ml-auto font-pixel text-[8px] text-muted opacity-60">
+          <span className="ml-auto font-pixel text-[10px] text-muted">
             tab ⇥
           </span>
         </div>

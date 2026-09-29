@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { useEffect, useMemo, useRef } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
 import {
@@ -25,20 +25,80 @@ interface VoxelFieldProps {
   animate: boolean;
 }
 
+/*
+ * Render loop: the canvas uses frameloop="demand", and this component asks
+ * for exactly one frame per 8fps tick via invalidate(). It stops ticking
+ * while the hero is scrolled off-screen or the tab is hidden, and never
+ * ticks under reduced motion (one static frame). Time comes from a tick
+ * counter, not R3F's clock, so a pause resumes where it left off.
+ */
 function VoxelField({ colors, animate }: VoxelFieldProps) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const lowColor = useMemo(() => new THREE.Color(colors.accent), [colors]);
   const highColor = useMemo(() => new THREE.Color(colors.accentAlt), [colors]);
   const scratch = useMemo(() => new THREE.Color(), []);
+  const invalidate = useThree((s) => s.invalidate);
+  const canvas = useThree((s) => s.gl.domElement);
 
-  useFrame(({ clock }) => {
+  /** Current 8fps tick, and the tick the instance buffers were built for. */
+  const tickRef = useRef(0);
+  const builtTickRef = useRef(-1);
+
+  // Theme change: rebuild the colours on the next frame.
+  useEffect(() => {
+    builtTickRef.current = -1;
+    invalidate();
+  }, [lowColor, highColor, invalidate]);
+
+  useEffect(() => {
+    if (!animate) {
+      tickRef.current = 0;
+      builtTickRef.current = -1;
+      invalidate();
+      return;
+    }
+
+    let onScreen = true;
+    let timer = 0;
+    const sync = () => {
+      const run = onScreen && document.visibilityState === "visible";
+      if (run && !timer) {
+        timer = window.setInterval(() => {
+          tickRef.current += 1;
+          invalidate();
+        }, 1000 / TICK_RATE);
+      } else if (!run && timer) {
+        window.clearInterval(timer);
+        timer = 0;
+      }
+    };
+
+    const observer = new IntersectionObserver(([entry]) => {
+      onScreen = entry?.isIntersecting ?? true;
+      sync();
+    });
+    observer.observe(canvas);
+    document.addEventListener("visibilitychange", sync);
+    sync();
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", sync);
+      window.clearInterval(timer);
+    };
+  }, [animate, canvas, invalidate]);
+
+  useFrame(() => {
     const mesh = meshRef.current;
     if (!mesh) return;
 
-    const t = animate
-      ? Math.floor(clock.getElapsedTime() * TICK_RATE) / TICK_RATE
-      : 0;
+    // Frames can also come from resizes; only rebuild on a new tick.
+    const tick = animate ? tickRef.current : 0;
+    if (tick === builtTickRef.current) return;
+    builtTickRef.current = tick;
+
+    const t = tick / TICK_RATE;
     const halfX = (GRID_X - 1) / 2;
     const halfZ = (GRID_Z - 1) / 2;
     let i = 0;
@@ -82,7 +142,7 @@ export default function VoxelScene() {
       dpr={[1, 1.5]}
       camera={{ position: [0, 7.5, 15], fov: 52, rotation: [-0.5, 0, 0] }}
       gl={{ antialias: false, alpha: true, powerPreference: "low-power" }}
-      frameloop={reducedMotion ? "demand" : "always"}
+      frameloop="demand"
     >
       <fog attach="fog" args={[colors.background, 12, 32]} />
       <ambientLight intensity={0.7} />

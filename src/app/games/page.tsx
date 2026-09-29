@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
 import SfxAnchor from "@/components/sfx/SfxAnchor";
 
 import { CONTACT } from "@/lib/site";
 import AwardOnVisit from "@/components/game/AwardOnVisit";
 import GameGrid from "@/components/games/GameGrid";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Games — Saim Hashmi",
+export const metadata = pageMetadata({
+  path: "/games",
+  title: "Games",
   description:
     "Saim Hashmi's game library — competitive FPS mains, all-time favorites, and the backlog.",
-};
+});
 
 export default function GamesPage() {
   return (
@@ -32,7 +33,7 @@ export default function GamesPage() {
             href="https://steamcommunity.com/profiles/76561198965205887/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 font-pixel text-[10px] text-muted transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
+            className="inline-flex min-h-11 items-center gap-2 font-pixel text-xs text-muted transition-colors hover:text-accent focus-visible:text-accent"
           >
             <svg
               viewBox="0 0 24 24"
@@ -47,7 +48,7 @@ export default function GamesPage() {
             href={CONTACT.discord}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 font-pixel text-[10px] text-muted transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
+            className="inline-flex min-h-11 items-center gap-2 font-pixel text-xs text-muted transition-colors hover:text-accent focus-visible:text-accent"
           >
             <svg
               viewBox="0 0 24 24"

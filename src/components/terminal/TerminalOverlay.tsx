@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { useGame } from "@/components/game/GameProvider";
-import { playSfx } from "@/lib/audio/sfx";
+import { playAfterGesture } from "@/components/game/useSound";
 import type { TerminalData } from "@/lib/terminal/commands";
 import { TERMINAL_TOGGLE_EVENT } from "@/lib/terminal/events";
 import Terminal from "./Terminal";
@@ -21,16 +21,21 @@ export default function TerminalOverlay({ data }: { data: TerminalData }) {
   const [open, setOpen] = useState(false);
   const [closing, setClosing] = useState(false);
   const closeTimer = useRef(0);
+  /** Whatever had focus when the terminal opened (normally the HUD button). */
+  const openerRef = useRef<HTMLElement | null>(null);
   const { state, award, hydrated } = useGame();
 
   const openTerminal = useCallback(() => {
     window.clearTimeout(closeTimer.current);
+    if (document.activeElement instanceof HTMLElement) {
+      openerRef.current = document.activeElement;
+    }
     setClosing(false);
     setOpen(true);
     // First discovery triggers the achievement fanfare instead; only play
     // the open jingle once SECRET CONSOLE is already unlocked.
     if (!state.muted && state.achievements.includes("found_terminal")) {
-      playSfx("terminal", state.volume);
+      playAfterGesture("terminal", state.volume);
     }
     award("found_terminal");
   }, [award, state.muted, state.volume, state.achievements]);
@@ -40,7 +45,7 @@ export default function TerminalOverlay({ data }: { data: TerminalData }) {
       return;
     }
     if (!state.muted) {
-      playSfx("terminal_off", state.volume);
+      playAfterGesture("terminal_off", state.volume);
     }
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setOpen(false);
@@ -79,6 +84,39 @@ export default function TerminalOverlay({ data }: { data: TerminalData }) {
 
   useEffect(() => () => window.clearTimeout(closeTimer.current), []);
 
+  /*
+   * While the terminal is up, make the page behind it inert (no clicks, no
+   * tab stops, hidden from assistive tech), backing up aria-modal. A layout
+   * effect so the cleanup lifts inert before the focus trap's passive
+   * cleanup tries to restore focus to the HUD button.
+   */
+  const active = hydrated && open && !closing;
+  useLayoutEffect(() => {
+    if (!active) {
+      return;
+    }
+    const regions = Array.from(
+      document.querySelectorAll<HTMLElement>("header, main, footer"),
+    ).filter(
+      (el) =>
+        !el.closest('[role="dialog"]') &&
+        !el.parentElement?.closest("header, main, footer"),
+    );
+    const previous = regions.map((el) => el.inert);
+    regions.forEach((el) => {
+      el.inert = true;
+    });
+    return () => {
+      regions.forEach((el, i) => {
+        el.inert = previous[i];
+      });
+      const opener = openerRef.current;
+      if (opener?.isConnected && !opener.closest("[inert]")) {
+        opener.focus();
+      }
+    };
+  }, [active]);
+
   if (!hydrated || !open) {
     return null;
   }
@@ -88,7 +126,7 @@ export default function TerminalOverlay({ data }: { data: TerminalData }) {
       <div
         aria-hidden
         onClick={closeTerminal}
-        className={`fixed inset-0 z-[80] bg-background/70 transition-opacity duration-200 ${
+        className={`fixed inset-0 z-[80] bg-[color-mix(in_srgb,var(--color-background)_70%,transparent)] transition-opacity duration-200 ${
           closing ? "opacity-0" : "opacity-100"
         }`}
       />

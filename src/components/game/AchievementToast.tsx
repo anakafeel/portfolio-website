@@ -43,7 +43,9 @@ export default function AchievementToast() {
     <div
       role="status"
       aria-live="polite"
-      className="pixel-border fixed left-1/2 top-6 z-[70] -translate-x-1/2 bg-surface px-6 py-3 text-center motion-safe:animate-fade-up"
+      // Bottom of the screen (full-width on phones, bottom-right from sm up)
+      // so the toast never covers the sticky nav or HUD.
+      className="pixel-border fixed inset-x-4 bottom-4 z-[70] bg-surface px-6 py-3 text-center motion-safe:animate-fade-up sm:inset-x-auto sm:bottom-6 sm:right-6"
     >
       <p className="font-pixel text-[10px] text-highlight">
         ACHIEVEMENT UNLOCKED

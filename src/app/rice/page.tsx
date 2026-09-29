@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 
 import AwardOnVisit from "@/components/game/AwardOnVisit";
 import SfxAnchor from "@/components/sfx/SfxAnchor";
 import { DOTFILES_URL, RICE_SHOTS, RICE_SPECS } from "@/lib/rice";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Rice — Saim Hashmi",
+export const metadata = pageMetadata({
+  path: "/rice",
+  title: "Rice",
   description:
     "The rice zone — Saim Hashmi's Fedora + Niri desktop customization setup.",
-};
+});
 
 export default function RicePage() {
   return (

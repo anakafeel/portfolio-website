@@ -19,6 +19,10 @@
   --color-accent: #ff2d78;
   --color-accent-alt: #00e5ff;
   --color-highlight: #ffd400;
+  /* Edge of a control (HUD buttons etc.): >=3:1 on surface (WCAG 1.4.11). */
+  --color-control: #6c6cb8;
+  /* Keyboard focus ring, shared by every theme block unless overridden. */
+  --color-focus: var(--color-highlight);
 }
 
 [data-theme="phosphor"] {
@@ -30,6 +34,8 @@
   --color-accent: #8dffb0;
   --color-accent-alt: #35ff6d;
   --color-highlight: #d6ffe2;
+  --color-control: #1a7a3a;
+  --color-focus: var(--color-highlight);
 }
 
 [data-theme="synthwave"] {
@@ -41,17 +47,25 @@
   --color-accent: #ff3ec8;
   --color-accent-alt: #00f0ff;
   --color-highlight: #ffb300;
+  --color-control: #8466c8;
+  --color-focus: var(--color-highlight);
 }
 
+/*
+ * Surface is a shade darker than the DMG's #306230 so every text token
+ * clears 4.5:1 on cards (muted was 2.75:1) and the border clears 3:1.
+ */
 [data-theme="gameboy"] {
   --color-background: #0f380f;
-  --color-surface: #306230;
+  --color-surface: #1a451a;
   --color-border: #8bac0f;
   --color-foreground: #9bbc0e;
-  --color-muted: #8bac0f;
+  --color-muted: #93b40f;
   --color-accent: #cadc9f;
   --color-accent-alt: #9bbc0e;
   --color-highlight: #cadc9f;
+  --color-control: #8bac0f;
+  --color-focus: var(--color-highlight);
 }
 
 @layer base {
@@ -254,48 +268,6 @@
     animation: crt-off 240ms ease-in both;
   }
 
-  /*
-   * Side-scroller sprite walk cycle (see StorySideScroller/PlayerSprite).
-   * Two frames swap in hard steps while scroll velocity is non-zero; the
-   * body gets a small bob. Freezes on the standing frame when idle.
-   */
-  @keyframes sprite-bob {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-2px);
-    }
-  }
-
-  @keyframes sprite-swap {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0;
-    }
-  }
-
-  .sprite-frame-b {
-    opacity: 0;
-  }
-
-  .story-sprite.is-walking {
-    animation: sprite-bob 0.32s steps(1) infinite;
-  }
-
-  .story-sprite.is-walking .sprite-frame-a {
-    animation: sprite-swap 0.32s steps(1) infinite;
-  }
-
-  .story-sprite.is-walking .sprite-frame-b {
-    animation: sprite-swap 0.32s steps(1) infinite;
-    animation-delay: -0.16s;
-  }
-
   /* Subtle CRT scanline overlay; apply to a fixed, pointer-events-none div. */
   .crt-scanlines {
     background: repeating-linear-gradient(
@@ -339,4 +311,15 @@
       transform: none;
     }
   }
+}
+
+/*
+ * Keyboard focus: a visible 2px ring in the focus token on every
+ * interactive element, not just a colour change. Deliberately unlayered and
+ * !important so per-component `focus-visible:outline-none` classes cannot
+ * hide it. Programmatically focused containers (tabindex="-1") are skipped.
+ */
+:is(a[href], button, input, select, textarea, summary, [role="button"], [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--color-focus) !important;
+  outline-offset: 2px !important;
 }

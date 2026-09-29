@@ -2,14 +2,17 @@
 
 import { useEffect, useRef } from "react";
 
-import { playSfx } from "@/lib/audio/sfx";
 import type { GameState } from "@/lib/game/state";
 import { useGame } from "./GameProvider";
+import { playAfterGesture } from "./useSound";
 
 /**
  * Plays chiptune feedback on game-state transitions (level up, achievement
  * unlock, palette swap). Renders nothing. Mirrors AchievementToast's
  * hydration handling: the first pass only records the restored save.
+ * Nothing plays before the first user gesture, so an achievement awarded on
+ * page load (AwardOnVisit) unlocks silently instead of hitting a suspended
+ * AudioContext.
  */
 export default function SoundEffects() {
   const { state, hydrated } = useGame();
@@ -27,14 +30,14 @@ export default function SoundEffects() {
 
     // One sound per transition, most celebratory wins.
     if (state.level > prev.level) {
-      playSfx("level_up", state.volume);
+      playAfterGesture("level_up", state.volume);
     } else if (state.achievements.length > prev.achievements.length) {
-      playSfx("achievement", state.volume);
+      playAfterGesture("achievement", state.volume);
     } else if (state.theme !== prev.theme) {
-      playSfx("theme", state.volume);
+      playAfterGesture("theme", state.volume);
     } else if (prev.muted) {
       // Just unmuted — confirm that audio is live.
-      playSfx("blip", state.volume);
+      playAfterGesture("blip", state.volume);
     }
   }, [state, hydrated]);
 

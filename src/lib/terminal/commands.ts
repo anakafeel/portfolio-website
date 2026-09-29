@@ -1,4 +1,4 @@
-import { CONTACT, SITE } from "@/lib/site";
+import { CONTACT, RESUME_URL, SITE } from "@/lib/site";
 import type { GameState } from "@/lib/game/state";
 import { THEMES, isThemeName, type ThemeName } from "@/lib/game/state";
 import { ACHIEVEMENTS } from "@/lib/game/achievements";
@@ -33,6 +33,8 @@ export type TerminalAction =
   | { kind: "clear" }
   | { kind: "exit" }
   | { kind: "navigate"; path: string }
+  /** Open a file (the resume PDF) in a new tab. */
+  | { kind: "openUrl"; url: string }
   | { kind: "setTheme"; theme: ThemeName };
 
 export interface CommandResult {
@@ -42,6 +44,7 @@ export interface CommandResult {
 
 export const TERMINAL_COMMANDS = [
   "help",
+  "resume",
   "ls",
   "cat",
   "open",
@@ -80,7 +83,9 @@ function err(text: string): CommandResult {
 
 function lsRoot(): CommandResult {
   return {
-    lines: [{ text: "about.md    projects/    blog/    contact" }],
+    lines: [
+      { text: "about.md    resume.pdf    projects/    blog/    contact" },
+    ],
   };
 }
 
@@ -114,6 +119,13 @@ function catProject(arg: string, data: TerminalData): CommandResult {
   };
 }
 
+function openResume(): CommandResult {
+  return {
+    lines: [{ className: INFO, text: `→ opening ${RESUME_URL} in a new tab…` }],
+    action: { kind: "openUrl", url: RESUME_URL },
+  };
+}
+
 function statsCard(game: GameState): CommandResult {
   const unlocked = game.achievements.map((id) => ACHIEVEMENTS[id].title);
   return {
@@ -136,6 +148,7 @@ const HELP_LINES: TerminalLine[] = [
   { text: "  ls [dir]           list contents" },
   { text: "  cat <file>         read a file" },
   { text: "  open <slug>        jump to a project quest" },
+  { text: "  resume             open my resume (PDF, new tab)" },
   { text: "  stats              player card (xp, level, unlocks)" },
   { text: "  theme <name>       switch palette" },
   { text: "  about|projects|blog|rice|games|home   navigate" },
@@ -185,14 +198,26 @@ export function interpret(
       return err(`ls: cannot access '${dir}'`);
     }
 
+    case "resume":
+      return openResume();
+
     case "cat": {
       if (!arg) return err("cat: missing file operand");
       if (arg === "about.md" || arg === "about") return catAbout();
+      if (arg === "resume.pdf" || arg === "resume") {
+        return {
+          lines: [
+            { className: DIM, text: "cat: resume.pdf: binary file" },
+            { className: DIM, text: "run 'resume' to open it in a new tab" },
+          ],
+        };
+      }
       return catProject(arg, data);
     }
 
     case "open": {
       if (!arg) return err("open: missing project slug");
+      if (arg === "resume.pdf" || arg === "resume") return openResume();
       const slug = arg.replace(/^projects\//, "").replace(/\.mdx?$/, "");
       const project = data.projects.find((p) => p.slug === slug);
       if (!project) return err(`open: ${arg}: no such quest`);
@@ -245,6 +270,7 @@ export function interpret(
           { text: `email     ${CONTACT.email}` },
           { text: `github    ${CONTACT.github}` },
           { text: `linkedin  ${CONTACT.linkedin}` },
+          { text: `resume    ${RESUME_URL}  (run 'resume')` },
         ],
       };
 
@@ -282,6 +308,7 @@ export function completions(input: string, data: TerminalData): string[] {
   if (cmd === "cat") {
     const options = [
       "about.md",
+      "resume.pdf",
       ...data.projects.map((p) => `projects/${p.slug}.md`),
     ];
     return options.filter((o) => o.startsWith(partial)).slice(0, 6);

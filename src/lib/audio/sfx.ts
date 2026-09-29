@@ -4,6 +4,8 @@
  * lazily on first play so it always follows a user gesture.
  */
 
+import { hasUserGesture } from "@/lib/game/gesture";
+
 interface Note {
   /** Frequency in Hz. */
   freq: number;
@@ -65,6 +67,11 @@ let context: AudioContext | null = null;
 
 function getContext(): AudioContext | null {
   if (typeof window === "undefined") {
+    return null;
+  }
+  // Browsers block audio until the visitor interacts; don't create a
+  // suspended context (and a console warning) before that.
+  if (!context && !hasUserGesture()) {
     return null;
   }
   if (!context) {

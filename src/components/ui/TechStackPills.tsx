@@ -6,7 +6,8 @@ export default function TechStackPills({ items }: { items: string[] }) {
       {items.map((tech) => (
         <li
           key={tech}
-          className="border border-border px-1.5 py-0.5 font-pixel text-[10px] text-muted"
+          // Tech stack is a key fact for recruiters: 12px pixel type, not 10px.
+          className="border border-border px-2 py-1 font-pixel text-xs text-muted"
         >
           {tech}
         </li>
