@@ -8,6 +8,7 @@ import MissionBriefing from "@/components/quests/MissionBriefing";
 import ProjectNavigation from "@/components/quests/ProjectNavigation";
 import QuestTracker from "@/components/quests/QuestTracker";
 import { getAdjacentProjects, getProject, getProjects } from "@/lib/content";
+import { pageMetadata } from "@/lib/seo";
 
 type Params = { slug: string };
 
@@ -25,10 +26,12 @@ export async function generateMetadata({
   if (!project) {
     return {};
   }
-  return {
-    title: `${project.frontmatter.title} — Saim Hashmi`,
+  return pageMetadata({
+    path: `/projects/${slug}`,
+    title: project.frontmatter.title,
     description: project.frontmatter.summary,
-  };
+    type: "article",
+  });
 }
 
 export default async function ProjectPage({
@@ -47,15 +50,20 @@ export default async function ProjectPage({
   return (
     <article className="mx-auto max-w-3xl px-4 py-16">
       <QuestTracker />
-      <nav className="flex items-center gap-2 font-pixel text-[10px]">
+      <nav
+        aria-label="Breadcrumb"
+        className="flex items-center gap-2 font-pixel text-[10px]"
+      >
         <SfxLink
           href="/projects"
           className="text-muted transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
         >
           QUEST LOG
         </SfxLink>
-        <span className="text-muted">►</span>
-        <span className="text-highlight">{frontmatter.title}</span>
+        <span aria-hidden className="text-muted">►</span>
+        <span aria-current="page" className="text-highlight">
+          {frontmatter.title}
+        </span>
       </nav>
       <h1 className="mt-6 font-pixel text-xl text-highlight">
         {frontmatter.title}

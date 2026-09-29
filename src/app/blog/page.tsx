@@ -3,13 +3,15 @@ import SfxLink from "@/components/sfx/SfxLink";
 import TechStackPills from "@/components/ui/TechStackPills";
 
 import { getBlogPosts } from "@/lib/content";
+import { pageMetadata } from "@/lib/seo";
 
 const STAGGER_DELAY_MS = 80;
 
-export const metadata: Metadata = {
-  title: "Blog — Saim Hashmi",
+export const metadata: Metadata = pageMetadata({
+  path: "/blog",
+  title: "Blog",
   description: "Field notes and dev logs by Saim Hashmi.",
-};
+});
 
 export default function BlogPage() {
   const posts = getBlogPosts();

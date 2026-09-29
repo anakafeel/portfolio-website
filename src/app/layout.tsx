@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Press_Start_2P, VT323 } from "next/font/google";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import "./globals.css";
 import Header from "@/components/Header";
@@ -10,7 +9,7 @@ import AchievementToast from "@/components/game/AchievementToast";
 import SoundEffects from "@/components/game/SoundEffects";
 import TerminalOverlay from "@/components/terminal/TerminalOverlay";
 import { getBlogPosts, getProjects } from "@/lib/content";
-import { SITE } from "@/lib/site";
+import { CONTACT, SITE } from "@/lib/site";
 import type { TerminalData } from "@/lib/terminal/commands";
 
 // Applies the saved theme before first paint to avoid a flash of the default
@@ -32,9 +31,37 @@ const vt323 = VT323({
 });
 
 export const metadata: Metadata = {
-  title: SITE.title,
+  metadataBase: new URL(SITE.url),
+  title: { default: SITE.title, template: `%s — ${SITE.name}` },
   description: SITE.description,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: SITE.name,
+    title: SITE.title,
+    description: SITE.description,
+    locale: "en_CA",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE.title,
+    description: SITE.description,
+  },
+  robots: { index: true, follow: true },
 };
+
+// schema.org Person, so search engines can tie the site to the GitHub and
+// LinkedIn profiles. `<` is escaped so the JSON can never close the tag early.
+const PERSON_JSON_LD = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: SITE.name,
+  url: SITE.url,
+  jobTitle: "Software Engineer",
+  alumniOf: { "@type": "CollegeOrUniversity", name: "Carleton University" },
+  sameAs: [CONTACT.github, CONTACT.linkedin],
+}).replace(/</g, "\\u003c");
 
 export default function RootLayout({
   children,
@@ -62,9 +89,21 @@ export default function RootLayout({
         className={`${pressStart.variable} ${vt323.variable} flex min-h-screen flex-col font-body`}
       >
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: PERSON_JSON_LD }}
+        />
+        <a
+          href="#main"
+          className="sr-only z-[60] bg-highlight px-3 py-2 font-pixel text-[10px] text-background focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+        >
+          SKIP TO CONTENT
+        </a>
         <GameProvider>
           <Header />
-          <main className="flex-1">{children}</main>
+          <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
+            {children}
+          </main>
           <Footer />
           <AchievementToast />
           <SoundEffects />
@@ -74,7 +113,6 @@ export default function RootLayout({
           aria-hidden
           className="crt-scanlines pointer-events-none fixed inset-0 z-50 opacity-40"
         />
-        <SpeedInsights />
       </body>
     </html>
   );

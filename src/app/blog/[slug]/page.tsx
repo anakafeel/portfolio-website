@@ -5,6 +5,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 
 import { MDXComponents } from "@/components/mdx/MDXComponents";
 import { getBlogPost, getBlogPosts } from "@/lib/content";
+import { pageMetadata } from "@/lib/seo";
 
 type Params = { slug: string };
 
@@ -22,10 +23,13 @@ export async function generateMetadata({
   if (!post) {
     return {};
   }
-  return {
-    title: `${post.frontmatter.title} — Saim Hashmi`,
+  return pageMetadata({
+    path: `/blog/${slug}`,
+    title: post.frontmatter.title,
     description: post.frontmatter.summary,
-  };
+    type: "article",
+    publishedTime: post.frontmatter.date,
+  });
 }
 
 export default async function BlogPostPage({
@@ -41,12 +45,14 @@ export default async function BlogPostPage({
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-16">
-      <SfxLink
-        href="/blog"
-        className="font-pixel text-[10px] text-muted transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
-      >
-        ◄ BACK TO DEV LOG
-      </SfxLink>
+      <nav aria-label="Breadcrumb">
+        <SfxLink
+          href="/blog"
+          className="font-pixel text-[10px] text-muted transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
+        >
+          <span aria-hidden>◄ </span>BACK TO DEV LOG
+        </SfxLink>
+      </nav>
       <h1 className="mt-6 font-pixel text-xl text-highlight">
         {post.frontmatter.title}
       </h1>

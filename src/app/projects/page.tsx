@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
 
+import { pageMetadata } from "@/lib/seo";
+
 import QuestCard from "@/components/quests/QuestCard";
 import { getProjects } from "@/lib/content";
 
 const STAGGER_DELAY_MS = 80;
 
-export const metadata: Metadata = {
-  title: "Projects — Saim Hashmi",
-  description: "Quest log — projects built by Saim Hashmi.",
-};
+export const metadata: Metadata = pageMetadata({
+  path: "/projects",
+  title: "Projects",
+  description:
+    "Projects by Saim Hashmi: Shopify CLI contributions, a QNX robot, a self-hosted Pi cloud, satellite push-to-talk and more.",
+});
 
 export default function ProjectsPage() {
   const projects = getProjects();
