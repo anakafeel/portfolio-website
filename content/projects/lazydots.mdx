@@ -1,32 +1,48 @@
 ---
 title: "LazyDots"
-rarityTier: "epic"
-techStack: ["Golang", "Bubbletea", "Lipgloss", "YAML", "Git"]
+rarityTier: "rare"
+order: 6
+techStack: ["Go", "Bubbletea", "Lipgloss", "YAML"]
 links:
   github: "https://github.com/anakafeel/lazydots"
 date: "2025-11-01"
-summary: "A cross-platform TUI dotfile manager in Go — profiles, Git-backed versioning, and safe symlinks. Built to replace GNU Stow."
+summary: "A lazygit-style TUI for dotfiles in Go: see symlink status at a glance and link or unlink files with one key. Works with existing Stow-style repos."
 image: "/projects/lazydots.svg"
+role: "Solo: design and implementation"
+result: "Symlink status and one-key linking for Stow-style dotfile repos, installable with go install"
+status: "Work in progress, core symlink management works"
 ---
 
 ## Quest briefing
 
-LazyDots is a dotfile manager built from scratch in Go to replace GNU Stow,
-with the interactive workflow Stow never had.
+### Problem
+
+Managing dotfiles by hand is tedious. Creating symlinks is error-prone,
+and keeping track of what's linked and what isn't is a mental burden. GNU
+Stow does the linking but gives you no view of the current state.
 
 ![LazyDots TUI interface preview](/images/projects/lazydots/tui-preview.webp)
 
-- Automates symlink management and Git-backed versioning across Linux
-  and macOS from a single portable binary.
-- Git-backed versioning with safe rollbacks — break your config, roll
-  back, keep ricing.
-- Interactive Bubbletea TUI for profile management and config switching,
-  a serious usability upgrade over existing CLI-only tools.
+### What I built
+
+- A Bubbletea/Lipgloss TUI that reads Stow-style package directories and
+  shows per-file symlink state: linked, missing, or conflicting.
+- One-key linking: press `space` to link or unlink an individual file.
+- Safe operations: it never overwrites existing files, and only removes
+  symlinks that point back into your repo.
+- A first-run setup wizard and a `--no-splash` flag; installs with
+  `go install`.
+
+### Roadmap
+
+Batch link/unlink per package, Git status and commit/push/pull from the
+TUI, per-machine profiles, and a conflict-resolution UI (diff, backup,
+overwrite). None of these ship yet.
 
 ## Loot (what was learned)
 
 - The Elm architecture (via Bubbletea) is a genuinely great fit for
   terminal UIs — state, update, view, done.
-- Symlink edge cases are endless: broken links, nested dirs, cross-device
-  moves. Safety checks earn their keep.
+- Symlink edge cases are endless: broken links, nested dirs, files that
+  exist but aren't links. Safety checks earn their keep.
 - Designing a tool you use daily is the fastest feedback loop there is.

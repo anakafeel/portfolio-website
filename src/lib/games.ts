@@ -41,7 +41,7 @@ export const GAMES: GameEntry[] = [
     details: {
       hours: "300+ HRS",
       mains: "MOONKNIGHT / CLOAK AND DAGGER",
-      memory: "10/10 will recommend if you got friends who can carry you ",
+      memory: "10/10 will recommend if you got friends who can carry you",
     },
   },
   {
@@ -76,7 +76,7 @@ export const GAMES: GameEntry[] = [
     title: "Valorant",
     genre: "TACTICAL FPS",
     status: "favorite",
-    blurb: "Its been a while and im glad it has",
+    blurb: "It's been a while and I'm glad it has",
     cover: "/games/valorant.svg",
     details: {
       hours: "600+ HRS",

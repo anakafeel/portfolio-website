@@ -35,6 +35,12 @@ const projectFrontmatterSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "date must be YYYY-MM-DD"),
   summary: z.string().min(1),
   image: z.string().optional(),
+  /** Display order on /projects (ascending). Unordered projects sort last, newest first. */
+  order: z.number().int().optional(),
+  /** Optional one-liners for the mission briefing's ROLE / RESULT / STATUS strip. */
+  role: z.string().optional(),
+  result: z.string().optional(),
+  status: z.string().optional(),
 });
 
 const blogFrontmatterSchema = z.object({
@@ -92,8 +98,10 @@ function findBySlug<T extends ContentEntry<unknown>>(
 }
 
 export const getProjects = cache((): Project[] =>
-  readEntries("projects", projectFrontmatterSchema).sort((a, b) =>
-    b.frontmatter.date.localeCompare(a.frontmatter.date),
+  readEntries("projects", projectFrontmatterSchema).sort(
+    (a, b) =>
+      (a.frontmatter.order ?? Infinity) - (b.frontmatter.order ?? Infinity) ||
+      b.frontmatter.date.localeCompare(a.frontmatter.date),
   ),
 );
 

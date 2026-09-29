@@ -1,0 +1,48 @@
+---
+title: "BOOPBOT"
+rarityTier: "epic"
+order: 2
+techStack: ["QNX SDP 8.0", "ROS2", "Qt Quick/QML", "C++", "Raspberry Pi 5"]
+links: {}
+date: "2026-05-01"
+summary: "A photo-booth robot on QNX Neutrino and ROS2: Qt/QML camera UI, SLAM ported to QNX, encoder-driven motors. Funded by a $1,000 BlackBerry QNX grant."
+image: "/projects/boopbot.svg"
+role: "UI, camera integration, SLAM port and motor control"
+result: "$1,000 BlackBerry QNX development grant to build it for cuHacking 7"
+status: "In progress (May 2026 – present)"
+---
+
+## Quest briefing
+
+### Problem
+
+A photo-booth robot for live events has to run a camera UI, autonomy and
+motor control on one small board, on a real-time OS with hard deadlines.
+QNX Neutrino gives you those deadlines, but most of the robotics stack
+(ROS2, Qt, SLAM) was never built with it in mind.
+
+### What I built
+
+- A terminal-themed Qt Quick/QML UI with a live camera feed and API
+  controls for running the booth at events.
+- Raspberry Pi camera integration through the QNX Sensor Framework. Qt6
+  and ROS2 fought over CMake, so I split them with a concurrent
+  `QLocalSocket` bridge and a crash-recovery watchdog.
+- A SLAM stack ported to QNX Neutrino, resolving thread-scheduling
+  conflicts between the SLAM pipeline and QNX's hard deadlines.
+- Motor control with encoder feedback and logging, validated with a
+  Logitech controller before wiring in the autonomy stack.
+
+### Result
+
+Secured a **$1,000 corporate development grant from BlackBerry QNX** to
+build the robot for cuHacking 7. Still in active development.
+
+## Loot (what was learned)
+
+- Porting to a real-time OS is mostly about scheduling: who runs when,
+  and what happens when a thread misses its slot.
+- When two build systems won't coexist, a process boundary and a socket
+  can be cleaner than forcing them into one binary.
+- Test the drivetrain by hand first. A gamepad finds wiring bugs long
+  before the autonomy stack would.

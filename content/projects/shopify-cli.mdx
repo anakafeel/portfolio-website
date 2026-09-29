@@ -1,24 +1,30 @@
 ---
 title: "Shopify CLI (OSS)"
 rarityTier: "legendary"
+order: 1
 techStack: ["TypeScript", "Ruby", "oclif", "Node.js", "GitHub Actions"]
 links:
   github: "https://github.com/Shopify/cli"
   writeup: "https://github.com/Shopify/cli/pull/6662"
 date: "2025-11-15"
-summary: "Open-source contributions to Shopify's CLI — smarter config detection, standardized validation, and refactored shared config modules."
+summary: "Merged upstream into Shopify's official CLI: added the shopify app config pull command, plus standardized config validation and refactored shared config modules."
 image: "/projects/shopify-cli.svg"
+role: "Open-source contributor (author of Shopify/cli#6662)"
+result: "New command merged upstream, Dec 2025"
+status: "Contributing since Nov 2025"
 ---
 
 ## Quest briefing
 
-Ongoing open-source contributions to [Shopify CLI](https://github.com/Shopify/cli),
-the tool every Shopify app and theme developer runs daily.
+Merged upstream into [Shopify CLI](https://github.com/Shopify/cli), the
+tool every Shopify app and theme developer runs daily.
 
 ![Shopify CLI terminal preview](/images/projects/shopify-cli/1765480124237.jpeg)
 
-- Built `config:pull` to detect `shopify.project.toml` and skip redundant
-  prompts, reducing manual setup for CLI users — merged upstream in
+- Added a new command, `shopify app config pull`, which reads the
+  already-linked app config (or the one passed with `--config`) and pulls
+  the remote app configuration with no interactive prompts, leaving
+  `app config link` unchanged. Merged upstream in
   [Shopify/cli#6662](https://github.com/Shopify/cli/pull/6662).
 - Standardized config validation across core commands to prevent
   inconsistent state and avoid common config-related problems.

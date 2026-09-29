@@ -14,7 +14,7 @@ function NavCard({
   return (
     <SfxLink
       href={`/projects/${project.slug}`}
-      className={`group flex flex-1 flex-col pixel-border pixel-border-interactive bg-surface p-4 transition-colors${isNext ? " items-end text-right" : ""}`}
+      className={`group flex min-w-0 flex-1 flex-col break-words pixel-border pixel-border-interactive bg-surface p-4 transition-colors${isNext ? " items-end text-right" : ""}`}
     >
       <span className="font-pixel text-[10px] text-muted transition-colors group-hover:text-accent">
         {isNext ? "NEXT QUEST ►" : "◄ PREV QUEST"}
@@ -45,16 +45,16 @@ export default function ProjectNavigation({
 
   return (
     <nav className="mt-16 border-t-2 border-border pt-8">
-      <div className="flex items-stretch gap-4">
+      <div className="flex flex-col items-stretch gap-4 sm:flex-row">
         {prev ? (
           <NavCard project={prev} direction="prev" />
         ) : (
-          <div className="flex-1" />
+          <div className="hidden flex-1 sm:block" />
         )}
         {next ? (
           <NavCard project={next} direction="next" />
         ) : (
-          <div className="flex-1" />
+          <div className="hidden flex-1 sm:block" />
         )}
       </div>
     </nav>

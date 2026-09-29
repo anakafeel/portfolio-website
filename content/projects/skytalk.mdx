@@ -1,0 +1,51 @@
+---
+title: "SkyTalk"
+rarityTier: "epic"
+order: 4
+techStack: ["React Native", "Expo", "Fastify", "WebSocket", "Prisma", "PostgreSQL", "DigitalOcean"]
+links:
+  github: "https://github.com/anakafeel/TheForbiddenLAN"
+  writeup: "https://the-forbidden-lan-docs.vercel.app/docs"
+date: "2025-10-01"
+summary: "Encrypted push-to-talk walkie-talkie over Iridium Certus satellite (22 kbps, 500–1500 ms latency), built at the SKYTRAC Hackathon."
+image: "/projects/skytalk.svg"
+role: "Built the client comms library (ForbiddenLANComms) on a 4-person team"
+result: "AES-256-GCM push-to-talk that stays responsive at satellite latency"
+status: "Hackathon build (SKYTRAC Hackathon)"
+---
+
+## Quest briefing
+
+### Problem
+
+Push-to-talk over satellite is hard. An Iridium Certus link gives you
+about **22 kbps** and **500–1500 ms** of latency, so a naive walkie-talkie
+app talks over itself: two people press the button at once and both think
+they have the floor.
+
+### What I built
+
+- A cross-platform Android/iOS walkie-talkie app (Expo) with **AES-256-GCM**
+  encrypted push-to-talk over Iridium Certus.
+- The client-side comms library, **ForbiddenLANComms**, which handles the
+  full push-to-talk connection over the unreliable satellite link. This
+  was my package in the monorepo; teammates owned the Fastify relay server
+  and the mobile/web UI.
+- Timestamp-based floor-control arbitration that resolves simultaneous
+  push-to-talk presses before the server confirms, so audio stays
+  responsive at satellite latency.
+
+### Result
+
+Encrypted push-to-talk over Iridium Certus that holds up at satellite
+latency. The architecture, sequence diagrams and API contracts are on the
+project's [docs site](https://the-forbidden-lan-docs.vercel.app/docs).
+
+## Loot (what was learned)
+
+- At 500+ ms round trips you can't wait for the server to decide.
+  Decide locally with a rule everyone agrees on, then reconcile.
+- Bandwidth budgets change every design choice, from codec to message
+  framing.
+- A shared comms library with a clear API let four people build in
+  parallel without stepping on each other.

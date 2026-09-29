@@ -1,0 +1,72 @@
+---
+title: "VaultPi"
+rarityTier: "epic"
+order: 3
+techStack: ["AWS", "Terraform", "Ansible", "Docker", "Immich", "Tailscale", "Cloudflare Tunnel"]
+links:
+  github: "https://github.com/anakafeel/vaultpi-"
+date: "2025-09-01"
+summary: "My Raspberry Pi homelab and personal cloud: an IaC-provisioned NAS with an event-driven AWS photo pipeline, zero inbound ports. This site is served from it."
+image: "/projects/vaultpi.svg"
+role: "Solo: design, infrastructure as code, pipeline and ops"
+result: "Replaced iCloud for 14,000+ photos (300+ GB); reproducible from Terraform + 11 Ansible roles"
+status: "Running 24/7 (Sep 2025 – present)"
+---
+
+## Quest briefing
+
+### Problem
+
+Photos and files were piling up on my laptop with no dedup, no tagging and
+no backup, while a Raspberry Pi already running my personal services sat
+mostly idle. I wanted a personal cloud I control, without opening my home
+network to the internet.
+
+![Raspberry Pi in its case, cabled up next to a keyboard](/images/projects/homelab/1761096851370.webp)
+
+### What I built
+
+- **Reproducible from code.** The Pi is provisioned with **Ansible (11
+  roles)**: Docker, HDD mount, Samba, Immich, n8n, Tailscale, monitoring,
+  Watchtower and more. The AWS side (IAM, S3, DynamoDB, Lambda) is
+  **Terraform**.
+- **Event-driven AI photo pipeline.** Photos sync from the local HDD to S3.
+  Each upload triggers a Lambda that tags the photo (Rekognition) and
+  embeds it (AWS Bedrock Titan), storing results in DynamoDB. Scripts on
+  top of that do duplicate detection and text-to-photo search.
+- **Immich** as the self-hosted photo app, replacing iCloud with no storage
+  cap or subscription.
+- **Zero inbound ports.** Public services, including this portfolio, are
+  exposed only through outbound **Cloudflare Tunnels**. Private services
+  (the NAS, Immich, Grafana) are reachable only on the LAN or over
+  **Tailscale**. Samba never touches the tunnel.
+- **Ops.** Containers run under Portainer, Watchtower keeps images updated
+  and posts to a Discord channel, and Grafana dashboards cover the Pi,
+  each container and the AWS side, with disk alerts before a mount fills.
+
+![Cloudflare Tunnel request flow: browser to Cloudflare's edge to the tunnel daemon on the server (diagram from Cloudflare's docs)](/images/projects/homelab/1763345059281.webp)
+
+![Portainer container list for the services running on the Pi](/images/projects/homelab/1761096849617.webp)
+
+![Discord channel receiving Watchtower container-update notifications](/images/projects/homelab/1761096849683.webp)
+
+![A GitHub Actions build-and-push Docker job next to Watchtower logs on the Pi](/images/projects/homelab/1761096849970.webp)
+
+![Terminal session with lazygit and Portainer server logs on the Pi](/images/projects/homelab/1761096850050.webp)
+
+### Result
+
+- **14,000+ photos (300+ GB)** moved off iCloud onto hardware I own.
+- **0 inbound ports** open on the home network, and you're reading this
+  page through the same tunnel.
+- The whole box can be rebuilt from the repo instead of from memory.
+
+## Loot (what was learned)
+
+- Dedup surfaced organizational debt, not just stray copies: most
+  duplicates were whole folders mirrored into each other.
+- Raw object counts lie. Filter to the files you'll actually process
+  before sizing the job.
+- Outbound-only tunnels remove an entire class of attack surface.
+- ARM quirks: not every container image loves a Raspberry Pi.
+- DNS is always the problem. Even at home. *Especially* at home.

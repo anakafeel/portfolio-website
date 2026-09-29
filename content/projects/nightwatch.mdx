@@ -1,21 +1,26 @@
 ---
 title: "Nightwatch"
-rarityTier: "epic"
+rarityTier: "rare"
+order: 5
 techStack: ["Python", "FastAPI", "Pydantic", "pytest"]
 links:
   github: "https://github.com/anakafeel/Nightwatch"
+  demo: "https://nightwatch-seven.vercel.app"
 date: "2026-01-15"
 summary: "Safe nighttime routing that scores paths by streetlight density instead of distance — Top 5 at CUMSA Hacks."
 image: "/projects/nightwatch.svg"
+role: "Built the FastAPI backend and API contracts (team project)"
+result: "Top 5 at CUMSA Hacks 2026"
+status: "Hackathon build, live demo online"
 ---
 
 ## Quest briefing
 
 Nightwatch answers a simple question: what's the *safest* way to walk home
 at night, not just the shortest? Built at CUMSA Hacks, where it placed
-**Top 5**.
+**Top 5**. Try the [live demo](https://nightwatch-seven.vercel.app).
 
-<video autoPlay loop muted playsInline poster="/images/projects/nightwatch/demo-screenshot.webp" className="w-full rounded">
+<video autoPlay loop muted playsInline poster="/images/projects/nightwatch/newdemo-poster.jpg" className="w-full">
   <source src="/images/projects/nightwatch/newdemo-sm.webm" type="video/webm" />
   <source src="/images/projects/nightwatch/newdemo.mp4" type="video/mp4" />
 </video>
@@ -24,10 +29,12 @@ at night, not just the shortest? Built at CUMSA Hacks, where it placed
   scoring paths with streetlight density from Ottawa Open Data.
 - Designed Pydantic schemas with nested models and validation to enforce
   strict API contracts and reject malformed requests at the boundary.
-- Implemented pytest integration tests with FastAPI's TestClient to
-  validate routing endpoints and schema correctness.
+- Added pytest contract tests with FastAPI's TestClient
+  ([`backend/tests`](https://github.com/anakafeel/Nightwatch/tree/main/backend/tests))
+  that check the health and route-compare endpoints return the agreed
+  response shape.
 
-![Nightwatch app screenshot](/images/projects/nightwatch/demo-screenshot.webp)
+![Chalkboard sketch of the Nightwatch plan: the route graph on the left, the backend-to-frontend pipeline on the right](/images/projects/nightwatch/demo-screenshot.webp)
 
 ## Loot (what was learned)
 

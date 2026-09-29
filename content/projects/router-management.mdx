@@ -1,6 +1,7 @@
 ---
 title: "AI Router Management"
-rarityTier: "rare"
+rarityTier: "common"
+order: 7
 techStack: ["Python", "Flask", "Scikit-learn", "Pandas", "Next.js", "GSAP"]
 links:
   github: "https://github.com/anakafeel/Technata-24-AI_router_Management_System"
@@ -8,13 +9,15 @@ links:
 date: "2024-10-10"
 summary: "An AI-powered Eco Intelligence Dashboard that cut simulated power consumption by ~20% — 3rd place at Technata Hacks 2024."
 image: "/projects/router-management.svg"
+result: "3rd place at Technata Hacks 2024; ~20% lower power use in simulation"
+status: "Hackathon prototype (2024)"
 ---
 
 ## Quest briefing
 
 The Eco Intelligence Dashboard, created for Technata Hacks 2024, is an interactive platform designed to optimize energy efficiency in IT infrastructure — specifically targeting router heat dissipation and energy consumption in large tech hubs like Kanata North.
 
-I trained my first-ever machine learning model (a random forest regressor) to predict energy consumption based on heat data from routers, and integrated it into the dashboard via a REST API for real-time predictions.
+I trained my first-ever machine learning model (a random forest regressor) to predict energy consumption from simulated router heat and traffic data, and integrated it into the dashboard via a REST API for live predictions on the simulated data.
 
 ![Eco Intelligence Dashboard overview](/images/projects/router-management/Zwqy_4F3NbkBXXQS_resized.avif)
 
@@ -36,18 +39,18 @@ An AI-powered router management system that dynamically controls routers — tur
 
 ![Linear regression model](/images/projects/router-management/Zwqzl4F3NbkBXXQV_linear_regression.avif)
 
-- **Interactive Dashboard** — Built with Next.js + GSAP animations showing real-time router activity, energy savings, and heat management data.
+- **Interactive Dashboard** — Built with Next.js + GSAP animations showing simulated router activity, energy savings, and heat management data.
 - **API Integration** — RESTful backend connecting trained models to the frontend for live predictions and data updates.
 
 ![Mobile dashboard view](/images/projects/router-management/Zwqz-YF3NbkBXXQX_phone.avif)
 
 ### Challenges
 
-Data simulation quirks, keeping predictions in sync in real time, and wrapping my head around conceptual heat-repurposing integration. Every blocker was a crash course in something new.
+Data simulation quirks, keeping predictions in sync with the dashboard, and designing the heat-repurposing step, which stayed conceptual. Every blocker was a crash course in something new.
 
 ## Loot (what was learned)
 
-- Feature engineering on telemetry data matters more than model choice for energy-efficiency problems.
+- Feature engineering on simulated traffic data mattered more than model choice for this problem.
 - The gap between "model works in a notebook" and "model drives a control loop" is where the real engineering lives.
 - GSAP + Next.js makes for a dangerously fun prototyping loop — animations got polished before the API was stable.
 - First hackathon podium — proof that a tight demo story wins judges.
