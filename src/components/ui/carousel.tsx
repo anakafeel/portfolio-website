@@ -140,6 +140,9 @@ const Carousel = React.forwardRef<
           className={cn("relative", className)}
           role="region"
           aria-roledescription="carousel"
+          // Every carousel is a landmark: callers should pass a unique
+          // aria-label ("Photo gallery", …); this generic one is a fallback.
+          aria-label="Carousel"
           {...props}
         >
           {children}
@@ -206,7 +209,7 @@ const CarouselPrevious = React.forwardRef<
       variant={variant}
       size={size}
       className={cn(
-        "absolute  h-8 w-8 rounded-full",
+        "absolute h-8 w-8",
         orientation === "horizontal"
           ? "-left-12 top-1/2 -translate-y-1/2"
           : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
@@ -235,7 +238,7 @@ const CarouselNext = React.forwardRef<
       variant={variant}
       size={size}
       className={cn(
-        "absolute h-8 w-8 rounded-full",
+        "absolute h-8 w-8",
         orientation === "horizontal"
           ? "-right-12 top-1/2 -translate-y-1/2"
           : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",

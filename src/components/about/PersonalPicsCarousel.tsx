@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Image from "next/image";
 
 import { useSound } from "@/components/game/useSound";
 import { cn } from "@/lib/utils";
@@ -21,6 +22,10 @@ export default function PersonalPicsCarousel({
   const [mainApi, setMainApi] = useState<CarouselApi>();
   const [thumbApi, setThumbApi] = useState<CarouselApi>();
   const [selectedIndex, setSelectedIndex] = useState(0);
+  // Slides whose full image has been requested. Only the current slide and
+  // its neighbours load, so the gallery no longer pulls all 16 photos
+  // (embla's off-screen slides defeat native lazy-loading).
+  const [loaded, setLoaded] = useState<Set<number>>(() => new Set([0, 1]));
   const play = useSound();
 
   const onThumbClick = useCallback(
@@ -35,6 +40,12 @@ export default function PersonalPicsCarousel({
     if (!mainApi || !thumbApi) return;
     const index = mainApi.selectedScrollSnap();
     setSelectedIndex(index);
+    setLoaded((prev) => {
+      if (prev.has(index - 1) && prev.has(index) && prev.has(index + 1)) {
+        return prev;
+      }
+      return new Set([...prev, index - 1, index, index + 1]);
+    });
     thumbApi.scrollTo(index);
   }, [mainApi, thumbApi]);
 
@@ -52,24 +63,35 @@ export default function PersonalPicsCarousel({
   if (images.length === 0) return null;
 
   return (
-    <section className="mx-auto max-w-5xl px-4">
+    <section aria-labelledby="gallery-heading">
       {/* Header */}
-      <p className="font-pixel text-[10px] text-accent">◆ GALLERY</p>
+      <h2 id="gallery-heading" className="font-pixel text-[10px] text-accent">
+        ◆ GALLERY
+      </h2>
 
       {/* Main carousel */}
       <div className="mt-4">
-        <Carousel setApi={setMainApi} className="w-full">
+        <Carousel
+          setApi={setMainApi}
+          className="w-full"
+          aria-label="Photo gallery"
+        >
           <CarouselContent>
             {images.map((img, index) => (
-              <CarouselItem key={img.src}>
+              <CarouselItem
+                key={img.src}
+                aria-label={`${index + 1} of ${images.length}`}
+              >
                 <div className="relative aspect-[4/3] overflow-hidden pixel-border bg-surface sm:aspect-[16/9]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={img.src}
-                    alt={img.alt}
-                    className="h-full w-full object-cover pixelated"
-                    loading={index === 0 ? "eager" : "lazy"}
-                  />
+                  {loaded.has(index) && (
+                    <Image
+                      src={img.src}
+                      alt={img.alt}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 992px"
+                      className="object-cover pixelated"
+                    />
+                  )}
                 </div>
               </CarouselItem>
             ))}
@@ -109,30 +131,34 @@ export default function PersonalPicsCarousel({
           dragFree: true,
         }}
         className="mt-3 w-full"
+        aria-label="Gallery thumbnails"
       >
         <CarouselContent className="-ml-2">
           {images.map((img, index) => (
             <CarouselItem
               key={img.src}
-              className="basis-1/5 cursor-pointer pl-2 sm:basis-1/6 lg:basis-1/8"
-              onClick={() => onThumbClick(index)}
+              className="basis-1/5 pl-2 sm:basis-1/6 lg:basis-1/8"
             >
-              <div
+              <button
+                type="button"
+                aria-label={`Show photo ${index + 1}: ${img.alt}`}
+                aria-current={index === selectedIndex ? "true" : undefined}
+                onClick={() => onThumbClick(index)}
                 className={cn(
-                  "pixel-border overflow-hidden transition-all duration-200",
+                  "pixel-border relative block aspect-square w-full cursor-pointer overflow-hidden transition-all duration-200",
                   index === selectedIndex
                     ? "opacity-100 ring-2 ring-accent ring-offset-2 ring-offset-background"
-                    : "opacity-40 hover:opacity-70",
+                    : "opacity-40 hover:opacity-70 focus-visible:opacity-100",
                 )}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={img.src}
-                  alt={img.alt}
-                  className="aspect-square w-full object-cover pixelated"
-                  loading="lazy"
+                  alt=""
+                  fill
+                  sizes="(max-width: 640px) 20vw, 128px"
+                  className="object-cover pixelated"
                 />
-              </div>
+              </button>
             </CarouselItem>
           ))}
         </CarouselContent>

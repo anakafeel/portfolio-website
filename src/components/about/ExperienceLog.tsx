@@ -14,8 +14,8 @@ const STATUS_STYLES: Record<
 export default function ExperienceLog() {
   return (
     <div id="main-quests">
-      <p className="font-pixel text-[10px] text-accent-alt">QUEST LOG</p>
-      <h2 id="main-quests-heading" className="mt-3 font-pixel text-lg text-highlight">MAIN QUESTS</h2>
+      <p className="font-pixel text-[10px] text-accent-alt">MAIN QUESTS</p>
+      <h2 id="main-quests-heading" className="mt-3 font-pixel text-lg text-highlight">EXPERIENCE</h2>
       <ol className="mt-8 flex flex-col gap-6">
         {EXPERIENCE.map((entry) => {
           const status = STATUS_STYLES[entry.status];
@@ -23,7 +23,7 @@ export default function ExperienceLog() {
             <li key={`${entry.org}-${entry.period}`}>
               <article className="pixel-border group bg-surface p-5 transition-transform motion-safe:hover:-translate-x-1">
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
-                  <span className="font-pixel text-[10px] text-muted">
+                  <span className="font-pixel text-xs text-muted">
                     {entry.period}
                   </span>
                   <span
@@ -54,7 +54,7 @@ export default function ExperienceLog() {
                     <h3 className="font-pixel text-sm leading-relaxed text-foreground">
                       {entry.org}
                     </h3>
-                    <p className="mt-1 font-pixel text-[10px] text-accent-alt">
+                    <p className="mt-1 font-pixel text-xs text-accent-alt">
                       {entry.role}
                     </p>
                   </div>

@@ -5,16 +5,21 @@ import Image from "next/image";
 import { animate, createDrawable } from "animejs";
 
 import SfxAnchor from "@/components/sfx/SfxAnchor";
-import { STORY_BEATS } from "@/lib/about";
+import { STORY_BEATS, type StoryBeat } from "@/lib/about";
 import { RESUME_URL } from "@/lib/site";
 import { usePrefersReducedMotion } from "@/lib/three/sceneHooks";
 
 /**
- * Mobile-friendly vertical story level. SVG PCB trace draws itself
- * as the user scrolls; beat cards and the final "LEVEL CLEAR" overlay
- * animate in via IntersectionObserver + anime.js.
+ * Vertical story level. SVG PCB trace draws itself as the user scrolls;
+ * beat cards and the final "LEVEL CLEAR" block animate in once via
+ * IntersectionObserver + anime.js. The server HTML has every beat visible,
+ * and a revealed beat never hides again, so no facts depend on motion.
  */
-export default function StoryLevel() {
+export default function StoryLevel({
+  beats = STORY_BEATS,
+}: {
+  beats?: StoryBeat[];
+}) {
   const rootRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = usePrefersReducedMotion();
 
@@ -49,12 +54,16 @@ export default function StoryLevel() {
         })
       : null;
 
-    // Initialize beats as hidden
+    // Hide only what is still below the fold; anything already on screen
+    // stays put instead of flashing out and back in.
+    const belowFold = (el: HTMLElement) =>
+      el.getBoundingClientRect().top > window.innerHeight;
     beatEls.forEach((el) => {
+      if (!belowFold(el)) return;
       el.style.opacity = "0";
       el.style.transform = "translateY(24px)";
     });
-    if (clearEl) {
+    if (clearEl && belowFold(clearEl)) {
       clearEl.style.opacity = "0";
       clearEl.style.transform = "scale(0.9)";
     }
@@ -77,14 +86,17 @@ export default function StoryLevel() {
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
 
-    // Intersection Observer for beat reveals
+    // Intersection Observer for beat reveals (one-way: reveal, then stop)
     const beatObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
           const el = entry.target as HTMLElement;
+          beatObserver.unobserve(el);
+          if (el.style.opacity !== "0") return;
           animate(el, {
-            opacity: entry.isIntersecting ? [0, 1] : [1, 0],
-            translateY: entry.isIntersecting ? ["24px", "0px"] : ["0px", "24px"],
+            opacity: [0, 1],
+            translateY: ["24px", "0px"],
             duration: 350,
             ease: "outQuad",
           });
@@ -100,9 +112,12 @@ export default function StoryLevel() {
       const clearObserver = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            clearObserver.unobserve(clearEl);
+            if (clearEl.style.opacity !== "0") return;
             animate(clearEl, {
-              opacity: entry.isIntersecting ? [0, 1] : [1, 0],
-              scale: entry.isIntersecting ? [0.9, 1] : [1, 0.9],
+              opacity: [0, 1],
+              scale: [0.9, 1],
               duration: 400,
               ease: "outBack",
             });
@@ -128,7 +143,7 @@ export default function StoryLevel() {
   }, [prefersReducedMotion]);
 
   return (
-    <div ref={rootRef} className="relative mt-16">
+    <div ref={rootRef} className="relative">
       {/* Level progress track: a PCB-trace path draws itself as you scroll. */}
       <svg
         aria-hidden
@@ -153,7 +168,7 @@ export default function StoryLevel() {
       <span className="level-player absolute left-[6px] top-4 hidden h-3 w-3 -translate-x-1/2 -translate-y-1/2 bg-highlight sm:block [image-rendering:pixelated]" />
 
       <ol className="flex flex-col gap-24 sm:pl-14">
-        {STORY_BEATS.map((beat) => (
+        {beats.map((beat) => (
           <li key={beat.world} className="level-beat">
             <div className="flex items-center gap-4">
               <Image
@@ -173,9 +188,16 @@ export default function StoryLevel() {
                 </h2>
               </div>
             </div>
-            <p className="mt-4 max-w-2xl text-xl leading-relaxed text-muted">
-              {beat.body}
-            </p>
+            <ul className="mt-4 flex max-w-2xl flex-col gap-2">
+              {beat.body.map((point) => (
+                <li
+                  key={point}
+                  className="text-xl leading-relaxed text-muted"
+                >
+                  ▸ {point}
+                </li>
+              ))}
+            </ul>
           </li>
         ))}
       </ol>
