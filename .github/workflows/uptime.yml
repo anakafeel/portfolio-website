@@ -1,0 +1,25 @@
+# Checks the live site every 10 minutes from GitHub's servers.
+# A failed run makes GitHub email the repo owner, so an outage gets noticed
+# even when the Pi (and anything running on it) is down.
+name: Uptime check
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check saimhashmi.xyz
+        run: |
+          for attempt in 1 2 3; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' -m 20 https://saimhashmi.xyz/ || true)
+            echo "attempt $attempt: HTTP $code"
+            [ "$code" = "200" ] && exit 0
+            sleep 30
+          done
+          echo "::error::saimhashmi.xyz returned HTTP $code after 3 attempts"
+          exit 1

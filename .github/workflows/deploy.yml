@@ -1,18 +1,61 @@
-# Triggered on every push to main — builds Docker image and pushes to Docker Hub
+# Quality gate on every PR and push to main; on push to main it then builds the
+# Docker image and pushes it to Docker Hub, where Watchtower on the Pi picks it up.
 # Uses separate jobs per architecture so arm64 builds on a native ARM runner (no QEMU crashes)
-name: Build and push Docker image
+name: CI and Docker image
 
 on:
   push:
     branches:
       - main
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   REGISTRY_IMAGE: anakafeel/nextjs-portfolio
 
 jobs:
+  check:
+    name: Lint, typecheck and build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Version comes from "packageManager" in package.json
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm exec tsc --noEmit
+
+      - name: Build
+        run: pnpm build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+
   build-amd64:
     name: Build linux/amd64
+    needs: check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
@@ -23,7 +66,10 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push (amd64)
         uses: docker/build-push-action@v6
@@ -38,6 +84,8 @@ jobs:
 
   build-arm64:
     name: Build linux/arm64
+    needs: check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04-arm
 
     steps:
@@ -48,8 +96,12 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # Separate cache ref so the two architectures don't overwrite each other
       - name: Build and push (arm64)
         uses: docker/build-push-action@v6
         with:
@@ -58,6 +110,8 @@ jobs:
           platforms: linux/arm64
           tags: ${{ env.REGISTRY_IMAGE }}:arm64-${{ github.sha }}
           file: ./Dockerfile
+          cache-from: type=registry,ref=${{ env.REGISTRY_IMAGE }}:cache-arm64
+          cache-to: type=registry,ref=${{ env.REGISTRY_IMAGE }}:cache-arm64,mode=max
 
   merge:
     name: Merge multi-arch manifest
@@ -69,7 +123,10 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Create and push multi-arch manifest
         run: |

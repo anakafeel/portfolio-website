@@ -1,5 +1,39 @@
+# Dependencies and build output (rebuilt inside the image)
 node_modules
-npm-debug.log
-dist
 .next
+out
+dist
+*.tsbuildinfo
+npm-debug.log*
+
+# VCS, CI and editor/AI tooling
 .git
+.github
+.gitignore
+.claude
+.claude-flow
+.swarm
+.impeccable
+.superpowers
+.vscode
+.idea
+.DS_Store
+
+# Local databases from tooling
+ruvector.db
+agentdb.rvf*
+
+# Env files (never bake secrets into the image)
+.env*
+
+# Source material and docs not used by the app
+assets
+docs
+README.md
+Dockerfile
+.dockerignore
+
+# Stray binaries and documents (the served resume is kept below)
+*.deb
+*.pdf
+!public/resume.pdf
